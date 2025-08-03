@@ -1036,29 +1036,44 @@
                     }
                     
                     // Initialize Razorpay with the new subscription ID
-                    const options = {
-                        key: "rzp_live_7oJpadczIYphAM",
-                        subscription_id: data.id,
-                        name: "TraderLog",
-                        description: "Early User Subscription (₹95/month)",
-                        currency: "INR",
-                        prefill: {
-                            name: name,
-                            email: email,
-                            contact: phone
-                        },
-                        theme: {
-                            color: "#8b5cf6"
-                        },
-                        handler: function(response) {
-                            showSuccessModal(response.razorpay_subscription_id);
-                        },
-                        modal: {
-                            ondismiss: function() {
-                                loadingOverlay.style.display = 'none';
-                            }
-                        }
-                    };
+                    // Inside the createSubscription() function, update the Razorpay options:
+const options = {
+    key: "rzp_live_7oJpadczIYphAM",
+    subscription_id: data.id,
+    name: "TraderLog",
+    description: "Early User Subscription (₹95/month)",
+    currency: "INR",
+    prefill: {
+        name: name,
+        email: email,
+        contact: phone
+    },
+    theme: {
+        color: "#8b5cf6"
+    },
+    handler: function(response) {
+        // Hide loading overlay immediately when payment succeeds
+        loadingOverlay.style.display = 'none';
+        
+        // Show success modal with subscription details
+        document.getElementById('subId').textContent = response.razorpay_subscription_id;
+        showSuccessModal(response.razorpay_subscription_id);
+    },
+    modal: {
+        ondismiss: function() {
+            // Hide loading if user closes Razorpay modal
+            loadingOverlay.style.display = 'none';
+        }
+    }
+};
+                    options.hooks = {
+    onPaymentFailed: function(response) {
+        loadingOverlay.style.display = 'none';
+        formError.textContent = "Payment failed: " + 
+            (response.error.description || "Please try again");
+        formError.style.display = 'block';
+    }
+};
                     
                     const rzp = new Razorpay(options);
                     rzp.open();
@@ -1084,4 +1099,5 @@
         });
     </script>
 </body>
+
 </html>
