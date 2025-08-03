@@ -1098,6 +1098,26 @@ const options = {
             }
         });
     </script>
+    // Get UTM parameters from URL
+function getUTMParams() {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    source: params.get('utm_source') || 'direct',
+    medium: params.get('utm_medium') || '',
+    campaign: params.get('utm_campaign') || '',
+    affiliate: params.get('affiliate') || ''
+  };
+}
+
+// Include in Razorpay payment data
+const options = {
+  // ... your existing options ...
+  notes: {
+    ...getUTMParams(), // Adds all UTM/affiliate data
+    user_email: document.getElementById('userEmail').value
+  }
+};
 </body>
 
 </html>
+
