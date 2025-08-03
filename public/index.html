@@ -1,0 +1,1947 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TraderLog - AI-Powered Trading Journal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        nav.scrolled {
+            padding: 1rem 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .logo i {
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: white;
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .cta-button {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+            transition: all 0.4s;
+            z-index: -1;
+        }
+        
+        .cta-button:hover:before {
+            left: 0;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 10rem 0 5rem;
+            display: flex;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--gray-light);
+            margin-bottom: 2.5rem;
+            max-width: 90%;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .dashboard-preview {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: perspective(1000px) rotateY(-10deg);
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            transition: transform 0.5s, box-shadow 0.5s;
+        }
+        
+        .dashboard-preview:hover {
+            transform: perspective(1000px) rotateY(0);
+            box-shadow: 0 30px 60px -10px rgba(139, 92, 246, 0.3);
+        }
+        
+        .stats-container {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            padding: 1.5rem;
+            flex: 1;
+            text-align: center;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            background: rgba(15, 23, 42, 0.7);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .section-title p {
+            color: var(--gray-light);
+            max-width: 600px;
+            margin: 1.5rem auto 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-card:hover:before {
+            transform: scaleX(1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            color: var(--accent);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card p {
+            color: var(--gray-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Psychology Focus */
+        .psychology {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%);
+        }
+        
+        .psychology-content {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+        }
+        
+        .psychology-text {
+            flex: 1;
+        }
+        
+        .psychology-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .psychology-text h2 span {
+            color: var(--accent);
+        }
+        
+        .psychology-text p {
+            margin-bottom: 1.5rem;
+            color: var(--gray-light);
+        }
+        
+        .psychology-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .mood-chart {
+            width: 100%;
+            max-width: 500px;
+            height: 300px;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .chart-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .chart-bars {
+            display: flex;
+            height: 200px;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .chart-bar {
+            width: 40px;
+            border-radius: 5px;
+            position: relative;
+            transition: height 0.5s ease;
+        }
+        
+        .chart-bar-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--gray-light);
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 0;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            max-width: 250px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            position: relative;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+        }
+        
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .step-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .step h3 {
+            margin: 1.5rem 0 1rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 41, 59, 0.9) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+        
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-content p {
+            color: var(--gray-light);
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+        }
+        
+        .trial-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .trial-form input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            border: 1px solid var(--gray);
+            background: rgba(30, 41, 59, 0.7);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .trial-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+            background: rgba(15, 23, 42, 0.9);
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .footer-brand {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links {
+            flex: 1;
+            display: flex;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .link-group h4 {
+            margin-bottom: 1.5rem;
+            color: white;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .link-group h4:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        .link-group ul {
+            list-style: none;
+        }
+        
+        .link-group ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .link-group ul li a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.3s;
+            display: inline-block;
+        }
+        
+        .link-group ul li a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.7);
+            color: var(--gray-light);
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 3rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .hero-content {
+                margin-bottom: 3rem;
+            }
+            
+            .hero p {
+                margin: 0 auto 2.5rem;
+            }
+            
+            .stats-container {
+                justify-content: center;
+            }
+            
+            .psychology-content {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .trial-form {
+                flex-direction: column;
+            }
+        }
+    </style>
+<style>
+/* ===== DESKTOP NAVIGATION FIX WITH LARGER LOGO ===== */
+@media (min-width: 769px) {
+  nav#navbar {
+    background: #1a202c; /* Change to your header background color */
+    padding: 10px 0;
+  }
+  
+  #navbar .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Increased logo size */
+  #navbar .logo {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 1.8rem; /* Increased from 1.5rem */
+    font-weight: bold;
+  }
+
+  #navbar .logo i {
+    margin-right: 10px;
+    font-size: 1.8rem; /* Match logo text size */
+  }
+
+  #navbar .nav-links {
+    display: flex;
+    gap: 30px;
+  }
+
+  #navbar .nav-links a {
+    color: white;
+    font-weight: 500;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+  }
+
+  #navbar .nav-links a:hover {
+    opacity: 0.8;
+  }
+}
+</style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>TraderLog</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#psychology">Psychology</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="Rpp1" class="tracked-payment-link">Pricing</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container" style="display: flex; align-items: center;">
+            <div class="hero-content">
+                <h1>Master Your Trading <span>Psychology & Strategy</span></h1>
+                <p>TraderLog helps new traders accelerate their growth through AI-powered journaling, psychological insights, and actionable analytics.</p>
+                <div class="button-group" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                    <a href="Rpp1" class="cta-button tracked-payment-link">Start Journaling Now</a>
+                    <a href="#features" class="cta-button" style="background: transparent; border: 2px solid var(--primary);">View Features</a>
+                </div>
+                
+                <div class="stats-container" style="display: flex; justify-content: center; gap: 20px;">
+                    <div class="stat-card">
+                        <h3>87%</h3>
+                        <p>Improved Win Rate</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>63%</h3>
+                        <p>Reduced Emotional Trading</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>100%</h3>
+                        <p>Faster Learning Curve</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="Trading Journal.jpg" alt="Trading Journal" class="dashboard-preview">
+            </div>
+        </div>
+    </section>
+<style>
+/* Mobile Optimization */
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 160px; 
+  }
+  
+  .hero .container {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+  
+  /* Hero text section */
+  .hero-content {
+    order: 1;
+    width: 100%;
+    padding-right: 0;
+    margin-bottom: 0;
+  }
+  
+  .hero h1 {
+    font-size: 2.3rem;
+    line-height: 1.3;
+    margin-bottom: 15px;
+  }
+  
+  .hero p {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+  
+  /* Hero image positioned after subheading but before buttons */
+  .hero-image {
+    order: 2;
+    width: 100%;
+    margin: 0 auto 40px; /* Increased bottom margin for gap */
+    max-width: 95%;
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .hero-image img {
+    transform: perspective(1000px) rotateY(-5deg);
+    transition: transform 0.4s ease;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    max-width: 100%;
+  }
+  
+  /* Buttons come after image */
+  .button-group {
+    order: 3;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px; /* Increased bottom margin for gap */
+    width: 100%;
+  }
+  
+  /* Smaller stats container with added top margin */
+  .stats-container {
+    order: 4;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 500px; /* Reduced from 600px */
+    margin: 30px auto 0; /* Added top margin for gap */
+    transform: scale(0.95); /* Slightly smaller container */
+    transform-origin: top center;
+  }
+  
+  .stat-card {
+    background: white;
+    padding: 12px 5px; /* Slightly reduced padding */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(37, 99, 235, 0.1);
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .stat-card h3 {
+    font-size: 1.6rem; /* Slightly reduced font size */
+    color: var(--primary);
+    margin-bottom: 5px;
+    font-weight: 700;
+  }
+  
+  .stat-card p {
+    font-size: 0.8rem; /* Slightly reduced font size */
+    color: var(--secondary);
+    margin-bottom: 0;
+    text-align: center;
+    line-height: 1.4;
+    padding: 0 5px;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 150px 0 30px;
+  }
+  
+  .hero h1 {
+    font-size: 1.9rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+    margin-bottom: 25px;
+  }
+  
+  .hero-image {
+    margin-bottom: 30px; /* Maintain increased gap */
+  }
+  
+  .cta-button {
+    padding: 13px 25px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .button-group {
+    margin-bottom: 35px; /* Maintain gap */
+  }
+  
+  .stats-container {
+    max-width: 450px; /* Smaller on small screens */
+    margin-top: 25px; /* Maintain gap */
+    transform: scale(0.92); /* Slightly smaller */
+  }
+  
+  .stats-container {
+    gap: 8px;
+  }
+  
+  .stat-card {
+    padding: 10px 4px; /* Slightly reduced padding */
+  }
+  
+  .stat-card h3 {
+    font-size: 1.4rem; /* Slightly reduced font size */
+  }
+  
+  .stat-card p {
+    font-size: 0.75rem; /* Slightly reduced font size */
+  }
+}
+
+@media (max-width: 380px) {
+  .stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 350px; /* Smaller container */
+    transform: scale(0.9); /* Slightly smaller */
+  }
+  
+  .stat-card:nth-child(3) {
+    grid-column: span 2;
+    max-width: 180px; /* Slightly smaller */
+    margin: 0 auto;
+  }
+}</style>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Powerful Trading Insights</h2>
+                <p>Advanced tools designed to transform your trading journey</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Psychology Analysis</h3>
+                    <p>Track your emotional state with each trade and identify psychological patterns affecting your performance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Trade Suggestions</h3>
+                    <p>Get personalized recommendations based on your trading patterns and market conditions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Deep dive into your performance metrics with customizable reports and visualizations.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Backtesting and Paper Trading</h3>
+                    <p>Backtest your strategies, Paper Trade & Demo Trading to prepare before entering the Market. (Coming Soon).</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Broker Integration</h3>
+                    <p>Automatically import your trades from popular brokers (Coming Soon).</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Experience</h3>
+                    <p>Log trades and review performance on the go with our mobile-optimized platform.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Psychology Focus -->
+    <section class="psychology" id="psychology">
+        <div class="container">
+            <div class="psychology-content">
+                <div class="psychology-text">
+                    <h2>Master Your <span>Trading Psychology</span></h2>
+                    <p>Successful trading requires more than just strategy - it demands emotional control and psychological awareness.</p>
+                    <p>TraderLog helps you identify emotional patterns that impact your trading decisions. Our mood tracking and psychological analysis tools provide insights into:</p>
+                    <ul style="list-style: none; margin: 1.5rem 0;">
+                        <li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Emotional triggers affecting your trades</span></li>
+                        <li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Confidence levels during winning/losing streaks</span></li>
+                        <li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Decision-making patterns under stress</span></li>
+                        <li style="display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Psychological biases impacting your strategy</span></li>
+                    </ul>
+                    <p>Transform your mindset and develop the psychological resilience needed for consistent trading success.</p>
+                </div>
+               <div class="psychology-visual">
+  <div class="mood-chart" style="background: #121c2d; padding: 20px; border-radius: 15px; color: white; width: fit-content; margin: 0 auto;">
+    <h3 class="chart-title" style="text-align: center; margin-bottom: 20px;">Emotional State vs. Trade Performance</h3>
+    <div class="chart-bars" style="display: flex; gap: 20px; justify-content: center;">
+      <div class="chart-bar" style="background: linear-gradient(to top, var(--success) 0%, var(--success) 65%, transparent 65%); height: 200px; width: 60px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
+        <div class="chart-bar-label" style="margin-top: 10px;">Confident</div>
+      </div>
+      <div class="chart-bar" style="background: linear-gradient(to top, var(--warning) 0%, var(--warning) 40%, transparent 40%); height: 200px; width: 60px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
+        <div class="chart-bar-label" style="margin-top: 10px;">Neutral</div>
+      </div>
+      <div class="chart-bar" style="background: linear-gradient(to top, var(--danger) 0%, var(--danger) 25%, transparent 25%); height: 200px; width: 60px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
+        <div class="chart-bar-label" style="margin-top: 10px;">Anxious</div>
+      </div>
+      <div class="chart-bar" style="background: linear-gradient(to top, var(--primary) 0%, var(--primary) 80%, transparent 80%); height: 200px; width: 60px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
+        <div class="chart-bar-label" style="margin-top: 10px;">Focused</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+        </div>
+<section class="features" style="padding: 6rem 0; background: rgba(15, 23, 42, 0.7);">
+    <div class="container">
+        <div class="section-title">
+            <h2>What Our Users Say</h2>
+            <p>Real feedback from traders who’ve leveled up with TraderLog</p>
+        </div>
+        <div class="features-grid">
+            <!-- Testimonial 1 -->
+            <div class="feature-card" style="text-align: center;">
+                <img src="Trader Alex.jpg" alt="Alex" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;">
+                <h3>Alex.</h3>
+                <p>"TraderLog helped me understand my emotions during trades. My confidence is at an all-time high."</p>
+            </div>
+            <!-- Testimonial 2 -->
+            <div class="feature-card" style="text-align: center;">
+                <img src="Trader Ananya.jpg" alt="Ananya" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;">
+                <h3>Ananya.</h3>
+                <p>"The AI insights are mind-blowing. I’m now journaling every trade and seeing real progress."</p>
+            </div>
+            <!-- Testimonial 3 -->
+            <div class="feature-card" style="text-align: center;">
+                <img src="Trader Mohit.jpg" alt="Mohit T." style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;">
+                <h3>Mohit T.</h3>
+                <p>"I always knew psychology was key. But this tool showed me *why* I was making poor decisions."</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Users Stats Section -->
+<section class="features" style="padding: 4rem 0 6rem; background: rgba(15, 23, 42, 0.8);">
+    <div class="container">
+        <div class="section-title">
+            <h2>Our Community</h2>
+            <p>Join thousands of traders improving with us</p>
+        </div>
+        <div class="stats-container" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            <div class="stat-card">
+                <h3>1590+</h3>
+                <p>Registered Traders</p>
+            </div>
+            <div class="stat-card">
+                <h3>80%</h3>
+                <p>Reported Better Focus</p>
+            </div>
+            <div class="stat-card">
+                <h3>12+</h3>
+                <p>Countries Using TraderLog</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-title">
+                <h2>Simple & Effective Process</h2>
+                <p>Transform your trading in just a few steps</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon"><i class="fas fa-pen-alt"></i></div>
+                    <h3>Log Your Trades</h3>
+                    <p>Quickly record each trade with our intuitive interface</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon"><i class="fas fa-chart-bar"></i></div>
+                    <h3>Analyze Performance</h3>
+                    <p>Review detailed analytics and psychological insights</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon"><i class="fas fa-lightbulb"></i></div>
+                    <h3>Get AI Suggestions</h3>
+                    <p>Receive personalized recommendations to improve</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-icon"><i class="fas fa-rocket"></i></div>
+                    <h3>Trade Smarter</h3>
+                    <p>Implement changes and track your progress</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Start Your Trading Transformation Today</h2>
+                <p>Join thousands of traders who have improved their strategy and psychology with TraderLog</p>
+                <div class="trial-form">
+                    <input type="email" placeholder="Enter your email">
+                    <a href="Rpp1" class="cta-button tracked-payment-link">Start Now</a>
+                </div>
+                <p style="font-size: 0.9rem;">No credit card required. Cancel anytime.Read T&C Carefully.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-chart-line"></i>
+                        <span>TraderLog</span>
+                    </div>
+                    <p style="color: var(--gray-light); margin-top: 1rem; max-width: 350px;">The advanced trading journal that focuses on both strategy and psychology to accelerate your trading success.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#how-it-works">How It Works</a></li>
+                            <li><a href="#pricing">Pricing</a></li>
+                            <li><a href="#">Integrations</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Trading Guides</a></li>
+                            <li><a href="#">Psychology Resources</a></li>
+                            <li><a href="#">Support Center</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="https://wa.link/jarbs9">Contact</a></li>
+                            <li><a href="https://docs.google.com/document/d/1F5CkLLNpkdENpWcjeqqbCcohhNsEdfrLU_-weYW6TNE/edit?usp=sharing">Refund Policy</a></li>
+                            <li><a href="https://docs.google.com/document/d/1QCtp0MZfqsMMgI6D1WNQKq1s3CWuSji9OFFMfusk6wY/edit?usp=sharing">T&C</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 TraderLog. All rights reserved. Designed for new traders to master their craft.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Animation for feature cards on scroll
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Apply to feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(card);
+        });
+        
+        // Apply to steps
+        document.querySelectorAll('.step').forEach((step, index) => {
+            step.style.opacity = 0;
+            step.style.transform = 'translateY(20px)';
+            step.style.transition = `opacity 0.5s ${index * 0.2}s, transform 0.5s ${index * 0.2}s`;
+            observer.observe(step);
+        });
+        
+        // Animate chart bars
+        const chartBars = document.querySelectorAll('.chart-bar');
+        chartBars.forEach(bar => {
+            const height = bar.style.height;
+            bar.style.height = '0';
+            setTimeout(() => {
+                bar.style.height = height;
+            }, 500);
+        });
+    </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TraderLog Popup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .traderlog-popup-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .traderlog-popup-container.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .traderlog-popup-content {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            width: 90%;
+            max-width: 280px;
+            border-radius: 12px;
+            padding: 1.5rem 1.2rem;
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            position: relative;
+            transform: translateY(50px);
+            transition: transform 0.5s ease;
+            text-align: center;
+        }
+        
+        .traderlog-popup-container.active .traderlog-popup-content {
+            transform: translateY(0);
+        }
+        
+        .traderlog-popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #cbd5e1;
+            font-size: 0.8rem;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        
+        .traderlog-popup-close:hover {
+            background: #8b5cf6;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        .traderlog-popup-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        .traderlog-popup-content h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.7rem;
+            color: white;
+            letter-spacing: -0.3px;
+        }
+        
+        .traderlog-popup-content h2 span {
+            background: linear-gradient(90deg, #8b5cf6 0%, #0ea5e9 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        
+        .traderlog-popup-content p {
+            color: #cbd5e1;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+        
+        .traderlog-download-btn {
+            background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            margin-top: 0.3rem;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+        
+        .traderlog-download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+            background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
+        }
+        
+        .traderlog-popup-footer {
+            margin-top: 1.2rem;
+            color: #64748b;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            font-weight: 300;
+        }
+        
+        .traderlog-popup-footer a {
+            color: #8b5cf6;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .traderlog-popup-footer a:hover {
+            color: #0ea5e9;
+            text-decoration: underline;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        .traderlog-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            z-index: 10;
+            box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3);
+            transform: rotate(5deg);
+        }
+        
+        .traderlog-features {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin: 1rem 0;
+        }
+        
+        .feature-item {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .feature-item i {
+            color: #8b5cf6;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- TraderLog Popup -->
+    <div class="traderlog-popup-container" id="traderlog-popup">
+        <div class="traderlog-popup-content">
+            <div class="traderlog-popup-close" id="traderlog-close-popup">
+                <i class="fas fa-times"></i>
+            </div>
+            
+            <div class="traderlog-badge">LIMITED TIME</div>
+            
+            <div class="traderlog-popup-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            
+            <h2>Free Trading <span>Resources</span></h2>
+            <p>Download premium Candlestick and SMC trading guides instantly</p>
+            
+            <div class="traderlog-features">
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i> Candlestick Patterns
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chess-board"></i> SMC Concepts
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-pdf"></i> PDF Format
+                </div>
+            </div>
+            
+            <a href="https://topmate.io/rahul_luthra/1377078" target="_blank" class="traderlog-download-btn pulse-animation">
+                <i class="fas fa-download"></i> Download Guides
+            </a>
+            
+            <div class="traderlog-popup-footer">
+                <p>100% free. By downloading, you agree to our <a href="#">Privacy Policy</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get DOM elements
+            const popup = document.getElementById('traderlog-popup');
+            const closePopup = document.getElementById('traderlog-close-popup');
+            
+            // Show popup function
+            function showPopup() {
+                popup.classList.add('active');
+                // Prevent body from scrolling
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // Close popup function
+            function closePopupFunc() {
+                popup.classList.remove('active');
+                // Restore body scrolling
+                document.body.style.overflow = 'auto';
+            }
+            
+            // Event listeners
+            closePopup.addEventListener('click', closePopupFunc);
+            
+            // Close popup when clicking outside the content
+            popup.addEventListener('click', (e) => {
+                if (e.target === popup) {
+                    closePopupFunc();
+                }
+            });
+            
+            // Close popup with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && popup.classList.contains('active')) {
+                    closePopupFunc();
+                }
+            });
+            
+            // Show popup after  seconds
+            setTimeout(showPopup, 9000);
+        });
+    </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Offer Bar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* STICKY OFFER BAR STYLES */
+        .offer-container {
+            position: fixed;
+            bottom: -150px;
+            left: 0;
+            right: 0;
+            z-index: 10000;
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .offer-container.active {
+            bottom: 0;
+        }
+        
+        .offer-banner {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            text-align: center;
+            padding: 5px;
+            font-weight: 700;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .offer-bar {
+            background: rgba(15, 23, 42, 0.98);
+            padding: 8px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
+            border-top: 2px solid rgba(139, 92, 246, 0.5);
+            gap: 20px;
+        }
+        
+        .pricing {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .original-price {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            text-decoration: line-through;
+        }
+        
+        .discounted-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .discount-badge {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 10px rgba(79, 172, 254, 0.4);
+        }
+        
+        .avail-btn-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .avail-btn {
+            background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+            color: white;
+            border: none;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.5);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-decoration: none;
+        }
+        
+        .avail-btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
+            z-index: -1;
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        
+        .avail-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.7);
+        }
+        
+        .avail-btn:hover:after {
+            opacity: 1;
+        }
+        
+        .close-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #cbd5e1;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close-btn:hover {
+            background: #8b5cf6;
+            color: white;
+            transform: rotate(90deg);
+        }
+        
+        /* Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Mobile-specific reductions (480px and below) */
+        @media (max-width: 480px) {
+            .offer-bar {
+                padding: 6.8px 12.75px; /* 15% reduction */
+                gap: 17px; /* Reduced gap */
+            }
+            
+            .pricing {
+                gap: 10px; /* Reduced gap */
+            }
+            
+            .avail-btn-container {
+                gap: 10px; /* Reduced gap */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Offer Bar Container -->
+    <div class="offer-container" id="offerContainer">
+        <div class="offer-banner">
+            ONLY FOR EARLY USERS
+        </div>
+        <div class="offer-bar">
+            <div class="pricing">
+                <div class="original-price">₹999</div>
+                <div class="discounted-price">₹95</div>
+                <div class="discount-badge">91% OFF</div>
+            </div>
+           
+            <div class="avail-btn-container">
+    <a href="Rpp1" 
+       target="_blank" 
+       class="avail-btn pulse tracked-payment-link"
+       style="display: inline-block; padding: 8px 20px; font-size: 14px; font-weight: bold; text-align: center; border-radius: 40px; text-decoration: none; color: white; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); box-shadow: 0 4px 10px rgba(33, 113, 248, 0.3); min-width: 140px;">
+        AVAIL NOW
+    </a>
+</div>
+                <button class="close-btn" id="closeOffer">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+<style>
+/* Mobile responsiveness for Avail Now button */
+@media (max-width: 460px) {
+  .avail-btn {
+    padding: 8px 18px !important;
+    font-size: 14px !important;
+    min-width: 135px !important;
+  }
+}
+</style>
+    <script>
+        <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Your existing offer container code remains here
+  // ... (keep the offer container script as is)
+
+  // ===== START AFFILIATE TRACKING FIX =====
+  // 1. Get UTM parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmSource = urlParams.get('utm_source') || urlParams.get('affiliate') || '';
+  const utmMedium = urlParams.get('utm_medium') || 'affiliate';
+  
+  // 2. Store parameters
+  if(utmSource) localStorage.setItem('aff_utm_source', utmSource);
+  localStorage.setItem('aff_utm_medium', utmMedium);
+  
+  // 3. Fix payment links
+  document.querySelectorAll('a.tracked-payment-link').forEach(link => {
+    // Create proper URL object (fixes relative paths)
+    const url = new URL(link.href, window.location.href);
+    
+    // Remove any existing parameters
+    url.search = '';
+    
+    // Add UTM parameters correctly
+    if(utmSource) url.searchParams.set('utm_source', utmSource);
+    url.searchParams.set('utm_medium', utmMedium);
+    
+    // Update link
+    link.href = url.toString();
+    console.log("Corrected Payment Link:", link.href);
+  });
+  // ===== END AFFILIATE TRACKING FIX =====
+});
+<script>
+// Debug helper (can remove after testing)
+document.addEventListener('DOMContentLoaded', function() {
+  const links = document.querySelectorAll('a.tracked-payment-link');
+  console.log("Found", links.length, "payment links");
+  
+  links.forEach(link => {
+    console.log("Link:", link.href);
+    try {
+      const url = new URL(link.href);
+      console.log(" - Path:", url.pathname);
+      console.log(" - Params:", url.search);
+    } catch(e) {
+      console.error("Invalid URL format:", e.message);
+    }
+  });
+});
+</script>
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Save affiliate ID from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const affiliateId = urlParams.get('affiliate');
+  if(affiliateId) {
+    localStorage.setItem('affiliate_id', affiliateId);
+    console.log("Affiliate stored:", affiliateId);
+  }
+  
+  // 2. Update payment links with tracking
+  document.querySelectorAll('.tracked-payment-link').forEach(button => {
+    const originalUrl = button.href;
+    const affiliateId = localStorage.getItem('affiliate_id') || '';
+    
+    if(affiliateId) {
+      // Add UTM parameters correctly
+      const separator = originalUrl.includes('?') ? '&' : '?';
+      button.href = `${originalUrl}${separator}utm_source=${encodeURIComponent(affiliateId)}&utm_medium=affiliate`;
+      console.log("Updated link:", button.href);
+    }
+  });
+  
+  // 3. Add click tracking (optional)
+  document.querySelectorAll('.tracked-payment-link').forEach(button => {
+    button.addEventListener('click', function() {
+      console.log("Payment button clicked with affiliate:", 
+                  localStorage.getItem('affiliate_id') || 'none');
+    });
+  });
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // 1. Capture UTM parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmSource = urlParams.get('utm_source') || urlParams.get('affiliate') || '';
+  const utmMedium = urlParams.get('utm_medium') || 'affiliate';
+  
+  // 2. Store parameters
+  if(utmSource) {
+    localStorage.setItem('aff_utm_source', utmSource);
+    console.log("Stored UTM source:", utmSource);
+  }
+  localStorage.setItem('aff_utm_medium', utmMedium);
+  
+  // 3. Fix payment links
+  document.querySelectorAll('a.tracked-payment-link').forEach(link => {
+    // Create proper URL object
+    const url = new URL(link.href, window.location.origin);
+    
+    // Clear existing parameters
+    url.search = '';
+    
+    // Add correct UTM parameters
+    if(utmSource) url.searchParams.append('utm_source', utmSource);
+    url.searchParams.append('utm_medium', utmMedium);
+    
+    // Update link
+    link.href = url.toString();
+    console.log("Corrected payment link:", link.href);
+  });
+});
+</script>
+<script>
+// Process pending commissions
+function processCommissions() {
+  const pending = JSON.parse(localStorage.getItem('pending_commissions') || '[]');
+  
+  if(pending.length > 0) {
+    console.log("Processing", pending.length, "pending commissions");
+    
+    pending.forEach(commission => {
+      // Send to Google Sheets via Sheety
+      fetch('https://api.sheety.co/YOUR_SHEET_ENDPOINT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer YOUR_SHEETY_KEY'
+        },
+        body: JSON.stringify({
+          commission: {
+            'Payment ID': commission.payment_id,
+            'Amount': commission.amount,
+            'Affiliate ID': commission.affiliate_id,
+            'Timestamp': commission.timestamp,
+            'Status': 'Pending'
+          }
+        })
+      }).then(() => {
+        console.log("Commission submitted:", commission.payment_id);
+      }).catch(error => {
+        console.error("Commission failed:", error);
+      });
+    });
+    
+    // Clear processed commissions
+    localStorage.removeItem('pending_commissions');
+  }
+}
+
+// Process commissions on page load
+document.addEventListener('DOMContentLoaded', processCommissions);
+
+// Also process when user returns to site
+window.addEventListener('focus', processCommissions);
+</script>
+</body>
+</html>

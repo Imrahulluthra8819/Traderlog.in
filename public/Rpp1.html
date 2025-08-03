@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TraderLog - AI-Powered Trading Journal</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1620476214170-1d6800d1c9e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--light);
+        }
+        
+        .logo i {
+            color: var(--accent);
+            background: rgba(139, 92, 246, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+        }
+        
+        /* Desktop Navigation */
+        .desktop-nav {
+            display: flex;
+        }
+        
+        .desktop-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        .desktop-nav a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+        
+        .desktop-nav a:hover {
+            color: var(--light);
+        }
+        
+        .desktop-nav a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .desktop-nav a:hover:after {
+            width: 100%;
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100%;
+            background: rgba(30, 41, 59, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 80px 30px 30px;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mobile-nav.active {
+            right: 0;
+        }
+        
+        .mobile-nav ul {
+            list-style: none;
+        }
+        
+        .mobile-nav li {
+            margin-bottom: 15px;
+        }
+        
+        .mobile-nav a {
+            color: var(--gray-light);
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            display: block;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+            transition: color 0.3s;
+        }
+        
+        .mobile-nav a:hover {
+            color: var(--light);
+        }
+        
+        .mobile-nav-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            color: var(--light);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            background: linear-gradient(to right, var(--light), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--gray-light);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            line-height: 1.6;
+        }
+        
+        .offer-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px 20px;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .offer-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+        }
+        
+        /* Offer Badge */
+        .offer-badge {
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: var(--danger);
+            color: white;
+            font-weight: 700;
+            font-size: 10px;
+            transform: rotate(45deg);
+            z-index: 10;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-align: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 32px;
+            padding: 0 10px;
+        }
+        
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 35px 0 10px;
+            color: var(--light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .price-tag .original {
+            font-size: 1.1rem;
+            text-decoration: line-through;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+        
+        .offer-duration {
+            color: var(--gray-light);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+        
+        .subscription-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .subscription-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+        }
+        
+        /* User Info Form */
+        .user-form {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        
+        .form-error {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Loading State */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            display: none;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: var(--light);
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        /* Features Section */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 60px 0;
+        }
+        
+        .feature-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 25px 20px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-card i {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 15px;
+            background: rgba(139, 92, 246, 0.1);
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--light);
+        }
+        
+        .feature-card p {
+            color: var(--gray-light);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        /* Buttons Section */
+        .buttons-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 40px 0;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 41, 59, 0.7);
+            color: var(--light);
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 280px;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            background: rgba(37, 99, 235, 0.2);
+            border-color: rgba(37, 99, 235, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .btn i {
+            color: var(--accent);
+        }
+        
+        /* Payment Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            border: 1px solid var(--accent);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray-light);
+            transition: color 0.3s;
+        }
+        
+        .close:hover {
+            color: var(--light);
+        }
+        
+        .modal-icon {
+            font-size: 50px;
+            color: var(--success);
+            margin-bottom: 15px;
+        }
+        
+        .modal h2 {
+            font-size: 1.7rem;
+            margin-bottom: 15px;
+            color: var(--light);
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            color: var(--gray-light);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .modal-btn {
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+        
+        .subscription-details {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+        
+        .subscription-details strong {
+            color: var(--light);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(100, 116, 139, 0.2);
+            color: var(--gray);
+        }
+        
+        .secure-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(30, 41, 59, 0.5);
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-top: 15px;
+            font-size: 13px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .secure-badge i {
+            color: var(--accent);
+        }
+        
+        /* Responsive */
+        @media (min-width: 769px) {
+            .mobile-nav-toggle,
+            .mobile-nav {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .desktop-nav {
+                display: none;
+            }
+            
+            .mobile-nav-toggle {
+                display: block;
+            }
+            
+            header {
+                padding: 15px 0;
+            }
+            
+            .hero {
+                padding: 70px 15px 30px;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .offer-card {
+                padding: 25px 15px;
+            }
+            
+            .price-tag {
+                font-size: 2rem;
+                margin: 30px 0 8px;
+            }
+            
+            .offer-badge {
+                font-size: 10px;
+                width: 130px;
+                height: 28px;
+                top: 12px;
+                right: -30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 22px;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 25px 20px;
+            }
+            
+            .modal h2 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Animation for buttons */
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
+        }
+        
+        .subscription-btn.pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Status indicator */
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active {
+            background-color: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+        
+        .status-inactive {
+            background-color: var(--danger);
+        }
+        
+        /* Error Message */
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid var(--danger);
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>TraderLog</span>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#" id="pricing-nav">Pricing</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="https://wa.link/1nycuf" target="_blank">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <!-- Mobile Navigation Toggle -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <!-- Mobile Navigation -->
+            <div class="mobile-nav" id="mobileNav">
+                <button class="mobile-nav-close" id="mobileNavClose">
+                    <i class="fas fa-times"></i>
+                </button>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#" id="mobile-pricing-nav">Pricing</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="https://wa.link/1nycuf" target="_blank">Contact</a></li>
+                </ul>
+            </div>
+        </header>
+        
+        <section class="hero">
+            <h1>Elevate Your Trading with AI-Powered Insights</h1>
+            <p>TraderLog helps you analyze your trades, identify patterns, and improve your strategy with advanced analytics and personalized suggestions.</p>
+            
+            <div class="offer-card">
+                <div class="offer-badge">LIMITED TIME OFFER</div>
+                <h2>Early User Special</h2>
+                <div class="price-tag">
+                    <span>₹95</span>
+                    <span class="original">₹999</span>
+                </div>
+                <div class="offer-duration">per month (Save 91%)</div>
+                <p>Get full access to all premium features at an exclusive early user price</p>
+                
+                <button class="subscription-btn pulse" id="offer-btn">
+                    <i class="fas fa-bolt"></i> Subscribe Now
+                </button>
+                
+                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-light);">
+                    <span class="status-indicator status-active"></span>
+                    Payment gateway is active and ready
+                </div>
+            </div>
+            
+            <!-- User Information Form -->
+            <div class="user-form" id="userForm">
+                <h3>Complete Your Subscription</h3>
+                <div class="error-message" id="formError"></div>
+                
+                <div class="form-group">
+                    <label for="userName">Full Name</label>
+                    <input type="text" id="userName" placeholder="Enter your full name">
+                    <div class="form-error" id="nameError">Please enter your name</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" id="userEmail" placeholder="Enter your email">
+                    <div class="form-error" id="emailError">Please enter a valid email</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userPhone">Phone Number</label>
+                    <input type="tel" id="userPhone" placeholder="Enter your phone number">
+                    <div class="form-error" id="phoneError">Please enter a 10-digit phone number</div>
+                </div>
+                
+                <button class="subscription-btn" id="proceedToPayment">
+                    <i class="fas fa-lock"></i> Proceed to Payment
+                </button>
+            </div>
+            
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-infinity"></i>
+                    <h3>Unlimited Trade Entries</h3>
+                    <p>Record every trade without limitations and build a comprehensive trading history.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-brain"></i>
+                    <h3>Advanced AI Analytics</h3>
+                    <p>Get deep insights into your trading patterns, performance metrics, and profitability.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Behavior Suggestions</h3>
+                    <p>Receive personalized recommendations to improve your trading psychology and decision-making.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-forward"></i>
+                    <h3>Upcoming Features</h3>
+                    <p>Access to copy trading, backtesting, and demo trading modules as they launch.</p>
+                </div>
+            </div>
+            
+            <div class="buttons-section">
+                <div class="buttons-section">
+                    <button class="btn" id="start-journaling">
+                        <i class="fas fa-book"></i> Start Journaling Now
+                    </button>
+                    
+                    <button class="btn" id="avail-now">
+                        <i class="fas fa-gem"></i> AVAIL NOW
+                    </button>
+                    
+                    <button class="btn" id="start-now">
+                        <i class="fas fa-play-circle"></i> Start Now
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>© 2023 TraderLog. All rights reserved.</p>
+            <div class="secure-badge">
+                <i class="fas fa-lock"></i>
+                <span>Secure payments powered by Razorpay</span>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Processing your subscription...</div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModalBtn">&times;</span>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="modalTitle">Subscription Successful!</h2>
+            <div id="modalMessage">
+                <p>Thanks for signing up for TraderLog!</p>
+                <div class="subscription-details" id="subscriptionDetails">
+                    <p><strong>Subscription ID:</strong> <span id="subId"></span></p>
+                    <p><strong>Plan:</strong> Early User Special</p>
+                    <p><strong>Amount:</strong> ₹95/month</p>
+                </div>
+                <p>You'll get your login details and Trading Journal access in your email within 12 hours.</p>
+                <p>If you don't get the email, just message us at Traderlog.cc@gmail.com.</p>
+            </div>
+            <button class="modal-btn" id="modalActionBtn">
+                <i class="fas fa-chart-line"></i> Go to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile navigation toggle
+            const mobileNavToggle = document.getElementById('mobileNavToggle');
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileNavClose = document.getElementById('mobileNavClose');
+            
+            if (mobileNavToggle && mobileNav) {
+                mobileNavToggle.addEventListener('click', function() {
+                    mobileNav.classList.add('active');
+                });
+            }
+            
+            if (mobileNavClose) {
+                mobileNavClose.addEventListener('click', function() {
+                    mobileNav.classList.remove('active');
+                });
+            }
+            
+            // Modal functionality
+            const modal = document.getElementById('successModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalActionBtn = document.getElementById('modalActionBtn');
+            
+            function showSuccessModal(subscriptionId) {
+                if (subscriptionId) {
+                    document.getElementById('subId').textContent = subscriptionId;
+                }
+                modal.style.display = 'flex';
+            }
+            
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+            
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', closeModal);
+            }
+            
+            if (modalActionBtn) {
+                modalActionBtn.addEventListener('click', closeModal);
+            }
+            
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Get UTM parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const utmSource = urlParams.get('utm_source') || '';
+            
+            // Form elements
+            const userForm = document.getElementById('userForm');
+            const offerBtn = document.getElementById('offer-btn');
+            const proceedBtn = document.getElementById('proceedToPayment');
+            const formError = document.getElementById('formError');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Show user form when payment button is clicked
+            function showUserForm() {
+                userForm.style.display = 'block';
+                userForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            
+            // Payment buttons
+            const paymentButtons = [
+                document.getElementById('offer-btn'),
+                document.getElementById('start-journaling'),
+                document.getElementById('avail-now'),
+                document.getElementById('start-now')
+            ];
+            
+            paymentButtons.forEach(button => {
+                if (button) {
+                    button.addEventListener('click', showUserForm);
+                }
+            });
+            
+            // Form validation
+            function validateForm() {
+                const name = document.getElementById('userName').value.trim();
+                const email = document.getElementById('userEmail').value.trim();
+                const phone = document.getElementById('userPhone').value.trim();
+                
+                // Reset errors
+                document.querySelectorAll('.form-error').forEach(el => {
+                    el.style.display = 'none';
+                });
+                formError.style.display = 'none';
+                
+                let isValid = true;
+                
+                // Validate name
+                if (name === '') {
+                    document.getElementById('nameError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                // Validate phone
+                const phoneRegex = /^[0-9]{10}$/;
+                if (!phoneRegex.test(phone)) {
+                    document.getElementById('phoneError').style.display = 'block';
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+            
+            // Create subscription via Netlify function
+            async function createSubscription() {
+                try {
+                    // Show loading overlay
+                    loadingOverlay.style.display = 'flex';
+                    
+                    // Get user info
+                    const name = document.getElementById('userName').value.trim();
+                    const email = document.getElementById('userEmail').value.trim();
+                    const phone = document.getElementById('userPhone').value.trim();
+                    
+                    // Call Netlify function
+                    const response = await fetch('/.netlify/functions/create-subscription', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            plan_id: "plan_R0lfqw7y18smql",
+                            utm_source: utmSource
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Failed to create subscription');
+                    }
+                    
+                    // Initialize Razorpay with the new subscription ID
+                    const options = {
+                        key: "rzp_live_7oJpadczIYphAM",
+                        subscription_id: data.id,
+                        name: "TraderLog",
+                        description: "Early User Subscription (₹95/month)",
+                        currency: "INR",
+                        prefill: {
+                            name: name,
+                            email: email,
+                            contact: phone
+                        },
+                        theme: {
+                            color: "#8b5cf6"
+                        },
+                        handler: function(response) {
+                            showSuccessModal(response.razorpay_subscription_id);
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                loadingOverlay.style.display = 'none';
+                            }
+                        }
+                    };
+                    
+                    const rzp = new Razorpay(options);
+                    rzp.open();
+                    
+                } catch (error) {
+                    console.error("Subscription error:", error);
+                    formError.textContent = error.message || 'An error occurred. Please try again.';
+                    formError.style.display = 'block';
+                    loadingOverlay.style.display = 'none';
+                }
+            }
+            
+            // Proceed to payment button
+            if (proceedBtn) {
+                proceedBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    if (validateForm()) {
+                        createSubscription();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
