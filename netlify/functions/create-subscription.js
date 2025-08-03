@@ -1,3 +1,16 @@
+exports.handler = async (event) => {
+  const { name, email, phone, utm_source, affiliate } = JSON.parse(event.body);
+  
+  const subscription = await razorpay.subscriptions.create({
+    plan_id: "plan_R0lfqw7y18smql",
+    notes: {
+      utm_source,
+      affiliate_id: affiliate,
+      customer_email: email
+    }
+  });
+  // ... rest of your code ...
+};
 const Razorpay = require('razorpay');
 
 exports.handler = async (event) => {
@@ -42,4 +55,5 @@ exports.handler = async (event) => {
       })
     };
   }
+
 };
