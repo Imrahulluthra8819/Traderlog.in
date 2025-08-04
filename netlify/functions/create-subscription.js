@@ -2,7 +2,8 @@ const Razorpay = require('razorpay');
 
 exports.handler = async (event) => {
   try {
-    const { name, email, phone, plan_id = "plan_R0lfqw7y18smql", utm_source } = JSON.parse(event.body);
+    const requestData = JSON.parse(event.body);
+    const { name, email, phone, plan_id = "plan_R0lfqw7y18smql", affiliate_id } = requestData;
     
     const razorpay = new Razorpay({
       key_id: process.env.RAZORPAY_KEY_ID,
@@ -17,7 +18,7 @@ exports.handler = async (event) => {
         user_name: name,
         user_email: email,
         user_phone: phone,
-        utm_source: utm_source || 'direct',
+        affiliate_id: affiliate_id || 'direct',
         created_via: "TraderLog Web"
       }
     });
@@ -42,6 +43,4 @@ exports.handler = async (event) => {
       })
     };
   }
-
 };
-
