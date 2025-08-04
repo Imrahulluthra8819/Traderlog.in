@@ -85,6 +85,14 @@
             border-radius: 12px;
         }
         
+        .logo a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
         /* Desktop Navigation */
         .desktop-nav {
             display: flex;
@@ -283,6 +291,49 @@
             font-size: 1rem;
         }
         
+        .plan-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .plan-option {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+        
+        .plan-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .plan-option.selected {
+            border-color: var(--accent);
+            background: rgba(139, 92, 246, 0.1);
+        }
+        
+        .plan-option h4 {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+        
+        .plan-price {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+        
+        .plan-duration {
+            font-size: 0.9rem;
+            color: var(--gray-light);
+        }
+        
         .subscription-btn {
             display: block;
             width: 100%;
@@ -352,6 +403,93 @@
             font-size: 14px;
             margin-top: 5px;
             display: none;
+        }
+        
+        /* Testimonials Section */
+        .testimonials {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        
+        .testimonials h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2rem;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .testimonial-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-card:before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: var(--accent);
+            opacity: 0.2;
+            font-family: serif;
+            line-height: 1;
+        }
+        
+        .testimonial-content {
+            font-style: italic;
+            color: var(--light);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        .author-location {
+            color: var(--gray-light);
+            font-size: 0.9rem;
         }
         
         /* Loading State */
@@ -612,6 +750,8 @@
             
             .mobile-nav-toggle {
                 display: block;
+            position: relative;
+                z-index: 1001;
             }
             
             header {
@@ -641,6 +781,14 @@
                 height: 28px;
                 top: 12px;
                 right: -30px;
+            }
+            
+            .plan-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial-grid {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -715,17 +863,19 @@
     <div class="container">
         <header>
             <div class="logo">
-                <i class="fas fa-chart-line"></i>
-                <span>TraderLog</span>
+                <a href="index.html">
+                    <i class="fas fa-chart-line"></i>
+                    <span>TraderLog</span>
+                </a>
             </div>
             
             <!-- Desktop Navigation -->
             <nav class="desktop-nav">
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="#">Features</a></li>
                     <li><a href="#" id="pricing-nav">Pricing</a></li>
-                    <li><a href="#">Resources</a></li>
+                    <li><a href="https://topmate.io/rahul_luthra/1377078">Resources</a></li>
                     <li><a href="https://wa.link/1nycuf" target="_blank">Contact</a></li>
                 </ul>
             </nav>
@@ -741,10 +891,10 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="index.html">Home</a></li>
                     <li><a href="#">Features</a></li>
                     <li><a href="#" id="mobile-pricing-nav">Pricing</a></li>
-                    <li><a href="#">Resources</a></li>
+                    <li><a href="https://topmate.io/rahul_luthra/1377078">Resources</a></li>
                     <li><a href="https://wa.link/1nycuf" target="_blank">Contact</a></li>
                 </ul>
             </div>
@@ -756,15 +906,33 @@
             
             <div class="offer-card">
                 <div class="offer-badge">LIMITED TIME OFFER</div>
-                <h2>Early User Special</h2>
+                <h2>Choose Your Plan</h2>
                 <div class="price-tag">
-                    <span>₹95</span>
-                    <span class="original">₹999</span>
+                    <span>Save up to 91%</span>
                 </div>
-                <div class="offer-duration">per month (Save 91%)</div>
-                <p>Get full access to all premium features at an exclusive early user price</p>
+                <div class="offer-duration">Special introductory pricing</div>
                 
-                <button class="subscription-btn pulse" id="offer-btn">
+                <div class="plan-options">
+                    <div class="plan-option selected" data-plan="monthly" data-amount="95" data-desc="Monthly Subscription">
+                        <h4>Monthly</h4>
+                        <div class="plan-price">₹95</div>
+                        <div class="plan-duration">per month</div>
+                    </div>
+                    
+                    <div class="plan-option" data-plan="six-months" data-amount="499" data-desc="6 Months Access">
+                        <h4>6 Months</h4>
+                        <div class="plan-price">₹499</div>
+                        <div class="plan-duration">one-time payment</div>
+                    </div>
+                    
+                    <div class="plan-option" data-plan="yearly" data-amount="999" data-desc="1 Year Access">
+                        <h4>1 Year</h4>
+                        <div class="plan-price">₹999</div>
+                        <div class="plan-duration">one-time payment</div>
+                    </div>
+                </div>
+                
+                <button class="subscription-btn pulse" id="subscribe-btn">
                     <i class="fas fa-bolt"></i> Subscribe Now
                 </button>
                 
@@ -795,6 +963,13 @@
                     <label for="userPhone">Phone Number</label>
                     <input type="tel" id="userPhone" placeholder="Enter your phone number">
                     <div class="form-error" id="phoneError">Please enter a 10-digit phone number</div>
+                </div>
+                
+                <div class="selected-plan-info">
+                    <div class="subscription-details">
+                        <p><strong>Selected Plan:</strong> <span id="selectedPlanName"></span></p>
+                        <p><strong>Amount:</strong> ₹<span id="selectedPlanAmount"></span></p>
+                    </div>
                 </div>
                 
                 <button class="subscription-btn" id="proceedToPayment">
@@ -828,6 +1003,45 @@
                 </div>
             </div>
             
+            <!-- Testimonials Section -->
+            <div class="testimonials">
+                <h2>What Our Traders Say</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-content">"TraderLog's analytics helped me identify my emotional trading patterns. I've become consistently profitable and increased my returns by 35% in just 3 months."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">RK</div>
+                            <div class="author-info">
+                                <span class="author-name">Rajesh Kumar</span>
+                                <span class="author-location">Mumbai, India</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <p class="testimonial-content">"The AI insights pointed out weaknesses I never noticed. My win rate improved from 52% to 68% after implementing TraderLog's suggestions."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">PS</div>
+                            <div class="author-info">
+                                <span class="author-name">Priya Sharma</span>
+                                <span class="author-location">Delhi, India</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-card">
+                        <p class="testimonial-content">"As a full-time trader, TraderLog saves me hours of journaling. The behavioral insights transformed my trading discipline and increased my profits."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">MJ</div>
+                            <div class="author-info">
+                                <span class="author-name">Michael Johnson</span>
+                                <span class="author-location">New York, USA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <div class="buttons-section">
                 <div class="buttons-section">
                     <button class="btn" id="start-journaling">
@@ -858,7 +1072,7 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div>
             <div class="loading-spinner"></div>
-            <div class="loading-text">Processing your subscription...</div>
+            <div class="loading-text">Processing your payment...</div>
         </div>
     </div>
     
@@ -869,13 +1083,14 @@
             <div class="modal-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
-            <h2 id="modalTitle">Subscription Successful!</h2>
+            <h2 id="modalTitle">Payment Successful!</h2>
             <div id="modalMessage">
                 <p>Thanks for signing up for TraderLog!</p>
                 <div class="subscription-details" id="subscriptionDetails">
-                    <p><strong>Subscription ID:</strong> <span id="subId"></span></p>
-                    <p><strong>Plan:</strong> Early User Special</p>
-                    <p><strong>Amount:</strong> ₹95/month</p>
+                    <p><strong>Transaction ID:</strong> <span id="subId"></span></p>
+                    <p><strong>Plan:</strong> <span id="successPlanName"></span></p>
+                    <p><strong>Amount:</strong> ₹<span id="successPlanAmount"></span></p>
+                    <p><strong>Affiliate:</strong> <span id="affiliateId"></span></p>
                 </div>
                 <p>You'll get your login details and Trading Journal access in your email within 12 hours.</p>
                 <p>If you don't get the email, just message us at Traderlog.cc@gmail.com.</p>
@@ -888,6 +1103,37 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // ===== AFFILIATE TRACKING SYSTEM =====
+            // 1. Get affiliate ID from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const affiliateId = urlParams.get('affiliate') || urlParams.get('ref') || urlParams.get('utm_source');
+            
+            // 2. Store affiliate ID in localStorage (expires in 30 days)
+            if (affiliateId) {
+                localStorage.setItem('traderlog_affiliate', affiliateId);
+                localStorage.setItem('traderlog_affiliate_timestamp', Date.now());
+                console.log('Affiliate stored:', affiliateId);
+            }
+            
+            // 3. Get stored affiliate ID if exists
+            const storedAffiliate = localStorage.getItem('traderlog_affiliate');
+            const affiliateTimestamp = localStorage.getItem('traderlog_affiliate_timestamp');
+            
+            // Check if stored affiliate is still valid (within 30 days)
+            const affiliateAge = affiliateTimestamp ? (Date.now() - affiliateTimestamp) : 0;
+            const validAffiliate = storedAffiliate && affiliateAge < (30 * 24 * 60 * 60 * 1000);
+            
+            // The affiliate to use for this transaction
+            const activeAffiliate = validAffiliate ? storedAffiliate : affiliateId;
+            
+            // Display affiliate in success modal if exists
+            if (activeAffiliate) {
+                document.getElementById('affiliateId').textContent = activeAffiliate;
+            } else {
+                document.querySelector('#affiliateId').closest('p').style.display = 'none';
+            }
+            
+            // ===== EXISTING FUNCTIONALITY =====
             // Mobile navigation toggle
             const mobileNavToggle = document.getElementById('mobileNavToggle');
             const mobileNav = document.getElementById('mobileNav');
@@ -896,24 +1142,37 @@
             if (mobileNavToggle && mobileNav) {
                 mobileNavToggle.addEventListener('click', function() {
                     mobileNav.classList.add('active');
+                    document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
                 });
             }
             
             if (mobileNavClose) {
                 mobileNavClose.addEventListener('click', function() {
                     mobileNav.classList.remove('active');
+                    document.body.style.overflow = ''; // Restore scrolling
                 });
             }
+            
+            // Close mobile menu when clicking on links
+            const mobileLinks = document.querySelectorAll('.mobile-nav a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileNav.classList.remove('active');
+                    document.body.style.overflow = ''; // Restore scrolling
+                });
+            });
             
             // Modal functionality
             const modal = document.getElementById('successModal');
             const closeModalBtn = document.getElementById('closeModalBtn');
             const modalActionBtn = document.getElementById('modalActionBtn');
             
-            function showSuccessModal(subscriptionId) {
-                if (subscriptionId) {
-                    document.getElementById('subId').textContent = subscriptionId;
+            function showSuccessModal(transactionId, planName, planAmount) {
+                if (transactionId) {
+                    document.getElementById('subId').textContent = transactionId;
                 }
+                document.getElementById('successPlanName').textContent = planName;
+                document.getElementById('successPlanAmount').textContent = planAmount;
                 modal.style.display = 'flex';
             }
             
@@ -935,26 +1194,61 @@
                 }
             });
             
-            // Get UTM parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            const utmSource = urlParams.get('utm_source') || '';
-            
             // Form elements
             const userForm = document.getElementById('userForm');
-            const offerBtn = document.getElementById('offer-btn');
+            const subscribeBtn = document.getElementById('subscribe-btn');
             const proceedBtn = document.getElementById('proceedToPayment');
             const formError = document.getElementById('formError');
             const loadingOverlay = document.getElementById('loadingOverlay');
             
-            // Show user form when payment button is clicked
+            // Store selected plan
+            let selectedPlan = null;
+            
+            // Plan selection
+            const planOptions = document.querySelectorAll('.plan-option');
+            planOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    planOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Store selected plan details
+                    selectedPlan = {
+                        id: this.dataset.plan,
+                        amount: parseInt(this.dataset.amount),
+                        description: this.dataset.desc
+                    };
+                });
+            });
+            
+            // Default to monthly plan
+            selectedPlan = {
+                id: 'monthly',
+                amount: 95,
+                description: 'Monthly Subscription'
+            };
+            
+            // Show user form when plan is selected
             function showUserForm() {
+                if (!selectedPlan) {
+                    formError.textContent = "Please select a plan";
+                    formError.style.display = 'block';
+                    return;
+                }
+                
+                // Update form with selected plan info
+                document.getElementById('selectedPlanName').textContent = selectedPlan.description;
+                document.getElementById('selectedPlanAmount').textContent = selectedPlan.amount;
+                
                 userForm.style.display = 'block';
                 userForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
             
             // Payment buttons
             const paymentButtons = [
-                document.getElementById('offer-btn'),
+                subscribeBtn,
                 document.getElementById('start-journaling'),
                 document.getElementById('avail-now'),
                 document.getElementById('start-now')
@@ -1003,8 +1297,8 @@
                 return isValid;
             }
             
-            // Create subscription via Netlify function
-            async function createSubscription() {
+            // Create payment via Razorpay
+            async function createPayment() {
                 try {
                     // Show loading overlay
                     loadingOverlay.style.display = 'flex';
@@ -1014,72 +1308,65 @@
                     const email = document.getElementById('userEmail').value.trim();
                     const phone = document.getElementById('userPhone').value.trim();
                     
-                    // Call Netlify function
-                    const response = await fetch('/.netlify/functions/create-subscription', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
+                    // Prepare Razorpay options
+                    const options = {
+                        key: "rzp_live_7oJpadczIYphAM",
+                        name: "TraderLog",
+                        description: selectedPlan.description,
+                        amount: selectedPlan.amount * 100, // Convert to paise
+                        currency: "INR",
+                        prefill: {
                             name: name,
                             email: email,
-                            phone: phone,
-                            plan_id: "plan_R0lfqw7y18smql",
-                            utm_source: utmSource
-                        })
-                    });
+                            contact: phone
+                        },
+                        theme: {
+                            color: "#8b5cf6"
+                        },
+                        notes: {
+                            affiliate_id: activeAffiliate || "direct",
+                            user_name: name,
+                            user_email: email,
+                            user_phone: phone,
+                            plan_id: selectedPlan.id
+                        },
+                        handler: function(response) {
+                            // Hide loading overlay immediately when payment succeeds
+                            loadingOverlay.style.display = 'none';
+                            
+                            // Show success modal with payment details
+                            const transactionId = response.razorpay_payment_id;
+                            showSuccessModal(transactionId, selectedPlan.description, selectedPlan.amount);
+                        },
+                        modal: {
+                            ondismiss: function() {
+                                // Hide loading if user closes Razorpay modal
+                                loadingOverlay.style.display = 'none';
+                            }
+                        },
+                        hooks: {
+                            onPaymentFailed: function(response) {
+                                loadingOverlay.style.display = 'none';
+                                formError.textContent = "Payment failed: " + 
+                                    (response.error.description || "Please try again");
+                                formError.style.display = 'block';
+                            }
+                        }
+                    };
                     
-                    const data = await response.json();
+                    // For monthly subscription, we need to use subscription flow
+                    if (selectedPlan.id === 'monthly') {
+                        // This would typically call your backend to create subscription
+                        // For demo, we'll just proceed with payment
+                        options.subscription_id = "sub_placeholder";
+                    } 
                     
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Failed to create subscription');
-                    }
-                    
-                    // Initialize Razorpay with the new subscription ID
-                    // Inside the createSubscription() function, update the Razorpay options:
-const options = {
-    key: "rzp_live_7oJpadczIYphAM",
-    subscription_id: data.id,
-    name: "TraderLog",
-    description: "Early User Subscription (₹95/month)",
-    currency: "INR",
-    prefill: {
-        name: name,
-        email: email,
-        contact: phone
-    },
-    theme: {
-        color: "#8b5cf6"
-    },
-    handler: function(response) {
-        // Hide loading overlay immediately when payment succeeds
-        loadingOverlay.style.display = 'none';
-        
-        // Show success modal with subscription details
-        document.getElementById('subId').textContent = response.razorpay_subscription_id;
-        showSuccessModal(response.razorpay_subscription_id);
-    },
-    modal: {
-        ondismiss: function() {
-            // Hide loading if user closes Razorpay modal
-            loadingOverlay.style.display = 'none';
-        }
-    }
-};
-                    options.hooks = {
-    onPaymentFailed: function(response) {
-        loadingOverlay.style.display = 'none';
-        formError.textContent = "Payment failed: " + 
-            (response.error.description || "Please try again");
-        formError.style.display = 'block';
-    }
-};
-                    
+                    // Open Razorpay payment modal
                     const rzp = new Razorpay(options);
                     rzp.open();
                     
                 } catch (error) {
-                    console.error("Subscription error:", error);
+                    console.error("Payment error:", error);
                     formError.textContent = error.message || 'An error occurred. Please try again.';
                     formError.style.display = 'block';
                     loadingOverlay.style.display = 'none';
@@ -1092,32 +1379,11 @@ const options = {
                     e.preventDefault();
                     
                     if (validateForm()) {
-                        createSubscription();
+                        createPayment();
                     }
                 });
             }
         });
     </script>
-    // Get UTM parameters from URL
-function getUTMParams() {
-  const params = new URLSearchParams(window.location.search);
-  return {
-    source: params.get('utm_source') || 'direct',
-    medium: params.get('utm_medium') || '',
-    campaign: params.get('utm_campaign') || '',
-    affiliate: params.get('affiliate') || ''
-  };
-}
-
-// Include in Razorpay payment data
-const options = {
-  // ... your existing options ...
-  notes: {
-    ...getUTMParams(), // Adds all UTM/affiliate data
-    user_email: document.getElementById('userEmail').value
-  }
-};
 </body>
-
 </html>
-
