@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1066,7 +1063,7 @@
     <div class="container">
         <div class="section-title">
             <h2>What Our Users Say</h2>
-            <p>Real feedback from traders who’ve leveled up with TraderLog</p>
+            <p>Real feedback from traders who've leveled up with TraderLog</p>
         </div>
         <div class="features-grid">
             <!-- Testimonial 1 -->
@@ -1079,7 +1076,7 @@
             <div class="feature-card" style="text-align: center;">
                 <img src="Trader Ananya.jpg" alt="Ananya" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;">
                 <h3>Ananya.</h3>
-                <p>"The AI insights are mind-blowing. I’m now journaling every trade and seeing real progress."</p>
+                <p>"The AI insights are mind-blowing. I'm now journaling every trade and seeing real progress."</p>
             </div>
             <!-- Testimonial 3 -->
             <div class="feature-card" style="text-align: center;">
@@ -1784,164 +1781,165 @@
 }
 </style>
     <script>
-        <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Your existing offer container code remains here
-  // ... (keep the offer container script as is)
+        // Show offer bar after delay
+        document.addEventListener('DOMContentLoaded', function() {
+            const offerContainer = document.getElementById('offerContainer');
+            const closeOffer = document.getElementById('closeOffer');
+            
+            // Show offer bar after 3 seconds
+            setTimeout(() => {
+                offerContainer.classList.add('active');
+            }, 3000);
+            
+            // Close offer bar
+            closeOffer.addEventListener('click', function() {
+                offerContainer.classList.remove('active');
+            });
+        });
+    </script>
 
-  // ===== START AFFILIATE TRACKING FIX =====
-  // 1. Get UTM parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const utmSource = urlParams.get('utm_source') || urlParams.get('affiliate') || '';
-  const utmMedium = urlParams.get('utm_medium') || 'affiliate';
-  
-  // 2. Store parameters
-  if(utmSource) localStorage.setItem('aff_utm_source', utmSource);
-  localStorage.setItem('aff_utm_medium', utmMedium);
-  
-  // 3. Fix payment links
-  document.querySelectorAll('a.tracked-payment-link').forEach(link => {
-    // Create proper URL object (fixes relative paths)
-    const url = new URL(link.href, window.location.href);
-    
-    // Remove any existing parameters
-    url.search = '';
-    
-    // Add UTM parameters correctly
-    if(utmSource) url.searchParams.set('utm_source', utmSource);
-    url.searchParams.set('utm_medium', utmMedium);
-    
-    // Update link
-    link.href = url.toString();
-    console.log("Corrected Payment Link:", link.href);
-  });
-  // ===== END AFFILIATE TRACKING FIX =====
-});
-<script>
-// Debug helper (can remove after testing)
-document.addEventListener('DOMContentLoaded', function() {
-  const links = document.querySelectorAll('a.tracked-payment-link');
-  console.log("Found", links.length, "payment links");
-  
-  links.forEach(link => {
-    console.log("Link:", link.href);
-    try {
-      const url = new URL(link.href);
-      console.log(" - Path:", url.pathname);
-      console.log(" - Params:", url.search);
-    } catch(e) {
-      console.error("Invalid URL format:", e.message);
-    }
-  });
-});
-</script>
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // 1. Save affiliate ID from URL
-  const urlParams = new URLSearchParams(window.location.search);
-  const affiliateId = urlParams.get('affiliate');
-  if(affiliateId) {
-    localStorage.setItem('affiliate_id', affiliateId);
-    console.log("Affiliate stored:", affiliateId);
-  }
-  
-  // 2. Update payment links with tracking
-  document.querySelectorAll('.tracked-payment-link').forEach(button => {
-    const originalUrl = button.href;
-    const affiliateId = localStorage.getItem('affiliate_id') || '';
-    
-    if(affiliateId) {
-      // Add UTM parameters correctly
-      const separator = originalUrl.includes('?') ? '&' : '?';
-      button.href = `${originalUrl}${separator}utm_source=${encodeURIComponent(affiliateId)}&utm_medium=affiliate`;
-      console.log("Updated link:", button.href);
-    }
-  });
-  
-  // 3. Add click tracking (optional)
-  document.querySelectorAll('.tracked-payment-link').forEach(button => {
-    button.addEventListener('click', function() {
-      console.log("Payment button clicked with affiliate:", 
-                  localStorage.getItem('affiliate_id') || 'none');
-    });
-  });
-});
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // 1. Capture UTM parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const utmSource = urlParams.get('utm_source') || urlParams.get('affiliate') || '';
-  const utmMedium = urlParams.get('utm_medium') || 'affiliate';
-  
-  // 2. Store parameters
-  if(utmSource) {
-    localStorage.setItem('aff_utm_source', utmSource);
-    console.log("Stored UTM source:", utmSource);
-  }
-  localStorage.setItem('aff_utm_medium', utmMedium);
-  
-  // 3. Fix payment links
-  document.querySelectorAll('a.tracked-payment-link').forEach(link => {
-    // Create proper URL object
-    const url = new URL(link.href, window.location.origin);
-    
-    // Clear existing parameters
-    url.search = '';
-    
-    // Add correct UTM parameters
-    if(utmSource) url.searchParams.append('utm_source', utmSource);
-    url.searchParams.append('utm_medium', utmMedium);
-    
-    // Update link
-    link.href = url.toString();
-    console.log("Corrected payment link:", link.href);
-  });
-});
-</script>
-<script>
-// Process pending commissions
-function processCommissions() {
-  const pending = JSON.parse(localStorage.getItem('pending_commissions') || '[]');
-  
-  if(pending.length > 0) {
-    console.log("Processing", pending.length, "pending commissions");
-    
-    pending.forEach(commission => {
-      // Send to Google Sheets via Sheety
-      fetch('https://api.sheety.co/YOUR_SHEET_ENDPOINT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer YOUR_SHEETY_KEY'
-        },
-        body: JSON.stringify({
-          commission: {
-            'Payment ID': commission.payment_id,
-            'Amount': commission.amount,
-            'Affiliate ID': commission.affiliate_id,
-            'Timestamp': commission.timestamp,
-            'Status': 'Pending'
-          }
-        })
-      }).then(() => {
-        console.log("Commission submitted:", commission.payment_id);
-      }).catch(error => {
-        console.error("Commission failed:", error);
-      });
-    });
-    
-    // Clear processed commissions
-    localStorage.removeItem('pending_commissions');
-  }
-}
+    <!-- Affiliate Tracking Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const affiliateId = urlParams.get('affiliate') || urlParams.get('ref') || urlParams.get('utm_source');
+            
+            // 2. Store affiliate ID in localStorage (expires in 30 days)
+            if (affiliateId) {
+                localStorage.setItem('affiliate_id', affiliateId);
+                localStorage.setItem('affiliate_timestamp', Date.now());
+                console.log('Affiliate ID stored:', affiliateId);
+            }
+            
+            // 3. Update all payment links with tracking parameters
+            document.querySelectorAll('.tracked-payment-link').forEach(link => {
+                try {
+                    const url = new URL(link.href, window.location.origin);
+                    
+                    // Get stored affiliate ID
+                    const storedAffiliateId = localStorage.getItem('affiliate_id');
+                    
+                    // Add tracking parameters if affiliate exists
+                    if (storedAffiliateId) {
+                        url.searchParams.set('affiliate', storedAffiliateId);
+                        url.searchParams.set('utm_source', storedAffiliateId);
+                        url.searchParams.set('utm_medium', 'affiliate');
+                        
+                        // Update the link
+                        link.href = url.toString();
+                        console.log('Updated payment link:', link.href);
+                    }
+                } catch (e) {
+                    console.error('Error updating payment link:', e);
+                }
+            });
+            
+            // 4. Track link clicks (optional)
+            document.querySelectorAll('.tracked-payment-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    const affiliateId = localStorage.getItem('affiliate_id') || 'direct';
+                    console.log('Payment link clicked - Affiliate:', affiliateId);
+                    
+                    // You can send this data to your analytics here
+                    // Example: 
+                    // fetch('/api/track-click', { method: 'POST', body: JSON.stringify({ affiliateId }) });
+                });
+            });
+        });
+    </script>
 
-// Process commissions on page load
-document.addEventListener('DOMContentLoaded', processCommissions);
+    <!-- Razorpay Payment Tracking Script -->
+    <script>
+        // This would be implemented on your payment page (Rpp1)
+        // Here's a template of what you would include there:
+        /*
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get affiliate ID from URL or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            let affiliateId = urlParams.get('affiliate') || 
+                             urlParams.get('utm_source') || 
+                             localStorage.getItem('affiliate_id');
+            
+            // If no affiliate in URL but one in localStorage (from previous visit)
+            if (!urlParams.get('affiliate') && localStorage.getItem('affiliate_id')) {
+                affiliateId = localStorage.getItem('affiliate_id');
+                // Update URL without reloading to maintain tracking
+                history.replaceState(null, null, `?affiliate=${affiliateId}`);
+            }
+            
+            // Initialize Razorpay with affiliate tracking
+            const options = {
+                key: 'YOUR_RAZORPAY_KEY',
+                amount: 9500, // ₹95 in paise
+                currency: 'INR',
+                name: 'TraderLog',
+                description: 'Premium Subscription',
+                image: '/logo.png',
+                handler: function(response) {
+                    // On successful payment
+                    console.log('Payment successful:', response);
+                    
+                    // Send payment data to your server with affiliate info
+                    if (affiliateId) {
+                        const paymentData = {
+                            payment_id: response.razorpay_payment_id,
+                            amount: 95,
+                            affiliate_id: affiliateId,
+                            timestamp: new Date().toISOString()
+                        };
+                        
+                        // Send to your backend
+                        fetch('/api/record-payment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(paymentData)
+                        }).then(res => {
+                            console.log('Payment recorded with affiliate');
+                            // Redirect to success page
+                            window.location.href = '/payment-success';
+                        });
+                    } else {
+                        // No affiliate - regular payment processing
+                        window.location.href = '/payment-success';
+                    }
+                },
+                prefill: {
+                    name: 'Customer Name',
+                    email: 'customer@example.com',
+                    contact: '9999999999'
+                },
+                notes: {
+                    affiliate_id: affiliateId || 'direct'
+                }
+            };
+            
+            // Initialize Razorpay button
+            const rzp = new Razorpay(options);
+            document.getElementById('pay-button').onclick = function(e) {
+                rzp.open();
+                e.preventDefault();
+            };
+        });
+        */
+    </script>
 
-// Also process when user returns to site
-window.addEventListener('focus', processCommissions);
-</script>
+    <!-- Backend Implementation Notes -->
+    <!-- 
+    On your backend (server), you would need to:
+    1. Create an endpoint to record payments (/api/record-payment)
+    2. Store payment data with affiliate IDs in your database
+    3. Create a dashboard for creators to see their referrals
+    4. Implement commission payout logic
+    
+    Example database structure for tracking:
+    - payments: id, user_id, amount, payment_id, status, created_at
+    - affiliates: id, creator_id, affiliate_code, payment_details
+    - referrals: id, affiliate_id, payment_id, commission_amount, status
+    
+    You can use Firebase, MongoDB, or any database you prefer.
+    -->
 </body>
 </html>
