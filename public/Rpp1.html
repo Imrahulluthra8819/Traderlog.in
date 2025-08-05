@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TraderLog - AI-Powered Trading Journal</title>
+    <title>TraderLog - Choose Your Subscription Plan</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -750,8 +750,6 @@
             
             .mobile-nav-toggle {
                 display: block;
-            position: relative;
-                z-index: 1001;
             }
             
             header {
@@ -1202,7 +1200,11 @@
             const loadingOverlay = document.getElementById('loadingOverlay');
             
             // Store selected plan
-            let selectedPlan = null;
+            let selectedPlan = {
+                id: 'monthly',
+                amount: 95,
+                description: 'Monthly Subscription'
+            };
             
             // Plan selection
             const planOptions = document.querySelectorAll('.plan-option');
@@ -1222,13 +1224,6 @@
                     };
                 });
             });
-            
-            // Default to monthly plan
-            selectedPlan = {
-                id: 'monthly',
-                amount: 95,
-                description: 'Monthly Subscription'
-            };
             
             // Show user form when plan is selected
             function showUserForm() {
@@ -1297,7 +1292,7 @@
                 return isValid;
             }
             
-            // Create payment via Razorpay
+            // Create payment via Netlify function
             async function createPayment() {
                 try {
                     // Show loading overlay
@@ -1308,13 +1303,42 @@
                     const email = document.getElementById('userEmail').value.trim();
                     const phone = document.getElementById('userPhone').value.trim();
                     
-                    // Prepare Razorpay options
+                    // Prepare request data
+                    const requestData = {
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        affiliate_id: activeAffiliate || "direct",
+                        plan_id: selectedPlan.id === 'monthly' ? "plan_R0lfqw7y18smql" : undefined,
+                        amount: selectedPlan.amount,
+                        description: selectedPlan.description
+                    };
+                    
+                    // Determine endpoint based on plan type
+                    const endpoint = selectedPlan.id === 'monthly' 
+                        ? '/.netlify/functions/create-subscription' 
+                        : '/.netlify/functions/create-order';
+                    
+                    // Call backend function
+                    const response = await fetch(endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(requestData)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Failed to create payment');
+                    }
+                    
+                    // Initialize Razorpay
                     const options = {
                         key: "rzp_live_7oJpadczIYphAM",
                         name: "TraderLog",
                         description: selectedPlan.description,
-                        amount: selectedPlan.amount * 100, // Convert to paise
-                        currency: "INR",
                         prefill: {
                             name: name,
                             email: email,
@@ -1331,16 +1355,15 @@
                             plan_id: selectedPlan.id
                         },
                         handler: function(response) {
-                            // Hide loading overlay immediately when payment succeeds
+                            // Handle successful payment
                             loadingOverlay.style.display = 'none';
-                            
-                            // Show success modal with payment details
-                            const transactionId = response.razorpay_payment_id;
+                            const transactionId = selectedPlan.id === 'monthly' 
+                                ? response.razorpay_subscription_id 
+                                : response.razorpay_payment_id;
                             showSuccessModal(transactionId, selectedPlan.description, selectedPlan.amount);
                         },
                         modal: {
                             ondismiss: function() {
-                                // Hide loading if user closes Razorpay modal
                                 loadingOverlay.style.display = 'none';
                             }
                         },
@@ -1354,12 +1377,13 @@
                         }
                     };
                     
-                    // For monthly subscription, we need to use subscription flow
+                    // Add subscription/order specific parameters
                     if (selectedPlan.id === 'monthly') {
-                        // This would typically call your backend to create subscription
-                        // For demo, we'll just proceed with payment
-                        options.subscription_id = "sub_placeholder";
-                    } 
+                        options.subscription_id = data.id;
+                    } else {
+                        options.order_id = data.id;
+                        options.amount = data.amount;
+                    }
                     
                     // Open Razorpay payment modal
                     const rzp = new Razorpay(options);
