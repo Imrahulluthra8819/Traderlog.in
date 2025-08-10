@@ -428,6 +428,15 @@
             font-size: 0.8rem;
             color: var(--gray-light);
         }
+
+        /* NEW STYLES FOR SUPADEMO */
+        .supademo-wrapper {
+            max-width: 900px; 
+            margin: 0 auto; /* Centering the block */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            overflow: hidden; /* Ensures the border-radius is applied to the iframe */
+        }
         
         /* How It Works */
         .how-it-works {
@@ -1054,15 +1063,33 @@
       </div>
       <div class="chart-bar" style="background: linear-gradient(to top, var(--primary) 0%, var(--primary) 80%, transparent 80%); height: 200px; width: 60px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center;">
         <div class="chart-bar-label" style="margin-top: 10px;">Focused</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
-</div>
+
+    <!-- ======================================================= -->
+    <!-- START: Interactive Demo Section -->
+    <!-- ======================================================= -->
+    <section class="features" style="padding: 6rem 0; background: #0f172a;">
+        <div class="container">
+            <div class="section-title">
+                <h2>See It In Action</h2>
+                <p>Explore how to customize your journal with this interactive demo</p>
+            </div>
+            <div class="supademo-wrapper">
+                <!-- Supademo Embed Code -->
+                <div style="position: relative; box-sizing: content-box; max-height: 80vh; max-height: 80svh; width: 100%; aspect-ratio: 1.7321571772253408; padding: 40px 0 40px 0;"><iframe src="https://app.supademo.com/embed/cme61v0e01wi8h3pylhrahd2p?embed_v=2&utm_source=embed" loading="lazy" title="How to customize TraderLog's Journal theme and settings" allow="clipboard-write" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+            </div>
         </div>
+    </section>
+    <!-- ======================================================= -->
+    <!-- END: Interactive Demo Section -->
+    <!-- ======================================================= -->
+
 <section class="features" style="padding: 6rem 0; background: rgba(15, 23, 42, 0.7);">
     <div class="container">
         <div class="section-title">
@@ -1768,7 +1795,7 @@
                 <div class="discounted-price">₹95</div>
                 <div class="discount-badge">91% OFF</div>
             </div>
-           
+            
             <div class="avail-btn-container">
     <a href="Rpp1" 
        target="_blank" 
@@ -1871,8 +1898,8 @@
             // Get affiliate ID from URL or localStorage
             const urlParams = new URLSearchParams(window.location.search);
             let affiliateId = urlParams.get('affiliate') || 
-                             urlParams.get('utm_source') || 
-                             localStorage.getItem('affiliate_id');
+                              urlParams.get('utm_source') || 
+                              localStorage.getItem('affiliate_id');
             
             // If no affiliate in URL but one in localStorage (from previous visit)
             if (!urlParams.get('affiliate') && localStorage.getItem('affiliate_id')) {
@@ -1956,8 +1983,3 @@
     -->
 </body>
 </html>
-
-
-
-
-
