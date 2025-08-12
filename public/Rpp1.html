@@ -492,6 +492,32 @@
             font-size: 0.9rem;
         }
         
+        /* Demo Section Styles */
+        .demo-section {
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .demo-section h2 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2rem;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .demo-container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
         /* Loading State */
         .loading-overlay {
             position: fixed;
@@ -1009,6 +1035,26 @@
                     <p>Access to copy trading, backtesting, and demo trading modules as they launch.</p>
                 </div>
             </div>
+
+            <!-- Supademo Section -->
+            <section class="demo-section">
+                <h2>See TraderLog in Action</h2>
+                <div class="demo-container">
+                    <div style="position: relative; padding-top: 57.7%; /* Aspect Ratio Wrapper */">
+                        <iframe 
+                            src="https://app.supademo.com/embed/cme61v0e01wi8h3pylhrahd2p?embed_v=2&utm_source=embed" 
+                            loading="lazy" 
+                            title="TraderLog- Step by Step Demo" 
+                            allow="clipboard-write" 
+                            frameborder="0" 
+                            webkitallowfullscreen="true" 
+                            mozallowfullscreen="true" 
+                            allowfullscreen 
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;">
+                        </iframe>
+                    </div>
+                </div>
+            </section>
             
             <!-- Testimonials Section -->
             <div class="testimonials">
@@ -1108,124 +1154,158 @@
         </div>
     </div>
 
+    <!-- NEW: Failure Modal -->
+    <div id="failureModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeFailureModalBtn">&times;</span>
+            <div class="modal-icon" style="color: var(--danger);">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <h2>Payment Failed</h2>
+            <div id="failureModalMessage">
+                <p>Your payment has failed. If any amount was deducted, it will be refunded within 7 business days.</p>
+                <p>If you do not receive the refund, please email your payment screenshot & details to: <strong>Traderlog.cc@gmail.com</strong></p>
+            </div>
+            <button class="modal-btn" id="failureModalCloseBtn" style="background: var(--gray);">
+                Close
+            </button>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // ===== AFFILIATE TRACKING SYSTEM =====
-            // 1. Get affiliate ID from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const affiliateId = urlParams.get('affiliate') || urlParams.get('ref') || urlParams.get('utm_source');
             
-            // 2. Store affiliate ID in localStorage (expires in 30 days)
             if (affiliateId) {
                 localStorage.setItem('traderlog_affiliate', affiliateId);
                 localStorage.setItem('traderlog_affiliate_timestamp', Date.now());
                 console.log('Affiliate stored:', affiliateId);
             }
             
-            // 3. Get stored affiliate ID if exists
             const storedAffiliate = localStorage.getItem('traderlog_affiliate');
             const affiliateTimestamp = localStorage.getItem('traderlog_affiliate_timestamp');
             
-            // Check if stored affiliate is still valid (within 30 days)
             const affiliateAge = affiliateTimestamp ? (Date.now() - affiliateTimestamp) : 0;
             const validAffiliate = storedAffiliate && affiliateAge < (30 * 24 * 60 * 60 * 1000);
             
-            // The affiliate to use for this transaction
             const activeAffiliate = validAffiliate ? storedAffiliate : affiliateId;
             
-            // Display affiliate in success modal if exists
             if (activeAffiliate) {
                 document.getElementById('affiliateId').textContent = activeAffiliate;
             } else {
                 document.querySelector('#affiliateId').closest('p').style.display = 'none';
             }
             
-            // ===== EXISTING FUNCTIONALITY =====
-            // Mobile navigation toggle
+            // ===== UI ELEMENTS =====
             const mobileNavToggle = document.getElementById('mobileNavToggle');
             const mobileNav = document.getElementById('mobileNav');
             const mobileNavClose = document.getElementById('mobileNavClose');
-            
-            if (mobileNavToggle && mobileNav) {
-                mobileNavToggle.addEventListener('click', function() {
-                    mobileNav.classList.add('active');
-                    document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
-                });
-            }
-            
-            if (mobileNavClose) {
-                mobileNavClose.addEventListener('click', function() {
-                    mobileNav.classList.remove('active');
-                    document.body.style.overflow = ''; // Restore scrolling
-                });
-            }
-            
-            // Close mobile menu when clicking on links
-            const mobileLinks = document.querySelectorAll('.mobile-nav a');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    mobileNav.classList.remove('active');
-                    document.body.style.overflow = ''; // Restore scrolling
-                });
-            });
-            
-            // Modal functionality
-            const modal = document.getElementById('successModal');
-            const closeModalBtn = document.getElementById('closeModalBtn');
-            const modalActionBtn = document.getElementById('modalActionBtn');
-            
-            function showSuccessModal(transactionId, planName, planAmount) {
-                if (transactionId) {
-                    document.getElementById('subId').textContent = transactionId;
-                }
-                document.getElementById('successPlanName').textContent = planName;
-                document.getElementById('successPlanAmount').textContent = planAmount;
-                modal.style.display = 'flex';
-            }
-            
-            function closeModal() {
-                modal.style.display = 'none';
-            }
-            
-            if (closeModalBtn) {
-                closeModalBtn.addEventListener('click', closeModal);
-            }
-            
-            if (modalActionBtn) {
-                modalActionBtn.addEventListener('click', closeModal);
-            }
-            
-            window.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    closeModal();
-                }
-            });
-            
-            // Form elements
+            const successModal = document.getElementById('successModal');
+            const closeSuccessModalBtn = document.getElementById('closeModalBtn');
+            const successModalActionBtn = document.getElementById('modalActionBtn');
+            const failureModal = document.getElementById('failureModal');
+            const closeFailureModalBtn = document.getElementById('closeFailureModalBtn');
+            const failureModalCloseBtn = document.getElementById('failureModalCloseBtn');
             const userForm = document.getElementById('userForm');
             const subscribeBtn = document.getElementById('subscribe-btn');
             const proceedBtn = document.getElementById('proceedToPayment');
             const formError = document.getElementById('formError');
             const loadingOverlay = document.getElementById('loadingOverlay');
             
-            // Store selected plan
+            // ===== MOBILE NAVIGATION =====
+            if (mobileNavToggle && mobileNav) {
+                mobileNavToggle.addEventListener('click', () => {
+                    mobileNav.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            
+            if (mobileNavClose) {
+                mobileNavClose.addEventListener('click', () => {
+                    mobileNav.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            document.querySelectorAll('.mobile-nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNav.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            // ===== MODAL LOGIC =====
+            function showSuccessModal(transactionId, planName, planAmount) {
+                if (transactionId) {
+                    document.getElementById('subId').textContent = transactionId;
+                }
+                document.getElementById('successPlanName').textContent = planName;
+                document.getElementById('successPlanAmount').textContent = planAmount;
+                successModal.style.display = 'flex';
+
+                // --- REDIRECT LOGIC ---
+                const modalMessage = document.getElementById('modalMessage');
+                successModalActionBtn.style.display = 'none';
+
+                const redirectMessage = document.createElement('p');
+                redirectMessage.id = 'redirect-message';
+                redirectMessage.style.marginTop = '20px';
+                redirectMessage.style.fontSize = '1rem';
+                redirectMessage.innerHTML = 'You will be redirected to the login page in <span id="redirect-timer">3</span> seconds...';
+                
+                const existingRedirectMsg = document.getElementById('redirect-message');
+                if (existingRedirectMsg) existingRedirectMsg.remove();
+                
+                modalMessage.appendChild(redirectMessage);
+
+                const timerSpan = document.getElementById('redirect-timer');
+                let countdown = 3;
+
+                const timerInterval = setInterval(() => {
+                    countdown--;
+                    if (timerSpan) timerSpan.textContent = countdown;
+                    if (countdown <= 0) clearInterval(timerInterval);
+                }, 1000);
+
+                setTimeout(() => {
+                    window.location.href = 'https://journal-traderlog.netlify.app/';
+                }, 3000);
+            }
+
+            function showFailureModal() {
+                failureModal.style.display = 'flex';
+            }
+            
+            function closeModal(modalElement) {
+                if (modalElement) {
+                    modalElement.style.display = 'none';
+                }
+            }
+
+            if (closeSuccessModalBtn) closeSuccessModalBtn.addEventListener('click', () => closeModal(successModal));
+            if (successModalActionBtn) successModalActionBtn.addEventListener('click', () => closeModal(successModal));
+            if (closeFailureModalBtn) closeFailureModalBtn.addEventListener('click', () => closeModal(failureModal));
+            if (failureModalCloseBtn) failureModalCloseBtn.addEventListener('click', () => closeModal(failureModal));
+            
+            window.addEventListener('click', (event) => {
+                if (event.target === successModal) closeModal(successModal);
+                if (event.target === failureModal) closeModal(failureModal);
+            });
+
+            // ===== PLAN SELECTION & FORM LOGIC =====
             let selectedPlan = {
                 id: 'monthly',
                 amount: 95,
                 description: 'Monthly Subscription'
             };
             
-            // Plan selection
             const planOptions = document.querySelectorAll('.plan-option');
             planOptions.forEach(option => {
                 option.addEventListener('click', function() {
-                    // Remove selected class from all options
                     planOptions.forEach(opt => opt.classList.remove('selected'));
-                    
-                    // Add selected class to clicked option
                     this.classList.add('selected');
-                    
-                    // Store selected plan details
                     selectedPlan = {
                         id: this.dataset.plan,
                         amount: parseInt(this.dataset.amount),
@@ -1234,159 +1314,113 @@
                 });
             });
             
-            // Show user form when plan is selected
             function showUserForm() {
                 if (!selectedPlan) {
                     formError.textContent = "Please select a plan";
                     formError.style.display = 'block';
                     return;
                 }
-                
-                // Update form with selected plan info
                 document.getElementById('selectedPlanName').textContent = selectedPlan.description;
                 document.getElementById('selectedPlanAmount').textContent = selectedPlan.amount;
-                
                 userForm.style.display = 'block';
                 userForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
             
-            // Payment buttons
             const paymentButtons = [
                 subscribeBtn,
                 document.getElementById('start-journaling'),
                 document.getElementById('avail-now'),
                 document.getElementById('start-now')
             ];
-            
             paymentButtons.forEach(button => {
-                if (button) {
-                    button.addEventListener('click', showUserForm);
-                }
+                if (button) button.addEventListener('click', showUserForm);
             });
-            
-            // Form validation
+
+            // ===== FORM VALIDATION =====
             function validateForm() {
                 const name = document.getElementById('userName').value.trim();
                 const email = document.getElementById('userEmail').value.trim();
                 const phone = document.getElementById('userPhone').value.trim();
-                
-                // Reset errors
-                document.querySelectorAll('.form-error').forEach(el => {
-                    el.style.display = 'none';
-                });
-                formError.style.display = 'none';
-                
                 let isValid = true;
+
+                document.querySelectorAll('.form-error').forEach(el => el.style.display = 'none');
                 
-                // Validate name
                 if (name === '') {
                     document.getElementById('nameError').style.display = 'block';
                     isValid = false;
                 }
-                
-                // Validate email
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email)) {
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                     document.getElementById('emailError').style.display = 'block';
                     isValid = false;
                 }
-                
-                // Validate phone
-                const phoneRegex = /^[0-9]{10}$/;
-                if (!phoneRegex.test(phone)) {
+                if (!/^[0-9]{10}$/.test(phone)) {
                     document.getElementById('phoneError').style.display = 'block';
                     isValid = false;
                 }
-                
                 return isValid;
             }
-            
-            // Create payment via Netlify function
+
+            // ===== PAYMENT CREATION =====
             async function createPayment() {
                 try {
-                    // Show loading overlay
                     loadingOverlay.style.display = 'flex';
                     
-                    // Get user info
-                    const name = document.getElementById('userName').value.trim();
-                    const email = document.getElementById('userEmail').value.trim();
-                    const phone = document.getElementById('userPhone').value.trim();
-                    
-                    // Prepare request data
                     const requestData = {
-                        name: name,
-                        email: email,
-                        phone: phone,
+                        name: document.getElementById('userName').value.trim(),
+                        email: document.getElementById('userEmail').value.trim(),
+                        phone: document.getElementById('userPhone').value.trim(),
                         affiliate_id: activeAffiliate || "direct",
                         plan_id: selectedPlan.id === 'monthly' ? "plan_R0lfqw7y18smql" : undefined,
                         amount: selectedPlan.amount,
                         description: selectedPlan.description
                     };
                     
-                    // Determine endpoint based on plan type
                     const endpoint = selectedPlan.id === 'monthly' 
                         ? '/.netlify/functions/create-subscription' 
                         : '/.netlify/functions/create-order';
                     
-                    // Call backend function
                     const response = await fetch(endpoint, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(requestData)
                     });
                     
                     const data = await response.json();
+                    if (!response.ok) throw new Error(data.error || 'Failed to create payment');
                     
-                    if (!response.ok) {
-                        throw new Error(data.error || 'Failed to create payment');
-                    }
-                    
-                    // Initialize Razorpay
                     const options = {
                         key: "rzp_live_7oJpadczIYphAM",
                         name: "TraderLog",
                         description: selectedPlan.description,
                         prefill: {
-                            name: name,
-                            email: email,
-                            contact: phone
+                            name: requestData.name,
+                            email: requestData.email,
+                            contact: requestData.phone
                         },
-                        theme: {
-                            color: "#8b5cf6"
-                        },
+                        theme: { color: "#8b5cf6" },
                         notes: {
                             affiliate_id: activeAffiliate || "direct",
-                            user_name: name,
-                            user_email: email,
-                            user_phone: phone,
+                            user_name: requestData.name,
+                            user_email: requestData.email,
+                            user_phone: requestData.phone,
                             plan_id: selectedPlan.id
                         },
                         handler: function(response) {
-                            // Handle successful payment
                             loadingOverlay.style.display = 'none';
                             const transactionId = selectedPlan.id === 'monthly' 
                                 ? response.razorpay_subscription_id 
                                 : response.razorpay_payment_id;
                             showSuccessModal(transactionId, selectedPlan.description, selectedPlan.amount);
                         },
-                        modal: {
-                            ondismiss: function() {
-                                loadingOverlay.style.display = 'none';
-                            }
-                        },
+                        modal: { ondismiss: () => loadingOverlay.style.display = 'none' },
                         hooks: {
                             onPaymentFailed: function(response) {
                                 loadingOverlay.style.display = 'none';
-                                formError.textContent = "Payment failed: " + 
-                                    (response.error.description || "Please try again");
-                                formError.style.display = 'block';
+                                showFailureModal();
                             }
                         }
                     };
                     
-                    // Add subscription/order specific parameters
                     if (selectedPlan.id === 'monthly') {
                         options.subscription_id = data.id;
                     } else {
@@ -1394,7 +1428,6 @@
                         options.amount = data.amount;
                     }
                     
-                    // Open Razorpay payment modal
                     const rzp = new Razorpay(options);
                     rzp.open();
                     
@@ -1406,18 +1439,13 @@
                 }
             }
             
-            // Proceed to payment button
             if (proceedBtn) {
-                proceedBtn.addEventListener('click', function(e) {
+                proceedBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
-                    if (validateForm()) {
-                        createPayment();
-                    }
+                    if (validateForm()) createPayment();
                 });
             }
         });
     </script>
 </body>
 </html>
-
