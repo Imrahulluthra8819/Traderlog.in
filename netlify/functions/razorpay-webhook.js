@@ -10,49 +10,70 @@ try {
 const db = admin.firestore();
 
 exports.handler = async function(event) {
-  const signature = event.headers['x-razorpay-signature'];
-  const WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET;
+    const signature = event.headers['x-razorpay-signature'];
+    const WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET;
 
-  try {
-    crypto.createHmac('sha256', WEBHOOK_SECRET).update(event.body).digest('hex');
-  } catch(error) { return { statusCode: 400, body: 'Invalid signature' }; }
+    try {
+        crypto.createHmac('sha256', WEBHOOK_SECRET).update(event.body).digest('hex');
+    } catch(error) { return { statusCode: 400, body: 'Invalid signature' }; }
 
-  const data = JSON.parse(event.body);
-  const eventType = data.event;
-  const subEntity = data.payload.subscription.entity;
-  const notes = subEntity.notes;
-  let firebaseUid = notes.firebase_uid;
+    const data = JSON.parse(event.body);
+    const eventType = data.event;
+    let updateData = {};
+    let firebaseUid, userEmail, userName, userPhone, planId;
+    let isSuccess = false;
 
-  let newStatus = 'inactive';
-  if (eventType.includes('activated') || eventType.includes('charged')) {
-      newStatus = 'active';
-  } else if (eventType.includes('cancelled') || eventType.includes('halted')) {
-      newStatus = 'cancelled';
-  }
+    if (eventType.startsWith('subscription.')) {
+        const sub = data.payload.subscription.entity;
+        firebaseUid = sub.notes.firebase_uid;
+        updateData.subscription_id = sub.id;
+        updateData.subscription_status = sub.status === 'active' ? 'active' : 'inactive';
+        if (sub.status === 'active') isSuccess = true;
 
-  try {
-    if (!firebaseUid) {
-        // This is a new user who paid directly. Create them now.
-        const userRecord = await admin.auth().createUser({ email: notes.user_email, displayName: notes.user_name });
-        firebaseUid = userRecord.uid;
-        await db.collection('free_trial_users').doc(firebaseUid).set({
-            email: notes.user_email,
-            status: 'active',
-            trial_end_date: null, // No trial
-            subscription_id: subEntity.id,
-            subscription_status: newStatus
-        });
-    } else {
-        // This is an existing user. Update their status.
-        await db.collection('free_trial_users').doc(firebaseUid).update({
-            subscription_id: subEntity.id,
-            subscription_status: newStatus,
-            status: 'active'
-        });
+    } else if (eventType === 'order.paid') {
+        const payment = data.payload.payment.entity;
+        const notes = payment.notes;
+        firebaseUid = notes.firebase_uid;
+        userEmail = notes.user_email;
+        userName = notes.user_name;
+        userPhone = notes.user_phone;
+        planId = notes.plan_id;
+        isSuccess = true;
     }
-    return { statusCode: 200, body: 'Webhook processed.' };
-  } catch (dbError) {
-      console.error('Firestore update failed:', dbError);
-      return { statusCode: 500, body: 'Database update failed.' };
-  }
+
+    if (!isSuccess) {
+        return { statusCode: 200, body: 'Event received but not a success action.' };
+    }
+
+    try {
+        let userDocRef;
+        if (firebaseUid) {
+            userDocRef = db.collection('free_trial_users').doc(firebaseUid);
+        } else {
+            // New user who paid directly. Find or create them.
+            const snapshot = await db.collection('free_trial_users').where('email', '==', userEmail).limit(1).get();
+            if (!snapshot.empty) {
+                userDocRef = snapshot.docs[0].ref;
+            } else {
+                const userRecord = await admin.auth().createUser({ email: userEmail, displayName: userName });
+                userDocRef = db.collection('free_trial_users').doc(userRecord.uid);
+                await userDocRef.set({ email: userEmail, name: userName, phone: userPhone, trial_end_date: null });
+            }
+        }
+
+        let subEndDate = new Date();
+        if (planId === 'six-months') subEndDate.setMonth(subEndDate.getMonth() + 6);
+        else if (planId === 'yearly') subEndDate.setFullYear(subEndDate.getFullYear() + 1);
+        else subEndDate.setFullYear(subEndDate.getFullYear() + 1); // Monthly subscription lasts a year
+
+        updateData.status = 'active';
+        updateData.subscription_end_date = admin.firestore.Timestamp.fromDate(subEndDate);
+
+        await userDocRef.update(updateData);
+        return { statusCode: 200, body: 'Webhook processed.' };
+
+    } catch (error) {
+        console.error('Webhook Firestore Error:', error);
+        return { statusCode: 500, body: 'Internal Server Error.' };
+    }
 };
