@@ -20,7 +20,7 @@ exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
-        // Correctly capture all details from the frontend request
+        // CORRECTLY CAPTURE ALL DETAILS FROM THE FRONTEND REQUEST
         const { name, email, phone, affiliate_id, plan_id } = JSON.parse(event.body);
         const userEmail = email.toLowerCase();
 
@@ -33,16 +33,16 @@ exports.handler = async function(event) {
         }
 
         const subscription = await razorpay.subscriptions.create({
-            plan_id: "plan_R6n1t5ne734knZ", // Your Live Monthly Plan ID
+            plan_id: "plan_R6n1t5ne734knZ", // Your Monthly Plan ID
             customer_notify: 1,
             total_count: 12,
             notes: { 
-                // Pass all captured details to Razorpay notes
+                // PASS ALL CAPTURED DETAILS TO RAZORPAY NOTES
                 firebase_uid: firebaseUid,
                 user_email: userEmail,
                 user_name: name,
                 user_phone: phone,
-                plan_id: plan_id,
+                plan_id: plan_id, // Use the plan_id from the form
                 affiliate_id: affiliate_id || "direct"
             }
         });
