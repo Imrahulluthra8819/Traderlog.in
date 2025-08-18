@@ -32,10 +32,10 @@ exports.handler = async function(event) {
         }
 
         const subscription = await razorpay.subscriptions.create({
-            // VITAL STEP: Replace this with your actual Plan ID from Razorpay
+            // VITAL: Ensure this is your correct, LIVE Plan ID from Razorpay
             plan_id: "plan_R6n1t5ne734knZ", 
             customer_notify: 1,
-            total_count: 12, // This means the subscription will run for 12 cycles (1 year)
+            total_count: 12,
             notes: { 
                 firebase_uid: firebaseUid,
                 user_email: userEmail,
@@ -48,8 +48,13 @@ exports.handler = async function(event) {
         return { statusCode: 200, body: JSON.stringify(subscription) };
 
     } catch (error) {
-        // This is the error you are seeing. It's happening because the plan_id is wrong.
-        console.error('Create Subscription Error:', error);
-        return { statusCode: 500, body: JSON.stringify({ error: 'Could not create subscription.' }) };
+        // --- ENHANCED ERROR LOGGING ---
+        // This will give us the exact reason for the failure.
+        console.error('RAZORPAY SUBSCRIPTION CREATE FAILED:', error);
+        
+        // Send a more specific error message back to the frontend if possible
+        const errorMessage = error.error ? error.error.description : 'Could not create subscription. Please check the function logs on Netlify.';
+        
+        return { statusCode: 500, body: JSON.stringify({ error: errorMessage }) };
     }
 };
