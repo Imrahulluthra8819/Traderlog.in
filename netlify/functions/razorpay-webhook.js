@@ -29,6 +29,7 @@ exports.handler = async function(event) {
         updateData.subscription_id = sub.id;
         updateData.subscription_status = sub.status === 'active' ? 'active' : 'inactive';
         if (sub.status === 'active') isSuccess = true;
+        planId = 'monthly'; // Assume subscription events are for monthly plans
 
     } else if (eventType === 'order.paid') {
         const payment = data.payload.payment.entity;
