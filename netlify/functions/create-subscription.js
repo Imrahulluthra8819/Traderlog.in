@@ -1,46 +1,53 @@
 const Razorpay = require('razorpay');
+const admin = require('firebase-admin');
 
-exports.handler = async (event) => {
-  try {
-    const requestData = JSON.parse(event.body);
-    const { name, email, phone, plan_id = "plan_R0lfqw7y18smql", affiliate_id } = requestData;
-    
-    const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID,
-      key_secret: process.env.RAZORPAY_SECRET
-    });
-
-    const subscription = await razorpay.subscriptions.create({
-      plan_id: plan_id,
-      customer_notify: 1,
-      total_count: 12,
-      notes: {
-        user_name: name,
-        user_email: email,
-        user_phone: phone,
-        affiliate_id: affiliate_id || 'direct',
-        created_via: "TraderLog Web"
-      }
-    });
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ 
-        id: subscription.id,
-        status: subscription.status
-      })
-    };
-  } catch (error) {
-    let errorMessage = "Subscription creation failed";
-    if (error.error?.description) errorMessage = error.error.description;
-    else if (error.message) errorMessage = error.message;
-    
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ 
-        error: errorMessage,
-        details: error.error || "Please check your input"
-      })
-    };
+// --- Initialize Services ---
+try {
+  if (!admin.apps.length) {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
   }
+} catch (e) { console.error('Firebase Admin Init Error:', e); }
+const db = admin.firestore();
+
+const razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
+// --------------------------
+
+exports.handler = async function(event) {
+    if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
+
+    try {
+        const { name, email, phone } = JSON.parse(event.body);
+        const userEmail = email.toLowerCase();
+
+        const usersRef = db.collection('free_trial_users');
+        const snapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
+        
+        let firebaseUid = '';
+        if (!snapshot.empty) {
+            firebaseUid = snapshot.docs[0].id;
+        }
+
+        const subscription = await razorpay.subscriptions.create({
+            plan_id: "plan_R0lfqw7y18smql", // Your Monthly Plan ID
+            customer_notify: 1,
+            total_count: 12,
+            notes: { 
+                firebase_uid: firebaseUid, // Will be blank for new users, webhook will handle it
+                user_email: userEmail,
+                user_name: name,
+                user_phone: phone,
+                plan_id: 'monthly'
+            }
+        });
+
+        return { statusCode: 200, body: JSON.stringify(subscription) };
+
+    } catch (error) {
+        console.error('Create Subscription Error:', error);
+        return { statusCode: 500, body: JSON.stringify({ error: 'Could not create subscription.' }) };
+    }
 };
