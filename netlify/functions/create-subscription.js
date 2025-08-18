@@ -32,11 +32,12 @@ exports.handler = async function(event) {
         }
 
         const subscription = await razorpay.subscriptions.create({
-            plan_id: "plan_R0lfqw7y18smql", // Your Monthly Plan ID
+            // VITAL STEP: Replace this with your actual Plan ID from Razorpay
+            plan_id: "plan_R6n1t5ne734knZ", 
             customer_notify: 1,
-            total_count: 12,
+            total_count: 12, // This means the subscription will run for 12 cycles (1 year)
             notes: { 
-                firebase_uid: firebaseUid, // Will be blank for new users, webhook will handle it
+                firebase_uid: firebaseUid,
                 user_email: userEmail,
                 user_name: name,
                 user_phone: phone,
@@ -47,6 +48,7 @@ exports.handler = async function(event) {
         return { statusCode: 200, body: JSON.stringify(subscription) };
 
     } catch (error) {
+        // This is the error you are seeing. It's happening because the plan_id is wrong.
         console.error('Create Subscription Error:', error);
         return { statusCode: 500, body: JSON.stringify({ error: 'Could not create subscription.' }) };
     }
