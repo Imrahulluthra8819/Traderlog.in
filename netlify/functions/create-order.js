@@ -20,7 +20,7 @@ exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
-        // Correctly capture all details from the frontend request
+        // CORRECTLY CAPTURE ALL DETAILS FROM THE FRONTEND REQUEST
         const { name, email, phone, affiliate_id, plan_id, amount } = JSON.parse(event.body);
         const userEmail = email.toLowerCase();
         
@@ -37,7 +37,7 @@ exports.handler = async function(event) {
             currency: "INR",
             receipt: `receipt_${userEmail}_${Date.now()}`,
             notes: {
-                // Pass all captured details to Razorpay notes
+                // PASS ALL CAPTURED DETAILS TO RAZORPAY NOTES
                 firebase_uid: firebaseUid,
                 user_email: userEmail,
                 user_name: name,
