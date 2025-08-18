@@ -20,7 +20,7 @@ exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
-        const { name, email, phone, password, isTrial } = JSON.parse(event.body);
+        const { name, email, phone, password, isTrial, plan } = JSON.parse(event.body);
         const userEmail = email.toLowerCase();
 
         const usersRef = db.collection('free_trial_users');
@@ -37,27 +37,42 @@ exports.handler = async function(event) {
                 status: 'trialing',
                 trial_end_date: admin.firestore.Timestamp.fromDate(trialEndDate),
                 subscription_id: null,
-                subscription_status: 'inactive'
+                subscription_status: 'inactive',
+                subscription_end_date: null
             });
             return { statusCode: 200, body: JSON.stringify({ status: 'trial_started' }) };
         }
-
+        
         // --- EXISTING USER OR DIRECT-TO-PAYMENT ---
         const userDoc = snapshot.empty ? null : snapshot.docs[0];
+        const notes = { 
+            firebase_uid: userDoc ? userDoc.id : '',
+            user_email: userEmail, 
+            user_name: name, 
+            user_phone: phone,
+            plan_id: plan.id
+        };
 
-        const subscription = await razorpay.subscriptions.create({
-            plan_id: "plan_R0lfqw7y18smql", // Your Monthly Plan ID from Razorpay
-            customer_notify: 1,
-            total_count: 12,
-            notes: { 
-                firebase_uid: userDoc ? userDoc.id : '', // Pass UID if user exists
-                user_email: userEmail, 
-                user_name: name, 
-                user_phone: phone 
-            }
-        });
-
-        return { statusCode: 200, body: JSON.stringify({ status: 'payment_initiated', subscription: subscription }) };
+        if (plan.id === 'monthly') {
+            // --- CREATE A RECURRING SUBSCRIPTION ---
+            const subscription = await razorpay.subscriptions.create({
+                plan_id: "plan_R0lfqw7y18smql", // Your Monthly Plan ID from Razorpay
+                customer_notify: 1,
+                total_count: 12,
+                notes: notes
+            });
+            return { statusCode: 200, body: JSON.stringify({ status: 'payment_initiated', type: 'subscription', payload: subscription }) };
+        } else {
+            // --- CREATE A ONE-TIME ORDER ---
+            const options = {
+                amount: plan.amount * 100, // Amount in paise
+                currency: "INR",
+                receipt: `receipt_${userEmail}_${Date.now()}`,
+                notes: notes
+            };
+            const order = await razorpay.orders.create(options);
+            return { statusCode: 200, body: JSON.stringify({ status: 'payment_initiated', type: 'order', payload: order }) };
+        }
 
     } catch (error) {
         console.error('Handler Error:', error);
