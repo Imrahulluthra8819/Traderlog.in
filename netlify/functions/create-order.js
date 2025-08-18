@@ -20,9 +20,11 @@ exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
-        // CORRECTLY CAPTURE ALL DETAILS FROM THE FRONTEND REQUEST
-        const { name, email, phone, affiliate_id, plan_id, amount } = JSON.parse(event.body);
-        const userEmail = email.toLowerCase();
+        // Correctly parse the incoming data from the form
+        const data = JSON.parse(event.body);
+        const userEmail = data.email.toLowerCase();
+
+        console.log("Received data for order:", data); // Log to confirm data is received
         
         const usersRef = db.collection('free_trial_users');
         const snapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
@@ -33,17 +35,17 @@ exports.handler = async function(event) {
         }
 
         const options = {
-            amount: amount * 100, // Amount in paise
+            amount: data.amount * 100, // Amount in paise
             currency: "INR",
             receipt: `receipt_${userEmail}_${Date.now()}`,
             notes: {
-                // PASS ALL CAPTURED DETAILS TO RAZORPAY NOTES
+                // Pass all captured details to Razorpay notes
                 firebase_uid: firebaseUid,
                 user_email: userEmail,
-                user_name: name,
-                user_phone: phone,
-                plan_id: plan_id,
-                affiliate_id: affiliate_id || "direct"
+                user_name: data.name,
+                user_phone: data.phone,
+                plan_id: data.plan_id,
+                affiliate_id: data.affiliate_id || "direct"
             }
         };
 
