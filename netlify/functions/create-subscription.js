@@ -21,7 +21,7 @@ exports.handler = async function(event) {
 
     try {
         // Correctly capture all details from the frontend request
-        const { name, email, phone, affiliate_id, plan_id, description } = JSON.parse(event.body);
+        const { name, email, phone, affiliate_id, plan_id } = JSON.parse(event.body);
         const userEmail = email.toLowerCase();
 
         const usersRef = db.collection('free_trial_users');
@@ -33,7 +33,7 @@ exports.handler = async function(event) {
         }
 
         const subscription = await razorpay.subscriptions.create({
-            plan_id: "plan_R6n1t5ne734knZ", // Your Monthly Plan ID
+            plan_id: "plan_R6n1t5ne734knZ", // Your Live Monthly Plan ID
             customer_notify: 1,
             total_count: 12,
             notes: { 
