@@ -1312,8 +1312,6 @@
                             email: requestData.email,
                             contact: requestData.phone
                         },
-                        // --- THIS IS THE FIX ---
-                        // This 'notes' object ensures the data is attached to the final payment record.
                         notes: {
                             user_name: requestData.name,
                             user_phone: requestData.phone,
@@ -1321,7 +1319,6 @@
                             plan_id: requestData.plan_id,
                             affiliate_id: requestData.affiliate_id
                         },
-                        // ----------------------
                         handler: function(response) {
                             loadingOverlay.style.display = 'none';
                             const transactionId = response.razorpay_subscription_id || response.razorpay_payment_id;
