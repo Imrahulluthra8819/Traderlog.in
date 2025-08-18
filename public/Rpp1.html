@@ -1312,6 +1312,16 @@
                             email: requestData.email,
                             contact: requestData.phone
                         },
+                        // --- THIS IS THE FIX ---
+                        // This 'notes' object ensures the data is attached to the final payment record.
+                        notes: {
+                            user_name: requestData.name,
+                            user_phone: requestData.phone,
+                            user_email: requestData.email,
+                            plan_id: requestData.plan_id,
+                            affiliate_id: requestData.affiliate_id
+                        },
+                        // ----------------------
                         handler: function(response) {
                             loadingOverlay.style.display = 'none';
                             const transactionId = response.razorpay_subscription_id || response.razorpay_payment_id;
@@ -1347,13 +1357,9 @@
             if (proceedBtn) {
                 proceedBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    // This is the only part that needs to change slightly.
-                    // Instead of calling a generic handler, we decide here.
                     if (isTrial) {
-                        // Handle trial creation
                         handleTrialSubmit();
                     } else {
-                        // Handle payment creation
                         createPayment();
                     }
                 });
