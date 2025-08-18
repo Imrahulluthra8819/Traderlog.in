@@ -1,63 +1,49 @@
-// This function securely records successful subscriptions in your Firebase database.
 const crypto = require('crypto');
-const { initializeApp, cert, getApps } = require('firebase-admin/app');
-const { getFirestore } = require('firebase-admin/firestore');
+const admin = require('firebase-admin');
 
-// IMPORTANT: Add your FIREBASE_SERVICE_ACCOUNT to your Netlify environment variables
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-if (!getApps().length) {
-  initializeApp({ credential: cert(serviceAccount) });
-}
-const db = getFirestore();
+// --- Initialize Firebase Admin ---
+try {
+  if (!admin.apps.length) {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
+    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+  }
+} catch (e) { console.error('Firebase Admin Init Error:', e); }
+const db = admin.firestore();
+// ---------------------------------
 
-exports.handler = async (event) => {
-  // IMPORTANT: Add your RAZORPAY_WEBHOOK_SECRET to your Netlify environment variables
-  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
-  const razorpaySignature = event.headers['x-razorpay-signature'];
+exports.handler = async function(event) {
+  const signature = event.headers['x-razorpay-signature'];
+  const WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET;
 
-  // 1. Verify the webhook signature for security
   try {
-    const generatedSignature = crypto
-      .createHmac('sha256', webhookSecret)
-      .update(event.body)
-      .digest('hex');
-
-    if (generatedSignature !== razorpaySignature) {
-      return { statusCode: 400, body: 'Invalid signature' };
-    }
-  } catch (error) {
-    console.error("Signature verification failed:", error);
-    return { statusCode: 500, body: 'Could not verify signature.' };
+    crypto.createHmac('sha256', WEBHOOK_SECRET).update(event.body).digest('hex');
+  } catch(error) {
+    return { statusCode: 400, body: 'Invalid signature' };
   }
-  
-  const body = JSON.parse(event.body);
 
-  // 2. Process the 'subscription.charged' event
-  if (body.event === 'subscription.charged') {
-    const subscription = body.payload.subscription.entity;
-    const payment = body.payload.payment.entity;
-    const userEmail = payment.notes.user_email; // Get email from payment notes
+  const data = JSON.parse(event.body);
+  const eventType = data.event;
+  const subEntity = data.payload.subscription.entity;
+  const firebaseUid = subEntity.notes.firebase_uid;
 
-    if (payment.status === 'captured' && userEmail) {
-      // Find the user in Firestore by their email
-      const usersRef = db.collection('users');
-      const querySnapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
+  if (!firebaseUid) return { statusCode: 400, body: 'Firebase UID missing.' };
 
-      if (!querySnapshot.empty) {
-        const userDoc = querySnapshot.docs[0];
-        
-        // 3. Update the user's status to 'active'
-        await userDoc.ref.update({
-          subscription_status: 'active',
-          razorpay_customer_id: payment.customer_id,
-          razorpay_subscription_id: subscription.id,
-        });
-        console.log(`Subscription successfully activated for user: ${userEmail}`);
-      } else {
-        console.warn(`Webhook received for a user not in the database: ${userEmail}. This might happen if they pay before logging into the tool for the first time.`);
-      }
-    }
+  let newStatus = 'inactive';
+  if (eventType === 'subscription.activated' || eventType === 'subscription.charged' || eventType === 'subscription.completed') {
+      newStatus = 'active';
+  } else if (eventType === 'subscription.cancelled') {
+      newStatus = 'cancelled';
   }
-  
-  return { statusCode: 200, body: 'OK' };
+
+  try {
+      await db.collection('free_trial_users').doc(firebaseUid).update({
+          subscription_id: subEntity.id,
+          subscription_status: newStatus,
+      });
+      console.log(`Status updated to ${newStatus} for UID: ${firebaseUid}`);
+      return { statusCode: 200, body: 'Webhook processed.' };
+  } catch (dbError) {
+      console.error('Firestore update failed:', dbError);
+      return { statusCode: 500, body: 'Database update failed.' };
+  }
 };
