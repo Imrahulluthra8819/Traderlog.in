@@ -937,6 +937,11 @@
                 <div class="offer-duration">Special introductory pricing</div>
                 
                 <div class="plan-options">
+                    <div class="plan-option" data-plan="free-trial">
+    <h4>Free Trial</h4>
+    <div class="plan-price">FREE</div>
+    <div class="plan-duration">14 Days</div>
+</div>
                     <div class="plan-option selected" data-plan="monthly" data-amount="95" data-desc="Monthly Subscription">
                         <h4>Monthly</h4>
                         <div class="plan-price">₹95</div>
@@ -970,6 +975,12 @@
             <div class="user-form" id="userForm">
                 <h3>Complete Your Subscription</h3>
                 <div class="error-message" id="formError"></div>
+                <div class="form-group" id="password-group" style="display: none;">
+    <label for="userPassword">Create Password</label>
+    <input type="password" id="userPassword" placeholder="Minimum 8 characters">
+    <div class="form-error" id="passwordError">Password must be at least 8 characters</div>
+</div>
+                
                 
                 <div class="form-group">
                     <label for="userName">Full Name</label>
@@ -1440,3 +1451,4 @@
     </script>
 </body>
 </html>
+
