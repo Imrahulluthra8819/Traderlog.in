@@ -1292,7 +1292,7 @@
                 if (!response.ok) throw new Error(result.error);
 
                 if (result.status === 'trial_started') {
-                    alert('Your 14-day free trial has started! Redirecting to the journal.');
+                    alert('Your 14-day free trial has started! You will now be redirected to the journal.');
                     window.location.href = 'https://journal-traderlog.netlify.app/';
                 } else if (result.status === 'payment_initiated') {
                     launchRazorpay(result.type, result.payload, requestData);
@@ -1338,4 +1338,5 @@
 </script>
 </body>
 </html>
+
 
