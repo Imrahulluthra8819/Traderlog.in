@@ -12,7 +12,7 @@ const db = getFirestore();
 
 exports.handler = async (event) => {
   // IMPORTANT: Add your RAZORPAY_WEBHOOK_SECRET to your Netlify environment variables
-  const webhookSecret = process.env.Raanav@88198819;
+  const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
   const razorpaySignature = event.headers['x-razorpay-signature'];
 
   // 1. Verify the webhook signature for security
@@ -61,4 +61,3 @@ exports.handler = async (event) => {
   
   return { statusCode: 200, body: 'OK' };
 };
-
