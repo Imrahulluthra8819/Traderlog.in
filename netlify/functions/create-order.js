@@ -20,7 +20,8 @@ exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
-        const { name, email, phone, amount, plan_id } = JSON.parse(event.body);
+        // Correctly capture all details from the frontend request
+        const { name, email, phone, affiliate_id, plan_id, amount } = JSON.parse(event.body);
         const userEmail = email.toLowerCase();
         
         const usersRef = db.collection('free_trial_users');
@@ -36,11 +37,13 @@ exports.handler = async function(event) {
             currency: "INR",
             receipt: `receipt_${userEmail}_${Date.now()}`,
             notes: {
-                firebase_uid: firebaseUid, // Will be blank for new users, webhook will handle it
+                // Pass all captured details to Razorpay notes
+                firebase_uid: firebaseUid,
                 user_email: userEmail,
                 user_name: name,
                 user_phone: phone,
-                plan_id: plan_id
+                plan_id: plan_id,
+                affiliate_id: affiliate_id || "direct"
             }
         };
 
