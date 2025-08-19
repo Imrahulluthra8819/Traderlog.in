@@ -937,21 +937,21 @@
                 <div class="offer-duration">Special introductory pricing</div>
                 
                 <div class="plan-options">
-                    <div class="plan-option selected" data-plan="monthly" data-amount="95" data-desc="Monthly Subscription">
+                    <div class="plan-option selected" data-plan="monthly" data-amount="199" data-desc="Monthly Subscription">
                         <h4>Monthly</h4>
-                        <div class="plan-price">₹95</div>
+                        <div class="plan-price">₹199</div>
                         <div class="plan-duration">per month</div>
                     </div>
                     
-                    <div class="plan-option" data-plan="six-months" data-amount="499" data-desc="6 Months Access">
+                    <div class="plan-option" data-plan="six-months" data-amount="999" data-desc="6 Months Access">
                         <h4>6 Months</h4>
-                        <div class="plan-price">₹499</div>
+                        <div class="plan-price">₹999</div>
                         <div class="plan-duration">one-time payment</div>
                     </div>
                     
-                    <div class="plan-option" data-plan="yearly" data-amount="999" data-desc="1 Year Access">
+                    <div class="plan-option" data-plan="yearly" data-amount="1899" data-desc="1 Year Access">
                         <h4>1 Year</h4>
-                        <div class="plan-price">₹999</div>
+                        <div class="plan-price">₹1899</div>
                         <div class="plan-duration">one-time payment</div>
                     </div>
                 </div>
@@ -1288,7 +1288,7 @@
             // ===== PLAN SELECTION & FORM LOGIC =====
             let selectedPlan = {
                 id: 'monthly',
-                amount: 95,
+                amount: 199,
                 description: 'Monthly Subscription'
             };
             
@@ -1361,7 +1361,7 @@
                         email: document.getElementById('userEmail').value.trim(),
                         phone: document.getElementById('userPhone').value.trim(),
                         affiliate_id: activeAffiliate || "direct",
-                        plan_id: selectedPlan.id === 'monthly' ? "plan_R0lfqw7y18smql" : undefined,
+                        plan_id: selectedPlan.id === 'monthly' ? "plan_R6n1t5ne734knZ" : undefined,
                         amount: selectedPlan.amount,
                         description: selectedPlan.description
                     };
@@ -1440,3 +1440,4 @@
     </script>
 </body>
 </html>
+
