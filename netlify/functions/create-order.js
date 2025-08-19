@@ -35,7 +35,11 @@ exports.handler = async function(event) {
         }
 
         const options = {
-            amount: data.amount * 100, // Amount in paise
+            // =================================================================
+            // FIXED: Removed multiplication by 100. The amount from the
+            // frontend is already in paise.
+            // =================================================================
+            amount: data.amount, // Amount in paise
             currency: "INR",
             receipt: `receipt_${userEmail}_${Date.now()}`,
             notes: {
