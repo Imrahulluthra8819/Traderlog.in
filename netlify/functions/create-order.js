@@ -1,20 +1,26 @@
 const Razorpay = require('razorpay');
 const admin = require('firebase-admin');
 
-// --- Initialize Services ---
-try {
-  if (!admin.apps.length) {
-    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
-    admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+// --- Initialize Firebase Admin SDK ---
+// This check ensures that Firebase is only initialized once,
+// preventing the function from crashing on subsequent runs.
+if (!admin.apps.length) {
+  try {
+    admin.initializeApp({
+      credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY))
+    });
+  } catch (e) {
+    console.error('Firebase Admin Init Error:', e);
   }
-} catch (e) { console.error('Firebase Admin Init Error:', e); }
+}
+// ------------------------------------
+
 const db = admin.firestore();
 
 const razorpay = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
-// --------------------------
 
 exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
@@ -35,11 +41,7 @@ exports.handler = async function(event) {
         }
 
         const options = {
-            // =================================================================
-            // FIXED: Removed multiplication by 100. The amount from the
-            // frontend is already in paise.
-            // =================================================================
-            amount: data.amount, // Amount in paise
+            amount: data.amount, // Amount should be in paise from the frontend
             currency: "INR",
             receipt: `receipt_${userEmail}_${Date.now()}`,
             notes: {
