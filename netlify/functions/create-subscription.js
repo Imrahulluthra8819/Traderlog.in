@@ -56,3 +56,4 @@ exports.handler = async function(event) {
         return { statusCode: 500, body: JSON.stringify({ error: 'Could not create subscription.' }) };
     }
 };
+
