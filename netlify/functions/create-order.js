@@ -2,8 +2,6 @@ const Razorpay = require('razorpay');
 const admin = require('firebase-admin');
 
 // --- Initialize Firebase Admin SDK ---
-// This check ensures that Firebase is only initialized once,
-// preventing the function from crashing on subsequent runs.
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -32,9 +30,6 @@ exports.handler = async function(event) {
         console.log("Received data for order:", data);
         
         let firebaseUid = '';
-        // --- RESILIENT FIREBASE LOOKUP ---
-        // This lookup is now wrapped in its own try/catch block.
-        // If it fails, we log the error but allow the payment to proceed.
         try {
             const usersRef = db.collection('free_trial_users');
             const snapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
@@ -43,15 +38,18 @@ exports.handler = async function(event) {
             }
         } catch (dbError) {
             console.error('Firestore lookup failed, but proceeding with payment. Error:', dbError);
-            // It's a good idea to check your Firestore indexes if you see this error.
         }
 
         const options = {
-            amount: data.amount, // Amount should be in paise from the frontend
+            amount: data.amount, 
             currency: "INR",
-            receipt: `receipt_${userEmail}_${Date.now()}`,
+            // =================================================================
+            // FINAL FIX: Created a shorter receipt ID to meet Razorpay's
+            // 40-character limit.
+            // =================================================================
+            receipt: `order_${Date.now()}`,
             notes: {
-                firebase_uid: firebaseUid || "N/A", // Default to "N/A" if lookup fails
+                firebase_uid: firebaseUid || "N/A",
                 user_email: userEmail,
                 user_name: data.name,
                 user_phone: data.phone,
@@ -64,7 +62,7 @@ exports.handler = async function(event) {
         return { statusCode: 200, body: JSON.stringify(order) };
 
     } catch (error) {
-        console.error('Create Order Error:', error);
+        console.error('Create Order Error:', error.error || error); // Log the detailed error from Razorpay
         return { statusCode: 500, body: JSON.stringify({ error: 'Could not create order.' }) };
     }
 };
