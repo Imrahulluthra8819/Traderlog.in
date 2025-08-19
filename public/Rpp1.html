@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-g">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TraderLog - Choose Your Subscription Plan</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -1362,9 +1362,6 @@
                         phone: document.getElementById('userPhone').value.trim(),
                         affiliate_id: activeAffiliate || "direct",
                         plan_id: selectedPlan.id === 'monthly' ? "plan_R76nWkRQGGkReO" : undefined,
-                        // =================================================================
-                        // FIXED: Amount is multiplied by 100 to convert to paise
-                        // =================================================================
                         amount: selectedPlan.amount * 100,
                         description: selectedPlan.description
                     };
@@ -1383,7 +1380,10 @@
                     if (!response.ok) throw new Error(data.error || 'Failed to create payment');
                     
                     const options = {
-                        key: "rzp_live_7oJpadczIYphAM",
+                        // =================================================================
+                        // FINAL FIX: Using the new, correct Key ID
+                        // =================================================================
+                        key: "rzp_live_R76huJF9dytj1q",
                         name: "TraderLog",
                         description: selectedPlan.description,
                         prefill: {
@@ -1443,4 +1443,3 @@
     </script>
 </body>
 </html>
-
