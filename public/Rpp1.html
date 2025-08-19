@@ -799,7 +799,7 @@
             }
             
             .plan-options {
-                grid-template-columns: 1fr 1fr; /* 2 columns on mobile */
+                grid-template-columns: 1fr;
             }
             
             .testimonial-grid {
@@ -873,6 +873,7 @@
             display: none;
         }
     </style>
+</head>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-0KFBLK283C"></script>
 <script>
@@ -956,12 +957,7 @@
                 </div>
                 
                 <button class="subscription-btn pulse" id="subscribe-btn">
-                    <i class="fas fa-bolt"></i> Get Started
-                </button>
-
-                <!-- NEW FREE TRIAL BUTTON -->
-                <button class="subscription-btn" id="claimTrialBtn" style="background: transparent; border: 2px solid var(--accent); margin-top: 10px;">
-                    <i class="fas fa-calendar-check"></i> Claim 14 days FREE Trial
+                    <i class="fas fa-bolt"></i> Subscribe Now
                 </button>
                 
                 <div style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-light);">
@@ -972,7 +968,7 @@
             
             <!-- User Information Form -->
             <div class="user-form" id="userForm">
-                <h3>Complete Your Details</h3>
+                <h3>Complete Your Subscription</h3>
                 <div class="error-message" id="formError"></div>
                 
                 <div class="form-group">
@@ -992,23 +988,16 @@
                     <input type="tel" id="userPhone" placeholder="Enter your phone number">
                     <div class="form-error" id="phoneError">Please enter a 10-digit phone number</div>
                 </div>
-
-                <!-- ADDED PASSWORD FIELD -->
-                <div class="form-group" id="password-group" style="display: none;">
-                    <label for="userPassword">Create Password</label>
-                    <input type="password" id="userPassword" placeholder="Minimum 8 characters">
-                    <div class="form-error" id="passwordError">Password must be at least 8 characters</div>
-                </div>
                 
                 <div class="selected-plan-info">
                     <div class="subscription-details">
                         <p><strong>Selected Plan:</strong> <span id="selectedPlanName"></span></p>
-                        <p><strong>Amount:</strong> <span id="selectedPlanAmount"></span></p>
+                        <p><strong>Amount:</strong> ₹<span id="selectedPlanAmount"></span></p>
                     </div>
                 </div>
                 
                 <button class="subscription-btn" id="proceedToPayment">
-                    <i class="fas fa-lock"></i> Proceed
+                    <i class="fas fa-lock"></i> Proceed to Payment
                 </button>
             </div>
             
@@ -1127,7 +1116,7 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div>
             <div class="loading-spinner"></div>
-            <div class="loading-text">Processing...</div>
+            <div class="loading-text">Processing your payment...</div>
         </div>
     </div>
     
@@ -1176,10 +1165,31 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Your existing UI and Affiliate logic remains here...
-            const affiliateId = new URLSearchParams(window.location.search).get('affiliate');
-            if (affiliateId) { localStorage.setItem('traderlog_affiliate', affiliateId); }
-            const activeAffiliate = localStorage.getItem('traderlog_affiliate');
+            // ===== AFFILIATE TRACKING SYSTEM =====
+            const urlParams = new URLSearchParams(window.location.search);
+            const affiliateId = urlParams.get('affiliate') || urlParams.get('ref') || urlParams.get('utm_source');
+            
+            if (affiliateId) {
+                localStorage.setItem('traderlog_affiliate', affiliateId);
+                localStorage.setItem('traderlog_affiliate_timestamp', Date.now());
+                console.log('Affiliate stored:', affiliateId);
+            }
+            
+            const storedAffiliate = localStorage.getItem('traderlog_affiliate');
+            const affiliateTimestamp = localStorage.getItem('traderlog_affiliate_timestamp');
+            
+            const affiliateAge = affiliateTimestamp ? (Date.now() - affiliateTimestamp) : 0;
+            const validAffiliate = storedAffiliate && affiliateAge < (30 * 24 * 60 * 60 * 1000);
+            
+            const activeAffiliate = validAffiliate ? storedAffiliate : affiliateId;
+            
+            if (activeAffiliate) {
+                document.getElementById('affiliateId').textContent = activeAffiliate;
+            } else {
+                document.querySelector('#affiliateId').closest('p').style.display = 'none';
+            }
+            
+            // ===== UI ELEMENTS =====
             const mobileNavToggle = document.getElementById('mobileNavToggle');
             const mobileNav = document.getElementById('mobileNav');
             const mobileNavClose = document.getElementById('mobileNavClose');
@@ -1190,36 +1200,99 @@
             const closeFailureModalBtn = document.getElementById('closeFailureModalBtn');
             const failureModalCloseBtn = document.getElementById('failureModalCloseBtn');
             const userForm = document.getElementById('userForm');
+            const subscribeBtn = document.getElementById('subscribe-btn');
+            const proceedBtn = document.getElementById('proceedToPayment');
+            const formError = document.getElementById('formError');
             const loadingOverlay = document.getElementById('loadingOverlay');
             
-            if (mobileNavToggle && mobileNav) { mobileNavToggle.addEventListener('click', () => mobileNav.classList.add('active')); }
-            if (mobileNavClose) { mobileNavClose.addEventListener('click', () => mobileNav.classList.remove('active')); }
+            // ===== MOBILE NAVIGATION =====
+            if (mobileNavToggle && mobileNav) {
+                mobileNavToggle.addEventListener('click', () => {
+                    mobileNav.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            
+            if (mobileNavClose) {
+                mobileNavClose.addEventListener('click', () => {
+                    mobileNav.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            document.querySelectorAll('.mobile-nav a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileNav.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            // ===== MODAL LOGIC =====
             function showSuccessModal(transactionId, planName, planAmount) {
-                if (transactionId) { document.getElementById('subId').textContent = transactionId; }
+                if (transactionId) {
+                    document.getElementById('subId').textContent = transactionId;
+                }
                 document.getElementById('successPlanName').textContent = planName;
                 document.getElementById('successPlanAmount').textContent = planAmount;
-                if (activeAffiliate) { document.getElementById('affiliateId').textContent = activeAffiliate; } else { document.querySelector('#affiliateId').closest('p').style.display = 'none'; }
                 successModal.style.display = 'flex';
-                setTimeout(() => { window.location.href = 'https://journal-traderlog.netlify.app/'; }, 3000);
+
+                // --- REDIRECT LOGIC ---
+                const modalMessage = document.getElementById('modalMessage');
+                successModalActionBtn.style.display = 'none';
+
+                const redirectMessage = document.createElement('p');
+                redirectMessage.id = 'redirect-message';
+                redirectMessage.style.marginTop = '20px';
+                redirectMessage.style.fontSize = '1rem';
+                redirectMessage.innerHTML = 'You will be redirected to the login page in <span id="redirect-timer">3</span> seconds...';
+                
+                const existingRedirectMsg = document.getElementById('redirect-message');
+                if (existingRedirectMsg) existingRedirectMsg.remove();
+                
+                modalMessage.appendChild(redirectMessage);
+
+                const timerSpan = document.getElementById('redirect-timer');
+                let countdown = 3;
+
+                const timerInterval = setInterval(() => {
+                    countdown--;
+                    if (timerSpan) timerSpan.textContent = countdown;
+                    if (countdown <= 0) clearInterval(timerInterval);
+                }, 1000);
+
+                setTimeout(() => {
+                    window.location.href = 'https://journal-traderlog.netlify.app/';
+                }, 3000);
             }
-            function showFailureModal() { failureModal.style.display = 'flex'; }
-            function closeModal(modalElement) { if (modalElement) { modalElement.style.display = 'none'; } }
+
+            function showFailureModal() {
+                failureModal.style.display = 'flex';
+            }
+            
+            function closeModal(modalElement) {
+                if (modalElement) {
+                    modalElement.style.display = 'none';
+                }
+            }
+
             if (closeSuccessModalBtn) closeSuccessModalBtn.addEventListener('click', () => closeModal(successModal));
             if (successModalActionBtn) successModalActionBtn.addEventListener('click', () => closeModal(successModal));
             if (closeFailureModalBtn) closeFailureModalBtn.addEventListener('click', () => closeModal(failureModal));
             if (failureModalCloseBtn) failureModalCloseBtn.addEventListener('click', () => closeModal(failureModal));
-
-            // ----- START: CORRECTED PAYMENT LOGIC -----
-            const proceedBtn = document.getElementById('proceedToPayment');
-            const formError = document.getElementById('formError');
-            const passwordGroup = document.getElementById('password-group');
-            const planOptions = document.querySelectorAll('.plan-option');
-            const subscribeBtn = document.getElementById('subscribe-btn');
-            const claimTrialBtn = document.getElementById('claimTrialBtn');
             
-            let selectedPlan = { id: 'monthly', amount: 95, description: 'Monthly Subscription' };
-            let isTrial = false;
+            window.addEventListener('click', (event) => {
+                if (event.target === successModal) closeModal(successModal);
+                if (event.target === failureModal) closeModal(failureModal);
+            });
 
+            // ===== PLAN SELECTION & FORM LOGIC =====
+            let selectedPlan = {
+                id: 'monthly',
+                amount: 95,
+                description: 'Monthly Subscription'
+            };
+            
+            const planOptions = document.querySelectorAll('.plan-option');
             planOptions.forEach(option => {
                 option.addEventListener('click', function() {
                     planOptions.forEach(opt => opt.classList.remove('selected'));
@@ -1231,69 +1304,72 @@
                     };
                 });
             });
-
+            
             function showUserForm() {
-                if (isTrial) {
-                    document.getElementById('selectedPlanName').textContent = "14-Day Free Trial";
-                    document.getElementById('selectedPlanAmount').textContent = "FREE";
-                    passwordGroup.style.display = 'block';
-                    document.getElementById('proceedToPayment').innerHTML = `<i class="fas fa-rocket"></i> Start Trial`;
-                } else {
-                    document.getElementById('selectedPlanName').textContent = selectedPlan.description;
-                    document.getElementById('selectedPlanAmount').textContent = selectedPlan.amount;
-                    passwordGroup.style.display = 'none';
-                    document.getElementById('proceedToPayment').innerHTML = `<i class="fas fa-lock"></i> Proceed to Payment`;
+                if (!selectedPlan) {
+                    formError.textContent = "Please select a plan";
+                    formError.style.display = 'block';
+                    return;
                 }
+                document.getElementById('selectedPlanName').textContent = selectedPlan.description;
+                document.getElementById('selectedPlanAmount').textContent = selectedPlan.amount;
                 userForm.style.display = 'block';
                 userForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-
-            subscribeBtn.addEventListener('click', () => { isTrial = false; showUserForm(); });
-            claimTrialBtn.addEventListener('click', () => { isTrial = true; showUserForm(); });
-
-            const otherPaymentButtons = [document.getElementById('start-journaling'), document.getElementById('avail-now'), document.getElementById('start-now')];
-            otherPaymentButtons.forEach(button => { 
-                if (button) button.addEventListener('click', () => {
-                    isTrial = false;
-                    showUserForm();
-                }); 
+            
+            const paymentButtons = [
+                subscribeBtn,
+                document.getElementById('start-journaling'),
+                document.getElementById('avail-now'),
+                document.getElementById('start-now')
+            ];
+            paymentButtons.forEach(button => {
+                if (button) button.addEventListener('click', showUserForm);
             });
 
+            // ===== FORM VALIDATION =====
             function validateForm() {
+                const name = document.getElementById('userName').value.trim();
+                const email = document.getElementById('userEmail').value.trim();
+                const phone = document.getElementById('userPhone').value.trim();
                 let isValid = true;
+
                 document.querySelectorAll('.form-error').forEach(el => el.style.display = 'none');
-                if (document.getElementById('userName').value.trim() === '') { document.getElementById('nameError').style.display = 'block'; isValid = false; }
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('userEmail').value.trim())) { document.getElementById('emailError').style.display = 'block'; isValid = false; }
-                if (!/^[0-9]{10}$/.test(document.getElementById('userPhone').value.trim())) { document.getElementById('phoneError').style.display = 'block'; isValid = false; }
-                if (isTrial && document.getElementById('userPassword').value.length < 8) {
-                     document.getElementById('passwordError').style.display = 'block';
-                     isValid = false;
+                
+                if (name === '') {
+                    document.getElementById('nameError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                }
+                if (!/^[0-9]{10}$/.test(phone)) {
+                    document.getElementById('phoneError').style.display = 'block';
+                    isValid = false;
                 }
                 return isValid;
             }
 
-            // This is the function that calls your backend
+            // ===== PAYMENT CREATION =====
             async function createPayment() {
-                if (!validateForm()) return;
-                loadingOverlay.style.display = 'flex';
-                formError.style.display = 'none';
-
-                const requestData = {
-                    name: document.getElementById('userName').value.trim(),
-                    email: document.getElementById('userEmail').value.trim(),
-                    phone: document.getElementById('userPhone').value.trim(),
-                    affiliate_id: activeAffiliate || "direct",
-                    plan_id: selectedPlan.id,
-                    amount: selectedPlan.amount,
-                    description: selectedPlan.description
-                };
-
-                // Determine which backend function to call
-                const endpoint = selectedPlan.id === 'monthly' 
-                    ? '/.netlify/functions/create-subscription' 
-                    : '/.netlify/functions/create-order';
-                
                 try {
+                    loadingOverlay.style.display = 'flex';
+                    
+                    const requestData = {
+                        name: document.getElementById('userName').value.trim(),
+                        email: document.getElementById('userEmail').value.trim(),
+                        phone: document.getElementById('userPhone').value.trim(),
+                        affiliate_id: activeAffiliate || "direct",
+                        plan_id: selectedPlan.id === 'monthly' ? "plan_R0lfqw7y18smql" : undefined,
+                        amount: selectedPlan.amount,
+                        description: selectedPlan.description
+                    };
+                    
+                    const endpoint = selectedPlan.id === 'monthly' 
+                        ? '/.netlify/functions/create-subscription' 
+                        : '/.netlify/functions/create-order';
+                    
                     const response = await fetch(endpoint, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -1304,7 +1380,7 @@
                     if (!response.ok) throw new Error(data.error || 'Failed to create payment');
                     
                     const options = {
-                        key: "rzp_live_R6mwB9aVRJBt1L",
+                        key: "rzp_live_7oJpadczIYphAM",
                         name: "TraderLog",
                         description: selectedPlan.description,
                         prefill: {
@@ -1312,16 +1388,19 @@
                             email: requestData.email,
                             contact: requestData.phone
                         },
+                        theme: { color: "#8b5cf6" },
                         notes: {
+                            affiliate_id: activeAffiliate || "direct",
                             user_name: requestData.name,
-                            user_phone: requestData.phone,
                             user_email: requestData.email,
-                            plan_id: requestData.plan_id,
-                            affiliate_id: requestData.affiliate_id
+                            user_phone: requestData.phone,
+                            plan_id: selectedPlan.id
                         },
                         handler: function(response) {
                             loadingOverlay.style.display = 'none';
-                            const transactionId = response.razorpay_subscription_id || response.razorpay_payment_id;
+                            const transactionId = selectedPlan.id === 'monthly' 
+                                ? response.razorpay_subscription_id 
+                                : response.razorpay_payment_id;
                             showSuccessModal(transactionId, selectedPlan.description, selectedPlan.amount);
                         },
                         modal: { ondismiss: () => loadingOverlay.style.display = 'none' },
@@ -1354,43 +1433,8 @@
             if (proceedBtn) {
                 proceedBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    if (isTrial) {
-                        handleTrialSubmit();
-                    } else {
-                        createPayment();
-                    }
+                    if (validateForm()) createPayment();
                 });
-            }
-
-            // New function specifically for handling trial submissions
-            async function handleTrialSubmit() {
-                if (!validateForm()) return;
-                loadingOverlay.style.display = 'flex';
-                formError.style.display = 'none';
-
-                const requestData = {
-                    name: document.getElementById('userName').value.trim(),
-                    email: document.getElementById('userEmail').value.trim(),
-                    phone: document.getElementById('userPhone').value.trim(),
-                    password: document.getElementById('userPassword').value,
-                };
-
-                try {
-                     const response = await fetch('/.netlify/functions/create-trial', { // We will create this new function
-                        method: 'POST', body: JSON.stringify(requestData)
-                    });
-                    const result = await response.json();
-                    if (!response.ok) throw new Error(result.error);
-                    
-                    alert('Your 14-day free trial has started! You will now be redirected to the journal.');
-                    window.location.href = 'https://journal-traderlog.netlify.app/';
-
-                } catch (error) {
-                    formError.textContent = error.message;
-                    formError.style.display = 'block';
-                } finally {
-                    loadingOverlay.style.display = 'none';
-                }
             }
         });
     </script>
