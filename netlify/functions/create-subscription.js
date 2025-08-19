@@ -35,7 +35,7 @@ exports.handler = async function(event) {
         }
 
         const subscription = await razorpay.subscriptions.create({
-            plan_id: "plan_R6n1t5ne734knZ", // Your Monthly Plan ID
+            plan_id: "plan_R76nWkRQGGkReO", // Your Monthly Plan ID
             customer_notify: 1,
             total_count: 12,
             notes: { 
@@ -56,4 +56,5 @@ exports.handler = async function(event) {
         return { statusCode: 500, body: JSON.stringify({ error: 'Could not create subscription.' }) };
     }
 };
+
 
