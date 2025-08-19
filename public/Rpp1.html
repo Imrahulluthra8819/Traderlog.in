@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-g">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TraderLog - Choose Your Subscription Plan</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -1362,7 +1362,10 @@
                         phone: document.getElementById('userPhone').value.trim(),
                         affiliate_id: activeAffiliate || "direct",
                         plan_id: selectedPlan.id === 'monthly' ? "plan_R6n1t5ne734knZ" : undefined,
-                        amount: selectedPlan.amount,
+                        // =================================================================
+                        // FIXED: Amount is multiplied by 100 to convert to paise
+                        // =================================================================
+                        amount: selectedPlan.amount * 100,
                         description: selectedPlan.description
                     };
                     
@@ -1440,5 +1443,3 @@
     </script>
 </body>
 </html>
-
-
