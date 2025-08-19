@@ -2,8 +2,6 @@
   "name": "traderlog",
   "version": "1.0.0",
   "dependencies": {
-    "firebase-admin": "^12.1.1",
-    "node-fetch": "^2.6.7",
-    "razorpay": "^2.9.4"
+    "razorpay": "^2.8.6"
   }
 }
