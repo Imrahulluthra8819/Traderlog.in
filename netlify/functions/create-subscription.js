@@ -17,6 +17,10 @@ const razorpay = new Razorpay({
 // --------------------------
 
 exports.handler = async function(event) {
+    // --- NEW DEBUGGING LINE ---
+    // This will help us confirm that the environment variable is being loaded correctly.
+    console.log("Function is attempting to use Key ID starting with:", process.env.RAZORPAY_KEY_ID ? process.env.RAZORPAY_KEY_ID.substring(0, 12) : "UNDEFINED");
+
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
@@ -35,6 +39,7 @@ exports.handler = async function(event) {
         }
 
         const subscription = await razorpay.subscriptions.create({
+            // --- UPDATED PLAN ID ---
             plan_id: "plan_R76nWkRQGGkReO", // Your Monthly Plan ID
             customer_notify: 1,
             total_count: 12,
@@ -56,5 +61,3 @@ exports.handler = async function(event) {
         return { statusCode: 500, body: JSON.stringify({ error: 'Could not create subscription.' }) };
     }
 };
-
-
