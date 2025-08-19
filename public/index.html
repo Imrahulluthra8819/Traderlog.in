@@ -1792,8 +1792,8 @@
         <div class="offer-bar">
             <div class="pricing">
                 <div class="original-price">₹999</div>
-                <div class="discounted-price">₹95</div>
-                <div class="discount-badge">91% OFF</div>
+                <div class="discounted-price">₹199</div>
+                <div class="discount-badge">81% OFF</div>
             </div>
             
             <div class="avail-btn-container">
@@ -1911,7 +1911,7 @@
             // Initialize Razorpay with affiliate tracking
             const options = {
                 key: 'YOUR_RAZORPAY_KEY',
-                amount: 9500, // ₹95 in paise
+                amount: 19900, // ₹199 in paise
                 currency: 'INR',
                 name: 'TraderLog',
                 description: 'Premium Subscription',
@@ -1924,7 +1924,7 @@
                     if (affiliateId) {
                         const paymentData = {
                             payment_id: response.razorpay_payment_id,
-                            amount: 95,
+                            amount: 199,
                             affiliate_id: affiliateId,
                             timestamp: new Date().toISOString()
                         };
@@ -1983,3 +1983,4 @@
     -->
 </body>
 </html>
+
