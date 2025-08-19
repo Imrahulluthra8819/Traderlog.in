@@ -26,18 +26,24 @@ exports.handler = async function(event) {
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
-        // Correctly parse the incoming data from the form
         const data = JSON.parse(event.body);
         const userEmail = data.email.toLowerCase();
 
-        console.log("Received data for order:", data); // Log to confirm data is received
+        console.log("Received data for order:", data);
         
-        const usersRef = db.collection('free_trial_users');
-        const snapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
-
         let firebaseUid = '';
-        if (!snapshot.empty) {
-            firebaseUid = snapshot.docs[0].id;
+        // --- RESILIENT FIREBASE LOOKUP ---
+        // This lookup is now wrapped in its own try/catch block.
+        // If it fails, we log the error but allow the payment to proceed.
+        try {
+            const usersRef = db.collection('free_trial_users');
+            const snapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
+            if (!snapshot.empty) {
+                firebaseUid = snapshot.docs[0].id;
+            }
+        } catch (dbError) {
+            console.error('Firestore lookup failed, but proceeding with payment. Error:', dbError);
+            // It's a good idea to check your Firestore indexes if you see this error.
         }
 
         const options = {
@@ -45,8 +51,7 @@ exports.handler = async function(event) {
             currency: "INR",
             receipt: `receipt_${userEmail}_${Date.now()}`,
             notes: {
-                // Pass all captured details to Razorpay notes
-                firebase_uid: firebaseUid,
+                firebase_uid: firebaseUid || "N/A", // Default to "N/A" if lookup fails
                 user_email: userEmail,
                 user_name: data.name,
                 user_phone: data.phone,
