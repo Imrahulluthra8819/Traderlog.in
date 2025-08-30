@@ -24,6 +24,7 @@
             --light: #f8fafc;
             --gray: #64748b;
             --gray-light: #cbd5e1;
+            --border-color: #334155; 
         }
         
         * {
@@ -429,13 +430,25 @@
             color: var(--gray-light);
         }
 
-        /* NEW STYLES FOR SUPADEMO */
-        .supademo-wrapper {
-            max-width: 900px; 
-            margin: 0 auto; /* Centering the block */
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        /* NEW STYLES FOR YOUTUBE VIDEO */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            max-width: 900px;
+            margin: 2rem auto 0;
             border-radius: 12px;
-            overflow: hidden; /* Ensures the border-radius is applied to the iframe */
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
         
         /* How It Works */
@@ -753,9 +766,890 @@
   }
 }
 </style>
+<style>
+    .interactive-features {
+        padding: 6rem 0;
+        background: var(--darker);
+        position: relative;
+    }
+
+    .interactive-features-container {
+        display: flex;
+        gap: 3rem;
+        align-items: center;
+    }
+
+    .feature-tabs {
+        flex: 1;
+        max-width: 450px;
+    }
+
+    .feature-tab {
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        border-radius: 15px;
+        cursor: pointer;
+        border: 1px solid rgba(100, 116, 139, 0.2);
+        background: rgba(30, 41, 59, 0.5);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .feature-tab:last-child {
+        margin-bottom: 0;
+    }
+
+    .feature-tab:hover {
+        transform: translateX(10px);
+        background: rgba(30, 41, 59, 0.9);
+    }
+    
+    .feature-tab.active {
+        background: var(--dark);
+        border-color: var(--accent);
+        box-shadow: 0 10px 25px rgba(139, 92, 246, 0.15);
+        transform: translateX(10px);
+    }
+    
+    .feature-tab-title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .feature-tab-title i {
+        font-size: 1.8rem;
+        color: var(--accent);
+        transition: transform 0.3s;
+    }
+
+    .feature-tab.active .feature-tab-title i {
+        transform: scale(1.1);
+    }
+
+    .feature-tab-title h3 {
+        font-size: 1.3rem;
+        margin: 0;
+    }
+
+    .feature-tab-content {
+        color: var(--gray-light);
+        margin-top: 0.75rem;
+        padding-left: 3.3rem;
+        font-size: 0.95rem;
+    }
+
+    .feature-display {
+        flex: 1;
+        position: relative;
+        min-height: 450px;
+    }
+
+    .feature-display-item {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        transform: translateY(20px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-radius: 20px;
+        background-size: cover;
+        background-position: center;
+        padding: 2rem;
+    }
+    
+    .feature-display-item.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    /* MODIFIED: Card Background Designs */
+    .feature-display-item[data-content="1"] { /* Ask AI */
+        background-image: 
+            radial-gradient(at 0% 0%, hsla(262, 83%, 58%, 0.3) 0px, transparent 50%),
+            radial-gradient(at 100% 100%, hsla(204, 90%, 54%, 0.3) 0px, transparent 50%),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cdefs%3E%3Cpattern id='ai-pattern' patternUnits='userSpaceOnUse' width='20' height='20'%3E%3Cpath d='M 5 5 L 15 15 M 15 5 L 5 15' stroke='%238b5cf6' stroke-width='1'/%3E%3Ccircle cx='10' cy='10' r='1.5' fill='%230ea5e9'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23ai-pattern)'/%3E%3C/svg%3E");
+    }
+    .feature-display-item[data-content="2"] { /* Live Market */
+        background-image: 
+            radial-gradient(at 50% 100%, hsla(158, 82%, 57%, 0.2) 0px, transparent 50%),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cdefs%3E%3Cpattern id='candles' patternUnits='userSpaceOnUse' width='40' height='40'%3E%3Crect x='5' y='10' width='10' height='20' fill='%2310b981'/%3E%3Cline x1='10' y1='5' x2='10' y2='35' stroke='%2310b981' stroke-width='2'/%3E%3Crect x='25' y='5' width='10' height='15' fill='%23ef4444'/%3E%3Cline x1='30' y1='0' x2='30' y2='25' stroke='%23ef4444' stroke-width='2'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23candles)' opacity='0.5'/%3E%3C/svg%3E");
+    }
+    .feature-display-item[data-content="3"] { /* AI Analytics */
+       background-image:
+            radial-gradient(at 0% 100%, hsla(204, 90%, 54%, 0.25) 0px, transparent 50%),
+            url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cdefs%3E%3Cpattern id='analytics' patternUnits='userSpaceOnUse' width='30' height='30'%3E%3Crect x='2' y='15' width='8' height='10' fill='%232563eb'/%3E%3Crect x='12' y='10' width='8' height='15' fill='%230ea5e9'/%3E%3Crect x='22' y='5' width='8' height='20' fill='%238b5cf6'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23analytics)' opacity='0.6'/%3E%3C/svg%3E");
+    }
+    .feature-display-item[data-content="4"] { /* Multiple Currency */
+        background-image:
+            radial-gradient(at 90% 10%, hsla(39, 92%, 53%, 0.3) 0px, transparent 50%),
+            url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='10' y='25' font-family='Arial' font-size='20' font-weight='bold' fill='%23f59e0b' fill-opacity='0.5'%3E$%3C/text%3E%3Ctext x='50' y='60' font-family='Arial' font-size='20' font-weight='bold' fill='%23f59e0b' fill-opacity='0.5'%3E€%3C/text%3E%3Ctext x='20' y='55' font-family='Arial' font-size='20' font-weight='bold' fill='%23f59e0b' fill-opacity='0.5'%3E¥%3C/text%3E%3Ctext x='45' y='30' font-family='Arial' font-size='20' font-weight='bold' fill='%23f59e0b' fill-opacity='0.5'%3E£%3C/text%3E%3C/svg%3E");
+    }
+
+
+    .feature-display-item > * {
+        position: relative;
+        z-index: 2;
+    }
+
+    .feature-display-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(15, 23, 42, 0.85); /* Slightly increased opacity for better text contrast */
+        border-radius: 20px;
+        z-index: 1;
+    }
+    
+    .feature-display-item img {
+        display: none; /* Hide the placeholder images */
+    }
+
+    .feature-display-item h3 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .feature-display-item p {
+        color: var(--gray-light);
+        max-width: 80%;
+        margin: 0 auto;
+    }
+    
+    /* Responsive styles for the new section */
+    @media (max-width: 992px) {
+        .interactive-features-container {
+            flex-direction: column;
+        }
+        .feature-tabs {
+            width: 100%;
+            max-width: 100%;
+        }
+        .feature-display {
+            min-height: 350px; /* Adjusted height for mobile */
+            width: 100%;
+        }
+        .feature-display-item {
+            position: relative; /* Change from absolute for stacking */
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            display: none; /* Hide all items */
+            margin-bottom: 2rem;
+        }
+        .feature-display-item.active {
+            display: flex; /* Show only the active one */
+        }
+        .feature-tab:hover, .feature-tab.active {
+            transform: none;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .feature-tab {
+            padding: 1rem;
+        }
+        .feature-tab-title h3 {
+            font-size: 1.1rem;
+        }
+        .feature-tab-content {
+            padding-left: 0;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        .feature-tab-title {
+            justify-content: center;
+        }
+    }
+
+</style>
+<style>
+    /* START: COMPARISON TABLE STYLES WITH 3D EFFECT */
+    .comparison-section {
+        padding: 6rem 0;
+    }
+
+    .comparison-wrapper {
+        max-width: 1050px; /* MODIFIED: Increased width by 5% */
+        margin: 0 auto;
+        /* MODIFIED: Removed overflow-x: auto; to remove scroller */
+        padding: 2rem 0; /* Add padding to prevent shadow clipping */
+    }
+
+    .comparison-table {
+        width: 100%;
+        min-width: 800px;
+        border-collapse: separate; /* Changed for border-radius */
+        border-spacing: 0;
+        background-color: transparent; /* Table itself is transparent */
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        vertical-align: top;
+        border-bottom: 1px solid var(--border-color);
+        background-color: var(--darker);
+    }
+    
+    /* Remove bottom border from the last row */
+    .comparison-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    /* Style the header */
+    .comparison-table thead {
+        background-color: rgba(30, 41, 59, 0.5);
+    }
+
+    .comparison-table th {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--light);
+    }
+    
+    .comparison-table td {
+        font-size: 0.9rem;
+        color: var(--gray-light);
+        line-height: 1.6;
+    }
+
+    .col-scenario { width: 25%; font-weight: 600; color: white; }
+    .col-traditional { width: 35%; }
+    .col-traderlog { width: 40%; }
+    
+    .traderlog-insight b {
+        font-weight: 600;
+        color: var(--accent);
+    }
+
+    /* 3D POP-UP EFFECT FOR TRADERLOG COLUMN */
+    .col-traderlog {
+        position: relative;
+        background: linear-gradient(145deg, var(--dark), #1a2436);
+        border-left: 2px solid var(--accent);
+        border-right: 2px solid var(--accent);
+        transform: scale(1.05) translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 5px 15px rgba(139, 92, 246, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .comparison-table tr:hover .col-traderlog {
+        transform: scale(1.07) translateY(-12px);
+    }
+
+    /* Apply border radius to the corners of the popped-up column */
+    .comparison-table thead tr:first-child th.col-traderlog {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        border-top: 2px solid var(--accent);
+    }
+
+    .comparison-table tbody tr:last-child td.col-traderlog {
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        border-bottom: 2px solid var(--accent);
+    }
+
+    /* END: COMPARISON TABLE STYLES */
+</style>
+<!-- =================================================================== -->
+<!-- ============== MOBILE OPTIMIZATION STYLES START HERE ============== -->
+<!-- =================================================================== -->
+<style>
+    /* START: MOBILE CAROUSEL STYLES */
+    .comparison-carousel {
+        display: none; /* Hidden by default */
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        padding: 2rem 0;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-card {
+        flex: 0 0 100%;
+        width: 100%;
+        padding: 0 20px; /* Provides margin on the sides */
+        box-sizing: border-box;
+    }
+
+    .card-content {
+        background: transparent;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        padding: 0;
+    }
+
+    .carousel-card.active .card-content {
+        transform: scale(1.05);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 8px 20px rgba(139, 92, 246, 0.2);
+    }
+    
+    .top-card-section {
+        background-color: #192a41;
+        padding: 1.5rem;
+        color: white;
+        border-radius: 15px 15px 0 0;
+    }
+
+    .top-card-section h3 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.3rem;
+        color: var(--light);
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--accent);
+        text-align: center;
+    }
+
+    .top-card-section h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .top-card-section p {
+        font-size: 0.9rem;
+        color: var(--gray-light);
+    }
+
+    .bottom-card-section {
+        background-color: #007bff;
+        padding: 1.5rem;
+        border-radius: 0 0 15px 15px;
+        position: relative;
+    }
+
+    .bottom-card-section h4 {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1a2a41;
+        margin-bottom: 0.75rem;
+    }
+
+    .bottom-card-section p {
+        font-size: 1.05rem;
+        color: var(--light);
+        line-height: 1.6;
+    }
+
+    .bottom-card-section .traderlog-insight b {
+        color: #ade8ff;
+        font-size: 1.15rem;
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .carousel-dots {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+    .dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--gray);
+        margin: 0 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .dot.active {
+        background-color: var(--accent);
+        transform: scale(1.3);
+    }
+    /* END: MOBILE CAROUSEL STYLES */
+
+
+    @media (max-width: 860px) {
+        /* Hide the desktop table */
+        .comparison-wrapper {
+            display: none;
+        }
+        /* Show the mobile carousel */
+        .comparison-carousel {
+            display: block;
+        }
+    }
+
+    @media (max-width: 768px) {
+        /* 1. Reduce heading font sizes for specified sections */
+        .section-title h2,
+        .psychology-text h2,
+        .cta-content h2 {
+            font-size: 2rem; /* Reduced from 2.5rem */
+            line-height: 1.3;
+        }
+
+        /* 2. Optimize section padding for a more compact view */
+        .features,
+        .psychology,
+        .how-it-works,
+        .cta-section,
+        .comparison-section,
+        .interactive-features {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        /* 3. Reduce bottom margin on section titles */
+        .section-title {
+            margin-bottom: 3rem;
+        }
+
+        /* 4. Tweak padding on individual cards for better spacing */
+        .feature-card,
+        .step {
+            padding: 1.5rem;
+        }
+
+        /* 5. Adjust psychology section chart for smaller screens */
+        .mood-chart {
+            padding: 1.5rem;
+            transform: scale(0.9);
+            transform-origin: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        /* Further reduce heading sizes for very small screens */
+        .section-title h2,
+        .psychology-text h2,
+        .cta-content h2 {
+            font-size: 1.8rem;
+        }
+
+        /* Further reduce section padding */
+        .features,
+        .psychology,
+        .how-it-works,
+        .cta-section,
+        .comparison-section,
+        .interactive-features {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        
+        .section-title p {
+            font-size: 0.95rem;
+        }
+    }
+</style>
+<!-- ================================================================= -->
+<!-- ============== MOBILE OPTIMIZATION STYLES END HERE ============== -->
+<!-- ================================================================= -->
+<style>
+    /* Popup Styles */
+    .traderlog-popup-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(5px);
+        z-index: 10000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s ease;
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .traderlog-popup-container.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .traderlog-popup-content {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        width: 90%;
+        max-width: 280px;
+        border-radius: 12px;
+        padding: 1.5rem 1.2rem;
+        box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(139, 92, 246, 0.4);
+        position: relative;
+        transform: translateY(50px);
+        transition: transform 0.5s ease;
+        text-align: center;
+    }
+    
+    .traderlog-popup-container.active .traderlog-popup-content {
+        transform: translateY(0);
+    }
+    
+    .traderlog-popup-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: rgba(30, 41, 59, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        color: #cbd5e1;
+        font-size: 0.8rem;
+        border: 1px solid rgba(100, 116, 139, 0.3);
+    }
+    
+    .traderlog-popup-close:hover {
+        background: #8b5cf6;
+        color: white;
+        transform: rotate(90deg);
+    }
+    
+    .traderlog-popup-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+    }
+    
+    .traderlog-popup-content h2 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 0.7rem;
+        color: white;
+        letter-spacing: -0.3px;
+    }
+    
+    .traderlog-popup-content h2 span {
+        background: linear-gradient(90deg, #8b5cf6 0%, #0ea5e9 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+    }
+    
+    .traderlog-popup-content p {
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+        font-size: 0.85rem;
+        font-weight: 400;
+    }
+    
+    .traderlog-download-btn {
+        background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+        color: white;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+        margin-top: 0.3rem;
+        letter-spacing: 0.3px;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    }
+    
+    .traderlog-download-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+        background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
+    }
+    
+    .traderlog-popup-footer {
+        margin-top: 1.2rem;
+        color: #64748b;
+        font-size: 0.7rem;
+        line-height: 1.4;
+        font-weight: 300;
+    }
+    
+    .traderlog-popup-footer a {
+        color: #8b5cf6;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .traderlog-popup-footer a:hover {
+        color: #0ea5e9;
+        text-decoration: underline;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+    
+    .traderlog-badge {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        z-index: 10;
+        box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3);
+        transform: rotate(5deg);
+    }
+    
+    .traderlog-features {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        margin: 1rem 0;
+    }
+    
+    .feature-item {
+        background: rgba(30, 41, 59, 0.6);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        padding: 6px 12px;
+        border-radius: 30px;
+        font-size: 0.75rem;
+        color: #cbd5e1;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .feature-item i {
+        color: #8b5cf6;
+        font-size: 0.8rem;
+    }
+    /* Offer Bar Styles */
+    .offer-container {
+        position: fixed;
+        bottom: -150px;
+        left: 0;
+        right: 0;
+        z-index: 10000;
+        transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .offer-container.active {
+        bottom: 0;
+    }
+    
+    .offer-banner {
+        background: linear-gradient(135deg, #ff416c, #ff4b2b);
+        color: white;
+        text-align: center;
+        padding: 5px;
+        font-weight: 700;
+        font-size: 0.7rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .offer-bar {
+        background: rgba(15, 23, 42, 0.98);
+        padding: 8px 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
+        border-top: 2px solid rgba(139, 92, 246, 0.5);
+        gap: 20px;
+    }
+    
+    .pricing {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .original-price {
+        font-size: 0.9rem;
+        color: #cbd5e1;
+        text-decoration: line-through;
+    }
+    
+    .discounted-price {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .discount-badge {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        box-shadow: 0 4px 10px rgba(79, 172, 254, 0.4);
+    }
+    
+    .avail-btn-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .avail-btn {
+        background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
+        color: white;
+        border: none;
+        padding: 8px 25px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 5px 15px rgba(37, 99, 235, 0.5);
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        text-decoration: none;
+    }
+    
+    .avail-btn:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
+        z-index: -1;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+    
+    .avail-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.7);
+    }
+    
+    .avail-btn:hover:after {
+        opacity: 1;
+    }
+    
+    .close-btn {
+        background: rgba(255, 255, 255, 0.1);
+        color: #cbd5e1;
+        border: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .close-btn:hover {
+        background: #8b5cf6;
+        color: white;
+        transform: rotate(90deg);
+    }
+    
+    /* Animation */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .pulse {
+        animation: pulse 2s infinite;
+    }
+    
+    /* MODIFIED: Mobile-specific reductions (for offer bar) */
+    @media (max-width: 480px) {
+        .offer-bar {
+            padding: 8px 10px; 
+            gap: 10px; 
+            flex-wrap: nowrap; /* Ensure it stays in one line */
+        }
+        
+        .pricing {
+            gap: 8px; /* Reduced gap */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .original-price {
+            font-size: 0.8rem;
+        }
+    
+        .discounted-price {
+            font-size: 1.1rem;
+        }
+    
+        .discount-badge {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+        }
+        
+        .avail-btn-container {
+            gap: 8px; /* Reduced gap */
+        }
+
+        .avail-btn {
+            padding: 7px 15px;
+            font-size: 0.85rem;
+        }
+    }
+</style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav id="navbar">
         <div class="container">
             <div class="logo">
@@ -770,12 +1664,11 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="container" style="display: flex; align-items: center;">
             <div class="hero-content">
                 <h1>Master Your Trading <span>Psychology & Strategy</span></h1>
-                <p>TraderLog helps new traders accelerate their growth through AI-powered journaling, psychological insights, and actionable analytics.</p>
+                <p>Unlike others, TraderLog gives you simple, easy-to-use insights—not random numbers you don’t need. No messy data, no confusing charts, no jargon. Just clean insights and clear steps to improve.</p>
                 <div class="button-group" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
                     <a href="Rpp1" class="cta-button tracked-payment-link">Start Journaling Now</a>
                     <a href="#features" class="cta-button" style="background: transparent; border: 2px solid var(--primary);">View Features</a>
@@ -797,7 +1690,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img src="Trading Journal.jpg" alt="Trading Journal" class="dashboard-preview">
+                <img src="Trading Journal.jpg" alt="Trading Journal" class="dashboard-preview" onerror="this.onerror=null;this.src='https://placehold.co/600x450/0f172a/ffffff?text=Image+Not+Found';">
             </div>
         </div>
     </section>
@@ -978,7 +1871,42 @@
     margin: 0 auto;
   }
 }</style>
-    <!-- Features Section -->
+
+    <!-- START: REDESIGNED COMPARISON SECTION -->
+    <section class="comparison-section" id="comparison">
+        <div class="container">
+            <div class="section-title">
+                <h2>Traditional Journals Vs TraderLog</h2>
+                <p>We translate confusing numbers into simple advice you can act on immediately.</p>
+            </div>
+            <!-- Desktop Table -->
+            <div class="comparison-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th class="col-scenario">Scenario</th>
+                            <th class="col-traditional">Traditional Journal</th>
+                            <th class="col-traderlog">TraderLog</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data is populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- Mobile Carousel -->
+            <div class="comparison-carousel">
+                <div class="carousel-track">
+                    <!-- Cards will be populated by JavaScript -->
+                </div>
+                <div class="carousel-dots">
+                    <!-- Dots will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END: REDESIGNED COMPARISON SECTION -->
+
     <section class="features" id="features">
         <div class="container">
             <div class="section-title">
@@ -1032,21 +1960,76 @@
         </div>
     </section>
 
-    <!-- Psychology Focus -->
+    <section class="interactive-features" id="new-features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Explore Our Next-Gen AI Features</h2>
+                <p>Harness cutting-edge technology to gain a unique trading advantage.</p>
+            </div>
+            <div class="interactive-features-container">
+                <div class="feature-tabs">
+                    <div class="feature-tab active" data-tab="1">
+                        <div class="feature-tab-title">
+                            <i class="fas fa-comment-dots"></i>
+                            <h3>Ask AI</h3>
+                        </div>
+                        <p class="feature-tab-content">Get detailed analysis in simple language.</p>
+                    </div>
+                    <div class="feature-tab" data-tab="2">
+                        <div class="feature-tab-title">
+                            <i class="fas fa-stream"></i>
+                            <h3>Live Market Updates</h3>
+                        </div>
+                        <p class="feature-tab-content">Integrated tickers and charts to analyse.</p>
+                    </div>
+                    <div class="feature-tab" data-tab="3">
+                        <div class="feature-tab-title">
+                            <i class="fas fa-cogs"></i>
+                            <h3>AI Analytics and Suggestions</h3>
+                        </div>
+                        <p class="feature-tab-content">Get simple, actionable advice.</p>
+                    </div>
+                    <div class="feature-tab" data-tab="4">
+                        <div class="feature-tab-title">
+                            <i class="fas fa-coins"></i>
+                            <h3>Multiple Currency Support</h3>
+                        </div>
+                        <p class="feature-tab-content">Journal and analyze in your home currency.</p>
+                    </div>
+                </div>
+
+                <div class="feature-display">
+                    <div class="feature-display-item active" data-content="1">
+                        <img src="https://placehold.co/600x400/0f172a/8b5cf6?text=Ask+AI" alt="Ask AI Feature">
+                        <h3>Conversational Market Analysis</h3>
+                        <p>Ask about your trades and get detailed analysis in simple language, plus news on any Crypto, Forex, and Stocks and its Short and Long Term Impacts on the Markets.</p>
+                    </div>
+                    <div class="feature-display-item" data-content="2">
+                         <img src="https://placehold.co/600x400/0f172a/0ea5e9?text=Live+Charts" alt="Live Market Updates">
+                        <h3>Real-Time Data at Your Fingertips</h3>
+                        <p>Stay ahead of the market with our integrated live market updates, complete with customizable tickers and advanced charts to analyse every move.</p>
+                    </div>
+                    <div class="feature-display-item" data-content="3">
+                         <img src="https://placehold.co/600x400/0f172a/10b981?text=AI+Analytics" alt="AI Analytics and Suggestions">
+                        <h3>Advice That Makes You Better</h3>
+                        <p>Our AI tells you exactly what to improve in plain English. Get advice like, “Your Breakout strategy has only 20% wins, avoid it,” or “Your SR strategy works well with 70% wins!”</p>
+                    </div>
+                    <div class="feature-display-item" data-content="4">
+                        <img src="https://placehold.co/600x400/0f172a/f59e0b?text=$,€,¥,£" alt="Multiple Currency Support">
+                        <h3>Trade The World</h3>
+                        <p>Seamlessly track your performance with our Multiple Currency Support. Journal and analyze your trades in your local currency for ultimate clarity and convenience.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <section class="psychology" id="psychology">
         <div class="container">
             <div class="psychology-content">
                 <div class="psychology-text">
                     <h2>Master Your <span>Trading Psychology</span></h2>
-                    <p>Successful trading requires more than just strategy - it demands emotional control and psychological awareness.</p>
-                    <p>TraderLog helps you identify emotional patterns that impact your trading decisions. Our mood tracking and psychological analysis tools provide insights into:</p>
-                    <ul style="list-style: none; margin: 1.5rem 0;">
-                        <li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Emotional triggers affecting your trades</span></li>
-                        <li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Confidence levels during winning/losing streaks</span></li>
-                        <li style="margin-bottom: 0.8rem; display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Decision-making patterns under stress</span></li>
-                        <li style="display: flex; align-items: flex-start;"><i class="fas fa-check-circle" style="color: var(--success); margin-right: 0.5rem; margin-top: 0.3rem;"></i> <span>Psychological biases impacting your strategy</span></li>
-                    </ul>
-                    <p>Transform your mindset and develop the psychological resilience needed for consistent trading success.</p>
+                    <p>Fear, greed, or excitement can ruin your trades. TraderLog shows you how your emotions impact your results and turns those feelings into clear advice.</p>
+                    <p>Our AI spots patterns between your trades and emotions. For example: ‘You lost 7 out of 10 trades when you entered out of FOMO.’ With insights like this, you can control your trading psychology and make smarter choices.</p>
                 </div>
                <div class="psychology-visual">
   <div class="mood-chart" style="background: #121c2d; padding: 20px; border-radius: 15px; color: white; width: fit-content; margin: 0 auto;">
@@ -1071,54 +2054,47 @@
         </div>
     </section>
 
-    <!-- ======================================================= -->
-    <!-- START: Interactive Demo Section -->
-    <!-- ======================================================= -->
     <section class="features" style="padding: 6rem 0; background: #0f172a;">
         <div class="container">
             <div class="section-title">
                 <h2>See It In Action</h2>
-                <p>Explore how to customize your journal with this interactive demo</p>
+                <p>Watch a quick overview of how TraderLog helps you improve.</p>
             </div>
-            <div class="supademo-wrapper">
-                <!-- Supademo Embed Code -->
-                <div style="position: relative; box-sizing: content-box; max-height: 80vh; max-height: 80svh; width: 100%; aspect-ratio: 1.7321571772253408; padding: 40px 0 40px 0;"><iframe src="https://app.supademo.com/embed/cme61v0e01wi8h3pylhrahd2p?embed_v=2&utm_source=embed" loading="lazy" title="How to customize TraderLog's Journal theme and settings" allow="clipboard-write" frameborder="0" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/sMC2QRZTV8Q" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                </iframe>
             </div>
         </div>
     </section>
-    <!-- ======================================================= -->
-    <!-- END: Interactive Demo Section -->
-    <!-- ======================================================= -->
-
-<section class="features" style="padding: 6rem 0; background: rgba(15, 23, 42, 0.7);">
+    <section class="features" style="padding: 6rem 0; background: rgba(15, 23, 42, 0.7);">
     <div class="container">
         <div class="section-title">
             <h2>What Our Users Say</h2>
             <p>Real feedback from traders who've leveled up with TraderLog</p>
         </div>
         <div class="features-grid">
-            <!-- Testimonial 1 -->
             <div class="feature-card" style="text-align: center;">
-                <img src="Trader Alex.jpg" alt="Alex" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;">
+                <img src="Trader Alex.jpg" alt="Alex" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;" onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=A';">
                 <h3>Alex.</h3>
                 <p>"TraderLog helped me understand my emotions during trades. My confidence is at an all-time high."</p>
             </div>
-            <!-- Testimonial 2 -->
             <div class="feature-card" style="text-align: center;">
-                <img src="Trader Ananya.jpg" alt="Ananya" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;">
+                <img src="Trader Ananya.jpg" alt="Ananya" style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;" onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=A';">
                 <h3>Ananya.</h3>
                 <p>"The AI insights are mind-blowing. I'm now journaling every trade and seeing real progress."</p>
             </div>
-            <!-- Testimonial 3 -->
             <div class="feature-card" style="text-align: center;">
-                <img src="Trader Mohit.jpg" alt="Mohit T." style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;">
+                <img src="Trader Mohit.jpg" alt="Mohit T." style="width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem;" onerror="this.onerror=null;this.src='https://placehold.co/80x80/1e293b/ffffff?text=M';">
                 <h3>Mohit T.</h3>
                 <p>"I always knew psychology was key. But this tool showed me *why* I was making poor decisions."</p>
             </div>
         </div>
     </div>
 </section>
-<!-- Users Stats Section -->
 <section class="features" style="padding: 4rem 0 6rem; background: rgba(15, 23, 42, 0.8);">
     <div class="container">
         <div class="section-title">
@@ -1142,7 +2118,6 @@
     </div>
 </section>
 
-    <!-- How It Works -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
             <div class="section-title">
@@ -1154,31 +2129,30 @@
                     <div class="step-number">1</div>
                     <div class="step-icon"><i class="fas fa-pen-alt"></i></div>
                     <h3>Log Your Trades</h3>
-                    <p>Quickly record each trade with our intuitive interface</p>
+                    <p>Quickly record each trade with our intuitive interface.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-icon"><i class="fas fa-chart-bar"></i></div>
                     <h3>Analyze Performance</h3>
-                    <p>Review detailed analytics and psychological insights</p>
+                    <p>See simple reports that are easy to understand.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-icon"><i class="fas fa-lightbulb"></i></div>
                     <h3>Get AI Suggestions</h3>
-                    <p>Receive personalized recommendations to improve</p>
+                    <p>Get clear advice from our AI on how to trade better.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
                     <div class="step-icon"><i class="fas fa-rocket"></i></div>
                     <h3>Trade Smarter</h3>
-                    <p>Implement changes and track your progress</p>
+                    <p>Implement changes and track your progress.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="cta-section" id="cta">
         <div class="container">
             <div class="cta-content">
@@ -1193,7 +2167,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -1245,6 +2218,68 @@
             </div>
         </div>
     </footer>
+
+    <div class="traderlog-popup-container" id="traderlog-popup">
+        <div class="traderlog-popup-content">
+            <div class="traderlog-popup-close" id="traderlog-close-popup">
+                <i class="fas fa-times"></i>
+            </div>
+            
+            <div class="traderlog-badge">LIMITED TIME</div>
+            
+            <div class="traderlog-popup-icon">
+                <i class="fas fa-gift"></i>
+            </div>
+            
+            <h2>Free Trading <span>Resources</span></h2>
+            <p>Download premium Candlestick and SMC trading guides instantly</p>
+            
+            <div class="traderlog-features">
+                <div class="feature-item">
+                    <i class="fas fa-chart-line"></i> Candlestick Patterns
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chess-board"></i> SMC Concepts
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-file-pdf"></i> PDF Format
+                </div>
+            </div>
+            
+            <a href="https://topmate.io/rahul_luthra/1377078" target="_blank" class="traderlog-download-btn pulse-animation">
+                <i class="fas fa-download"></i> Download Guides
+            </a>
+            
+            <div class="traderlog-popup-footer">
+                <p>100% free. By downloading, you agree to our <a href="#">Privacy Policy</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="offer-container" id="offerContainer">
+        <div class="offer-banner">
+            ONLY FOR EARLY USERS
+        </div>
+        <div class="offer-bar">
+            <div class="pricing">
+                <div class="original-price">₹999</div>
+                <div class="discounted-price">₹199</div>
+                <div class="discount-badge">81% OFF</div>
+            </div>
+            
+            <div class="avail-btn-container">
+                <a href="Rpp1" 
+                   target="_blank" 
+                   class="avail-btn pulse tracked-payment-link"
+                   style="display: inline-block; padding: 8px 20px; font-size: 14px; font-weight: bold; text-align: center; border-radius: 40px; text-decoration: none; color: white; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); box-shadow: 0 4px 10px rgba(33, 113, 248, 0.3); min-width: 140px;">
+                    AVAIL NOW
+                </a>
+            </div>
+            <button class="close-btn" id="closeOffer">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
 
     <script>
         // Smooth scrolling for navigation links
@@ -1308,681 +2343,240 @@
                 bar.style.height = height;
             }, 500);
         });
-    </script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TraderLog Popup</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .traderlog-popup-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(5px);
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .traderlog-popup-container.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .traderlog-popup-content {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            width: 90%;
-            max-width: 280px;
-            border-radius: 12px;
-            padding: 1.5rem 1.2rem;
-            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            position: relative;
-            transform: translateY(50px);
-            transition: transform 0.5s ease;
-            text-align: center;
-        }
-        
-        .traderlog-popup-container.active .traderlog-popup-content {
-            transform: translateY(0);
-        }
-        
-        .traderlog-popup-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: rgba(30, 41, 59, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #cbd5e1;
-            font-size: 0.8rem;
-            border: 1px solid rgba(100, 116, 139, 0.3);
-        }
-        
-        .traderlog-popup-close:hover {
-            background: #8b5cf6;
-            color: white;
-            transform: rotate(90deg);
-        }
-        
-        .traderlog-popup-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-            color: white;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
-        }
-        
-        .traderlog-popup-content h2 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.7rem;
-            color: white;
-            letter-spacing: -0.3px;
-        }
-        
-        .traderlog-popup-content h2 span {
-            background: linear-gradient(90deg, #8b5cf6 0%, #0ea5e9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 700;
-        }
-        
-        .traderlog-popup-content p {
-            color: #cbd5e1;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-            font-size: 0.85rem;
-            font-weight: 400;
-        }
-        
-        .traderlog-download-btn {
-            background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-decoration: none;
-            margin-top: 0.3rem;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
-        }
-        
-        .traderlog-download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
-            background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
-        }
-        
-        .traderlog-popup-footer {
-            margin-top: 1.2rem;
-            color: #64748b;
-            font-size: 0.7rem;
-            line-height: 1.4;
-            font-weight: 300;
-        }
-        
-        .traderlog-popup-footer a {
-            color: #8b5cf6;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        
-        .traderlog-popup-footer a:hover {
-            color: #0ea5e9;
-            text-decoration: underline;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse-animation {
-            animation: pulse 2s infinite;
-        }
-        
-        .traderlog-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-            z-index: 10;
-            box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3);
-            transform: rotate(5deg);
-        }
-        
-        .traderlog-features {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            margin: 1rem 0;
-        }
-        
-        .feature-item {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(139, 92, 246, 0.2);
-            padding: 6px 12px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            color: #cbd5e1;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        
-        .feature-item i {
-            color: #8b5cf6;
-            font-size: 0.8rem;
-        }
-    </style>
-</head>
-<body>
-    <!-- TraderLog Popup -->
-    <div class="traderlog-popup-container" id="traderlog-popup">
-        <div class="traderlog-popup-content">
-            <div class="traderlog-popup-close" id="traderlog-close-popup">
-                <i class="fas fa-times"></i>
-            </div>
-            
-            <div class="traderlog-badge">LIMITED TIME</div>
-            
-            <div class="traderlog-popup-icon">
-                <i class="fas fa-gift"></i>
-            </div>
-            
-            <h2>Free Trading <span>Resources</span></h2>
-            <p>Download premium Candlestick and SMC trading guides instantly</p>
-            
-            <div class="traderlog-features">
-                <div class="feature-item">
-                    <i class="fas fa-chart-line"></i> Candlestick Patterns
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-chess-board"></i> SMC Concepts
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-file-pdf"></i> PDF Format
-                </div>
-            </div>
-            
-            <a href="https://topmate.io/rahul_luthra/1377078" target="_blank" class="traderlog-download-btn pulse-animation">
-                <i class="fas fa-download"></i> Download Guides
-            </a>
-            
-            <div class="traderlog-popup-footer">
-                <p>100% free. By downloading, you agree to our <a href="#">Privacy Policy</a>.</p>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        // Wait for the DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get DOM elements
-            const popup = document.getElementById('traderlog-popup');
-            const closePopup = document.getElementById('traderlog-close-popup');
+        // START: SCRIPT FOR NEW INTERACTIVE FEATURES SECTION
+        const featureTabs = document.querySelectorAll('.feature-tab');
+        const featureDisplayItems = document.querySelectorAll('.feature-display-item');
+
+        featureTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabNumber = tab.dataset.tab;
+                featureTabs.forEach(item => item.classList.remove('active'));
+                tab.classList.add('active');
+                featureDisplayItems.forEach(item => {
+                    item.classList.toggle('active', item.dataset.content === tabNumber);
+                });
+            });
+        });
+        // END: SCRIPT FOR NEW INTERACTIVE FEATURES SECTION
+
+        // START: SCRIPT FOR COMPARISON SECTION (TABLE & CAROUSEL)
+        document.addEventListener('DOMContentLoaded', () => {
+            const comparisonData = [
+                {
+                    scenario: "Win Rate & RR",
+                    traditional: "- Win rate: 43.27% - Avg RR: 0.82 - Std Dev RR: 0.36",
+                    traderlog: "<b>Losses are 2x your wins</b> Cut losses sooner or target higher RR. Action: tighter stops | Goal: RR ≥ 1.5"
+                },
+                {
+                    scenario: "Lot Size Behavior",
+                    traditional: "- Avg lot: 1.27 - Max lot: 3.54 - Variance: 1.73",
+                    traderlog: "<b>You upsize after wins</b> Use fixed lot or capped scaling to limit drawdown."
+                },
+                {
+                    scenario: "Strategy Success",
+                    traditional: "- SR WR: 70.18% - Breakout WR: 19.84% - Avg RR (all): 0.65.",
+                    traderlog: "<b>SR wins 70% — Breakout wins 20%</b> Shift allocation to SR; pause Breakouts until fixed."
+                },
+                {
+                    scenario: "Profit Factor",
+                    traditional: "- Profit factor: 0.84 - Gross profit: $2,356 - Gross loss: $2,804.",
+                    traderlog: "<b>You lose more than you make</b> Stop low-edge setups; tighten exits & sizing."
+                },
+                {
+                    scenario: "Behavioral Pattern",
+                    traditional: "- Max DD: -12.43% - Recovery trades: 18 - Avg hold: 14m 22s.",
+                    traderlog: "<b>You chase losses after drawdowns</b> Auto-pause after big loss; review plan before next trade."
+                }
+            ];
+
+            // Populate Desktop Table
+            const tableBody = document.querySelector('.comparison-table tbody');
+            tableBody.innerHTML = ''; 
+            comparisonData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="col-scenario">${item.scenario}</td>
+                    <td class="col-traditional">${item.traditional}</td>
+                    <td class="col-traderlog"><div class="traderlog-insight">${item.traderlog}</div></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Populate Mobile Carousel
+            const carouselTrack = document.querySelector('.carousel-track');
+            const carouselDots = document.querySelector('.carousel-dots');
+            carouselTrack.innerHTML = '';
+            carouselDots.innerHTML = '';
+
+            comparisonData.forEach((item, index) => {
+                // Create Card
+                const card = document.createElement('div');
+                card.classList.add('carousel-card');
+                card.innerHTML = `
+                    <div class="card-content">
+                        <div class="top-card-section">
+                            <h3>${item.scenario}</h3>
+                            <h4>Traditional Journal</h4>
+                            <p>${item.traditional}</p>
+                        </div>
+                        <div class="bottom-card-section">
+                            <h4>TraderLog</h4>
+                            <p class="traderlog-insight">${item.traderlog}</p>
+                        </div>
+                    </div>
+                `;
+                carouselTrack.appendChild(card);
+
+                // Create Dot
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                dot.dataset.index = index;
+                carouselDots.appendChild(dot);
+            });
+
+            // Carousel Logic
+            const track = document.querySelector('.carousel-track');
+            const cards = Array.from(track.children);
+            const dots = Array.from(carouselDots.children);
+            let currentIndex = 0;
+            let autoSlideInterval;
+
+            function updateCarousel() {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentIndex);
+                });
+                 cards.forEach((card, index) => {
+                    card.classList.toggle('active', index === currentIndex);
+                });
+            }
+
+            function showNextCard() {
+                currentIndex = (currentIndex + 1) % cards.length;
+                updateCarousel();
+            }
+
+            function startAutoSlide() {
+                stopAutoSlide(); // Prevent multiple intervals
+                autoSlideInterval = setInterval(showNextCard, 3000); // CHANGED TO 3 SECONDS
+            }
+
+            function stopAutoSlide() {
+                clearInterval(autoSlideInterval);
+            }
+
+            carouselDots.addEventListener('click', e => {
+                const targetDot = e.target.closest('.dot');
+                if (!targetDot) return;
+                
+                currentIndex = parseInt(targetDot.dataset.index);
+                updateCarousel();
+                startAutoSlide(); // Reset timer on manual navigation
+            });
+
+            // Swipe functionality
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            track.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+                stopAutoSlide();
+            });
+
+            track.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startAutoSlide();
+            });
+
+            function handleSwipe() {
+                if (touchEndX < touchStartX - 50) { // Swiped left
+                    showNextCard();
+                }
+                if (touchEndX > touchStartX + 50) { // Swiped right
+                    currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+                    updateCarousel();
+                }
+            }
             
-            // Show popup function
+            // Initial setup
+            updateCarousel();
+            startAutoSlide();
+        });
+        // END: SCRIPT FOR COMPARISON SECTION
+
+        // Popup and Offer Bar Script
+        document.addEventListener('DOMContentLoaded', function() {
+            const popup = document.getElementById('traderlog-popup');
+            const closePopupBtn = document.getElementById('traderlog-close-popup');
+            
             function showPopup() {
-                popup.classList.add('active');
-                // Prevent body from scrolling
+                if(popup) popup.classList.add('active');
                 document.body.style.overflow = 'hidden';
             }
             
-            // Close popup function
-            function closePopupFunc() {
-                popup.classList.remove('active');
-                // Restore body scrolling
+            function closePopup() {
+                if(popup) popup.classList.remove('active');
                 document.body.style.overflow = 'auto';
             }
             
-            // Event listeners
-            closePopup.addEventListener('click', closePopupFunc);
-            
-            // Close popup when clicking outside the content
-            popup.addEventListener('click', (e) => {
-                if (e.target === popup) {
-                    closePopupFunc();
-                }
+            if(closePopupBtn) closePopupBtn.addEventListener('click', closePopup);
+            if(popup) popup.addEventListener('click', (e) => {
+                if (e.target === popup) closePopup();
             });
-            
-            // Close popup with Escape key
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && popup.classList.contains('active')) {
-                    closePopupFunc();
+                if (e.key === 'Escape' && popup && popup.classList.contains('active')) {
+                    closePopup();
                 }
             });
             
-            // Show popup after  seconds
             setTimeout(showPopup, 9000);
-        });
-    </script>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sticky Offer Bar</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* STICKY OFFER BAR STYLES */
-        .offer-container {
-            position: fixed;
-            bottom: -150px;
-            left: 0;
-            right: 0;
-            z-index: 10000;
-            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        
-        .offer-container.active {
-            bottom: 0;
-        }
-        
-        .offer-banner {
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: white;
-            text-align: center;
-            padding: 5px;
-            font-weight: 700;
-            font-size: 0.7rem;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        
-        .offer-bar {
-            background: rgba(15, 23, 42, 0.98);
-            padding: 8px 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.4);
-            border-top: 2px solid rgba(139, 92, 246, 0.5);
-            gap: 20px;
-        }
-        
-        .pricing {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .original-price {
-            font-size: 0.9rem;
-            color: #cbd5e1;
-            text-decoration: line-through;
-        }
-        
-        .discounted-price {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .discount-badge {
-            background: linear-gradient(135deg, #4facfe, #00f2fe);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            box-shadow: 0 4px 10px rgba(79, 172, 254, 0.4);
-        }
-        
-        .avail-btn-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .avail-btn {
-            background: linear-gradient(90deg, #2563eb 0%, #0ea5e9 100%);
-            color: white;
-            border: none;
-            padding: 8px 25px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.5);
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            text-decoration: none;
-        }
-        
-        .avail-btn:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
-            z-index: -1;
-            opacity: 0;
-            transition: all 0.4s ease;
-        }
-        
-        .avail-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.7);
-        }
-        
-        .avail-btn:hover:after {
-            opacity: 1;
-        }
-        
-        .close-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: #cbd5e1;
-            border: none;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .close-btn:hover {
-            background: #8b5cf6;
-            color: white;
-            transform: rotate(90deg);
-        }
-        
-        /* Animation */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        /* Mobile-specific reductions (480px and below) */
-        @media (max-width: 480px) {
-            .offer-bar {
-                padding: 6.8px 12.75px; /* 15% reduction */
-                gap: 17px; /* Reduced gap */
-            }
-            
-            .pricing {
-                gap: 10px; /* Reduced gap */
-            }
-            
-            .avail-btn-container {
-                gap: 10px; /* Reduced gap */
-            }
-        }
-    </style>
-</head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0KFBLK283C"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-0KFBLK283C');
-</script>
-<body>
-    <!-- Sticky Offer Bar Container -->
-    <div class="offer-container" id="offerContainer">
-        <div class="offer-banner">
-            ONLY FOR EARLY USERS
-        </div>
-        <div class="offer-bar">
-            <div class="pricing">
-                <div class="original-price">₹999</div>
-                <div class="discounted-price">₹199</div>
-                <div class="discount-badge">81% OFF</div>
-            </div>
-            
-            <div class="avail-btn-container">
-    <a href="Rpp1" 
-       target="_blank" 
-       class="avail-btn pulse tracked-payment-link"
-       style="display: inline-block; padding: 8px 20px; font-size: 14px; font-weight: bold; text-align: center; border-radius: 40px; text-decoration: none; color: white; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); box-shadow: 0 4px 10px rgba(33, 113, 248, 0.3); min-width: 140px;">
-        AVAIL NOW
-    </a>
-</div>
-                <button class="close-btn" id="closeOffer">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-<style>
-/* Mobile responsiveness for Avail Now button */
-@media (max-width: 460px) {
-  .avail-btn {
-    padding: 8px 18px !important;
-    font-size: 14px !important;
-    min-width: 135px !important;
-  }
-}
-</style>
-    <script>
-        // Show offer bar after delay
-        document.addEventListener('DOMContentLoaded', function() {
             const offerContainer = document.getElementById('offerContainer');
             const closeOffer = document.getElementById('closeOffer');
             
-            // Show offer bar after 3 seconds
             setTimeout(() => {
-                offerContainer.classList.add('active');
+                if(offerContainer) offerContainer.classList.add('active');
             }, 3000);
             
-            // Close offer bar
-            closeOffer.addEventListener('click', function() {
-                offerContainer.classList.remove('active');
+            if(closeOffer) closeOffer.addEventListener('click', function() {
+                if(offerContainer) offerContainer.classList.remove('active');
             });
-        });
-    </script>
 
-    <!-- Affiliate Tracking Script -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. Get URL parameters
+            // Affiliate Tracking Script
             const urlParams = new URLSearchParams(window.location.search);
             const affiliateId = urlParams.get('affiliate') || urlParams.get('ref') || urlParams.get('utm_source');
             
-            // 2. Store affiliate ID in localStorage (expires in 30 days)
             if (affiliateId) {
                 localStorage.setItem('affiliate_id', affiliateId);
                 localStorage.setItem('affiliate_timestamp', Date.now());
-                console.log('Affiliate ID stored:', affiliateId);
             }
             
-            // 3. Update all payment links with tracking parameters
             document.querySelectorAll('.tracked-payment-link').forEach(link => {
                 try {
                     const url = new URL(link.href, window.location.origin);
-                    
-                    // Get stored affiliate ID
                     const storedAffiliateId = localStorage.getItem('affiliate_id');
                     
-                    // Add tracking parameters if affiliate exists
                     if (storedAffiliateId) {
                         url.searchParams.set('affiliate', storedAffiliateId);
                         url.searchParams.set('utm_source', storedAffiliateId);
                         url.searchParams.set('utm_medium', 'affiliate');
-                        
-                        // Update the link
                         link.href = url.toString();
-                        console.log('Updated payment link:', link.href);
                     }
                 } catch (e) {
                     console.error('Error updating payment link:', e);
                 }
             });
-            
-            // 4. Track link clicks (optional)
-            document.querySelectorAll('.tracked-payment-link').forEach(link => {
-                link.addEventListener('click', function() {
-                    const affiliateId = localStorage.getItem('affiliate_id') || 'direct';
-                    console.log('Payment link clicked - Affiliate:', affiliateId);
-                    
-                    // You can send this data to your analytics here
-                    // Example: 
-                    // fetch('/api/track-click', { method: 'POST', body: JSON.stringify({ affiliateId }) });
-                });
-            });
         });
     </script>
-
-    <!-- Razorpay Payment Tracking Script -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0KFBLK283C"></script>
     <script>
-        // This would be implemented on your payment page (Rpp1)
-        // Here's a template of what you would include there:
-        /*
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get affiliate ID from URL or localStorage
-            const urlParams = new URLSearchParams(window.location.search);
-            let affiliateId = urlParams.get('affiliate') || 
-                              urlParams.get('utm_source') || 
-                              localStorage.getItem('affiliate_id');
-            
-            // If no affiliate in URL but one in localStorage (from previous visit)
-            if (!urlParams.get('affiliate') && localStorage.getItem('affiliate_id')) {
-                affiliateId = localStorage.getItem('affiliate_id');
-                // Update URL without reloading to maintain tracking
-                history.replaceState(null, null, `?affiliate=${affiliateId}`);
-            }
-            
-            // Initialize Razorpay with affiliate tracking
-            const options = {
-                key: 'YOUR_RAZORPAY_KEY',
-                amount: 19900, // ₹199 in paise
-                currency: 'INR',
-                name: 'TraderLog',
-                description: 'Premium Subscription',
-                image: '/logo.png',
-                handler: function(response) {
-                    // On successful payment
-                    console.log('Payment successful:', response);
-                    
-                    // Send payment data to your server with affiliate info
-                    if (affiliateId) {
-                        const paymentData = {
-                            payment_id: response.razorpay_payment_id,
-                            amount: 199,
-                            affiliate_id: affiliateId,
-                            timestamp: new Date().toISOString()
-                        };
-                        
-                        // Send to your backend
-                        fetch('/api/record-payment', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(paymentData)
-                        }).then(res => {
-                            console.log('Payment recorded with affiliate');
-                            // Redirect to success page
-                            window.location.href = '/payment-success';
-                        });
-                    } else {
-                        // No affiliate - regular payment processing
-                        window.location.href = '/payment-success';
-                    }
-                },
-                prefill: {
-                    name: 'Customer Name',
-                    email: 'customer@example.com',
-                    contact: '9999999999'
-                },
-                notes: {
-                    affiliate_id: affiliateId || 'direct'
-                }
-            };
-            
-            // Initialize Razorpay button
-            const rzp = new Razorpay(options);
-            document.getElementById('pay-button').onclick = function(e) {
-                rzp.open();
-                e.preventDefault();
-            };
-        });
-        */
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0KFBLK283C');
     </script>
-
-    <!-- Backend Implementation Notes -->
-    <!-- 
-    On your backend (server), you would need to:
-    1. Create an endpoint to record payments (/api/record-payment)
-    2. Store payment data with affiliate IDs in your database
-    3. Create a dashboard for creators to see their referrals
-    4. Implement commission payout logic
-    
-    Example database structure for tracking:
-    - payments: id, user_id, amount, payment_id, status, created_at
-    - affiliates: id, creator_id, affiliate_code, payment_details
-    - referrals: id, affiliate_id, payment_id, commission_amount, status
-    
-    You can use Firebase, MongoDB, or any database you prefer.
-    -->
-</body>
+    </body>
 </html>
-
-
-
