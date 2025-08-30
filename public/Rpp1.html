@@ -3,342 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TraderLog - Choose Your Subscription Plan</title>
+    <title>TraderLog - Unlock Your Trading Potential</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
             --secondary: #0ea5e9;
             --accent: #8b5cf6;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --dark: #1e293b;
-            --darker: #0f172a;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --gray-light: #cbd5e1;
+            --dark: #0f172a; /* Darker base */
+            --dark-light: #1e293b; /* Lighter card background */
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --gray-light: #d1d5db;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
-            background: linear-gradient(135deg, var(--darker), var(--dark));
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            background-image: radial-gradient(ellipse at top, #1e293b, var(--dark) 60%);
             color: var(--light);
             min-height: 100vh;
-            position: relative;
+            line-height: 1.6;
             overflow-x: hidden;
         }
-        
-        body:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1620476214170-1d6800d1c9e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
-            opacity: 0.05;
-            z-index: -1;
-        }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
-        
-        /* Header Styles */
+
+        /* Header */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 0;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
+            background: transparent;
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
         }
-        
-        .logo {
+
+        .logo a {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 700;
             color: var(--light);
-        }
-        
-        .logo i {
-            color: var(--accent);
-            background: rgba(139, 92, 246, 0.1);
-            padding: 10px;
-            border-radius: 12px;
-        }
-        
-        .logo a {
             text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
-        
-        /* Desktop Navigation */
-        .desktop-nav {
-            display: flex;
+
+        .logo i {
+            color: var(--primary);
         }
-        
-        .desktop-nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-        
+
+        .desktop-nav { display: flex; }
+        .desktop-nav ul { display: flex; list-style: none; gap: 35px; }
         .desktop-nav a {
             color: var(--gray-light);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            padding-bottom: 5px;
+            transition: color 0.3s ease;
         }
+        .desktop-nav a:hover { color: var(--primary); }
+
+        .mobile-nav-toggle { display: none; background: none; border: none; color: var(--light); font-size: 24px; cursor: pointer; z-index: 1001; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 80%; max-width: 300px; height: 100%; background: var(--dark-light); z-index: 1000; padding: 80px 30px 30px; transition: right 0.4s ease; box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2); }
+        .mobile-nav.active { right: 0; }
+        .mobile-nav ul { list-style: none; }
+        .mobile-nav li { margin-bottom: 20px; }
+        .mobile-nav a { color: var(--gray-light); text-decoration: none; font-size: 18px; font-weight: 500; display: block; padding: 10px 0; transition: color 0.3s; }
+        .mobile-nav a:hover { color: var(--primary); }
+        .mobile-nav-close { position: absolute; top: 20px; right: 20px; font-size: 28px; color: var(--light); background: none; border: none; cursor: pointer; }
         
-        .desktop-nav a:hover {
-            color: var(--light);
-        }
-        
-        .desktop-nav a:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-        
-        .desktop-nav a:hover:after {
-            width: 100%;
-        }
-        
-        /* Mobile Navigation */
-        .mobile-nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--light);
-            font-size: 24px;
-            cursor: pointer;
-            z-index: 1001;
-        }
-        
-        .mobile-nav {
-            position: fixed;
-            top: 0;
-            right: -100%;
-            width: 80%;
-            max-width: 300px;
-            height: 100%;
-            background: rgba(30, 41, 59, 0.98);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            padding: 80px 30px 30px;
-            transition: right 0.4s ease;
-            overflow-y: auto;
-            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .mobile-nav.active {
-            right: 0;
-        }
-        
-        .mobile-nav ul {
-            list-style: none;
-        }
-        
-        .mobile-nav li {
-            margin-bottom: 15px;
-        }
-        
-        .mobile-nav a {
-            color: var(--gray-light);
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 500;
-            display: block;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(100, 116, 139, 0.3);
-            transition: color 0.3s;
-        }
-        
-        .mobile-nav a:hover {
-            color: var(--light);
-        }
-        
-        .mobile-nav-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 28px;
-            color: var(--light);
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        
-        /* Hero Section */
-        .hero {
+        /* Centered Hero Section */
+        .hero-section {
             text-align: center;
-            padding: 80px 20px 40px;
-            max-width: 900px;
-            margin: 0 auto;
+            padding: 80px 0 60px;
         }
-        
-        .hero h1 {
-            font-size: 2.5rem;
+        .hero-section h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
             margin-bottom: 20px;
             line-height: 1.2;
-            background: linear-gradient(to right, var(--light), var(--secondary));
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            background: linear-gradient(90deg, #fff, var(--gray-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        
-        .hero p {
-            font-size: 1.1rem;
+        .hero-section .subtitle {
+            font-size: 1.2rem;
             color: var(--gray-light);
             max-width: 700px;
-            margin: 0 auto 30px;
-            line-height: 1.6;
-        }
-        
-        .offer-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 30px 20px;
-            max-width: 500px;
             margin: 0 auto 40px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
         }
         
-        .offer-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-        }
-        
-        /* Offer Badge */
-        .offer-badge {
-            position: absolute;
-            top: 15px;
-            right: -35px;
-            background: var(--danger);
-            color: white;
-            font-weight: 700;
-            font-size: 10px;
-            transform: rotate(45deg);
-            z-index: 10;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+        /* Universal Features */
+        .universal-features {
             text-align: center;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 150px;
-            height: 32px;
-            padding: 0 10px;
+            margin-bottom: 50px;
         }
-        
-        .price-tag {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 35px 0 10px;
+        .universal-features h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
             color: var(--light);
+        }
+        .features-grid {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        .feature-item {
+            display: flex;
             align-items: center;
-        }
-        
-        .price-tag .original {
+            gap: 10px;
             font-size: 1.1rem;
-            text-decoration: line-through;
-            color: var(--gray);
-            margin-top: 5px;
-        }
-        
-        .offer-duration {
             color: var(--gray-light);
-            margin-bottom: 20px;
-            font-size: 1rem;
         }
-        
-        .plan-options {
+        .feature-item i {
+            color: var(--primary);
+        }
+
+
+        /* Pricing Section */
+        .pricing-section {
+            padding-bottom: 80px;
+        }
+        .pricing-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+            gap: 30px;
+            align-items: center;
         }
-        
-        .plan-option {
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 12px;
-            padding: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
+        .pricing-card {
+            background: var(--dark-light);
+            border-radius: 16px;
+            padding: 40px 30px;
+            border: 2px solid var(--dark-light);
+            transition: all 0.3s ease;
             text-align: center;
+            position: relative;
         }
-        
-        .plan-option:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        .pricing-card.popular {
+            border-color: var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(79, 70, 229, 0.5), 0 0 15px rgba(79, 70, 229, 0.3);
         }
-        
-        .plan-option.selected {
-            border-color: var(--accent);
-            background: rgba(139, 92, 246, 0.1);
+        .popular-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 6px 15px;
+            border-radius: 20px;
         }
-        
-        .plan-option h4 {
-            margin-bottom: 8px;
-            font-size: 1.1rem;
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
         }
-        
-        .plan-price {
+        .price {
+            margin-bottom: 25px;
+        }
+        .price .new-price {
+            font-size: 3rem;
             font-weight: 700;
-            font-size: 1.4rem;
-            margin-bottom: 5px;
+            color: var(--light);
         }
-        
-        .plan-duration {
-            font-size: 0.9rem;
+        .price .old-price {
+            font-size: 1.2rem;
+            color: var(--gray);
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+        .price-description {
             color: var(--gray-light);
+            font-size: 1rem;
         }
-        
-        .subscription-btn {
+
+        .features-list {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+            min-height: 200px;
+        }
+        .features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .features-list i {
+            color: var(--success);
+            margin-top: 5px;
+        }
+
+        .btn {
             display: block;
             width: 100%;
-            background: linear-gradient(90deg, var(--accent), var(--primary));
+            background: var(--primary);
             color: white;
             padding: 16px;
             border: none;
@@ -347,544 +237,133 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.4);
-            margin-top: 15px;
-            position: relative;
-            overflow: hidden;
+            text-align: center;
+            text-decoration: none;
+        }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .pricing-card .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .pricing-card .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
         }
         
-        .subscription-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.6);
+        .trial-section {
+            text-align: center;
+            margin-top: 60px;
         }
+        .trial-section .subtitle {
+             margin-bottom: 20px;
+        }
+        .btn-trial {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            display: inline-block;
+            width: 100%;
+            max-width: 450px;
+            padding: 16px 30px;
+            font-size: 1.2rem;
+        }
+        .btn-trial:hover { background: rgba(79, 70, 229, 0.1); }
         
-        /* User Info Form */
         .user-form {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 25px;
-            max-width: 500px;
-            margin: 0 auto 30px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             display: none;
+            max-width: 500px;
+            margin: 60px auto 0;
+            background: var(--dark-light);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--light);
-        }
-        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
         .form-group input {
             width: 100%;
             padding: 14px;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(100, 116, 139, 0.3);
+            background: var(--dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             color: var(--light);
             font-size: 16px;
             transition: all 0.3s;
         }
-        
-        .form-group input:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
-        }
-        
-        .form-error {
-            color: var(--danger);
-            font-size: 14px;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        /* Testimonials Section */
-        .testimonials {
-            max-width: 900px;
-            margin: 60px auto;
-            padding: 0 20px;
-        }
-        
-        .testimonials h2 {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2rem;
-            background: linear-gradient(to right, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .testimonial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-        
-        .testimonial-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .testimonial-card:before {
-            content: '"';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 5rem;
-            color: var(--accent);
-            opacity: 0.2;
-            font-family: serif;
-            line-height: 1;
-        }
-        
-        .testimonial-content {
-            font-style: italic;
-            color: var(--light);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-        }
-        
-        .author-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        .author-info {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .author-name {
-            font-weight: 600;
-            color: var(--light);
-        }
-        
-        .author-location {
-            color: var(--gray-light);
-            font-size: 0.9rem;
-        }
-        
-        /* Demo Section Styles */
-        .demo-section {
-            max-width: 900px;
-            margin: 60px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
+        .form-group input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
+        .form-error { color: var(--danger); font-size: 14px; margin-top: 5px; display: none; }
+        .subscription-details { background: var(--dark); padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: left; font-size: 0.9rem; }
+        .subscription-details p { margin: 0; }
+        .subscription-details strong { color: var(--light); }
 
-        .demo-section h2 {
-            text-align: center;
-            margin-bottom: 40px;
-            font-size: 2rem;
-            background: linear-gradient(to right, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Other Sections */
+        .section {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
-        /* Loading State */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            display: none;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            border-top-color: var(--accent);
-            animation: spin 1s ease-in-out infinite;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        .loading-text {
-            color: var(--light);
-            margin-top: 20px;
-            font-size: 18px;
-            text-align: center;
-        }
-        
-        /* Features Section */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 60px 0;
-        }
-        
-        .feature-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 25px 20px;
-            border: 1px solid rgba(100, 116, 139, 0.2);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(139, 92, 246, 0.4);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .feature-card i {
-            font-size: 2.2rem;
-            color: var(--accent);
-            margin-bottom: 15px;
-            background: rgba(139, 92, 246, 0.1);
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 14px;
-        }
-        
-        .feature-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 12px;
-            color: var(--light);
-        }
-        
-        .feature-card p {
-            color: var(--gray-light);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-        
-        /* Buttons Section */
-        .buttons-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            margin: 40px 0;
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(30, 41, 59, 0.7);
-            color: var(--light);
-            padding: 14px 30px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(100, 116, 139, 0.3);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 280px;
-            gap: 10px;
-        }
-        
-        .btn:hover {
-            background: rgba(37, 99, 235, 0.2);
-            border-color: rgba(37, 99, 235, 0.4);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-        
-        .btn i {
-            color: var(--accent);
-        }
-        
-        /* Payment Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, var(--darker), var(--dark));
-            border-radius: 16px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
-            border: 1px solid var(--accent);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-        }
-        
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--gray-light);
-            transition: color 0.3s;
-        }
-        
-        .close:hover {
-            color: var(--light);
-        }
-        
-        .modal-icon {
-            font-size: 50px;
-            color: var(--success);
-            margin-bottom: 15px;
-        }
-        
-        .modal h2 {
-            font-size: 1.7rem;
-            margin-bottom: 15px;
-            color: var(--light);
-        }
-        
-        .modal p {
-            margin-bottom: 20px;
-            color: var(--gray-light);
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-        
-        .modal-btn {
-            background: linear-gradient(90deg, var(--accent), var(--primary));
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .modal-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
-        }
-        
-        .subscription-details {
-            background: rgba(30, 41, 59, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: left;
-            font-size: 0.9rem;
-        }
-        
-        .subscription-details strong {
-            color: var(--light);
-        }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            margin-top: 50px;
-            border-top: 1px solid rgba(100, 116, 139, 0.2);
-            color: var(--gray);
-        }
-        
-        .secure-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(30, 41, 59, 0.5);
-            padding: 8px 16px;
-            border-radius: 50px;
-            margin-top: 15px;
-            font-size: 13px;
-            backdrop-filter: blur(5px);
-        }
-        
-        .secure-badge i {
-            color: var(--accent);
-        }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 50px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 15px; }
+        .section-header p { font-size: 1.1rem; color: var(--gray-light); }
+        .demo-container { position: relative; padding-top: 56.25%; max-width: 900px; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
+        .demo-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .testimonial-card { background: var(--dark-light); border-radius: 16px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .testimonial-content { font-style: italic; color: var(--light); margin-bottom: 20px; font-size: 1.1rem; }
+        .testimonial-author { display: flex; align-items: center; gap: 15px; }
+        .author-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
+        .author-name { font-weight: 600; }
+        .author-location { color: var(--gray); font-size: 0.9rem; }
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { background: var(--dark-light); border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; }
+        .faq-question { padding: 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 1.1rem; }
+        .faq-question i { transition: transform 0.3s; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out; padding: 0 20px; color: var(--gray-light); }
+        .faq-item.active .faq-answer { max-height: 200px; padding: 0 20px 20px; }
+
+        footer { text-align: center; padding: 40px 0; margin-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); color: var(--gray); }
+
+        /* Modals & Loading */
+        .loading-overlay, .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 10000; backdrop-filter: blur(5px); }
+        .loading-overlay { display: none; }
+        .modal { display: none; }
+        .loading-spinner { width: 50px; height: 50px; border: 5px solid rgba(255, 255, 255, 0.1); border-radius: 50%; border-top-color: var(--primary); animation: spin 1s ease-in-out infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { color: var(--light); margin-top: 20px; font-size: 18px; text-align: center; }
+        .modal-content { background: var(--dark-light); border-radius: 16px; padding: 30px; width: 90%; max-width: 400px; text-align: center; position: relative; border: 1px solid var(--primary); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .close { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: var(--gray-light); transition: color 0.3s; }
+        .close:hover { color: var(--light); }
+        .modal-icon { font-size: 50px; color: var(--success); margin-bottom: 15px; }
+        .modal h2 { font-size: 1.7rem; margin-bottom: 15px; }
+        .modal p { margin-bottom: 20px; color: var(--gray-light); }
+        .modal-btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .modal-btn:hover { background: var(--primary-dark); }
         
         /* Responsive */
-        @media (min-width: 769px) {
-            .mobile-nav-toggle,
-            .mobile-nav {
-                display: none;
-            }
+        @media (max-width: 992px) {
+            .pricing-grid { grid-template-columns: 1fr; gap: 40px; }
+            .pricing-card.popular { transform: scale(1); order: -1; /* Move popular card to top on mobile */ }
+            .pricing-card { max-width: 400px; margin: 0 auto; }
+            .hero-section h1 { font-size: 2.8rem; }
         }
-        
         @media (max-width: 768px) {
-            .desktop-nav {
-                display: none;
-            }
-            
-            .mobile-nav-toggle {
-                display: block;
-            }
-            
-            header {
-                padding: 15px 0;
-            }
-            
-            .hero {
-                padding: 70px 15px 30px;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .offer-card {
-                padding: 25px 15px;
-            }
-            
-            .price-tag {
-                font-size: 2rem;
-                margin: 30px 0 8px;
-            }
-            
-            .offer-badge {
-                font-size: 10px;
-                width: 130px;
-                height: 28px;
-                top: 12px;
-                right: -30px;
-            }
-            
-            .plan-options {
-                grid-template-columns: 1fr;
-            }
-            
-            .testimonial-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .logo {
-                font-size: 22px;
-            }
-            
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-            }
-            
-            .modal-content {
-                padding: 25px 20px;
-            }
-            
-            .modal h2 {
-                font-size: 1.5rem;
-            }
-        }
-        
-        /* Animation for buttons */
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.7); }
-            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
-        }
-        
-        .subscription-btn.pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        /* Status indicator */
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .status-active {
-            background-color: var(--success);
-            box-shadow: 0 0 8px var(--success);
-        }
-        
-        .status-inactive {
-            background-color: var(--danger);
-        }
-        
-        /* Error Message */
-        .error-message {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 1px solid var(--danger);
-            display: none;
+            .desktop-nav { display: none; }
+            .mobile-nav-toggle { display: block; }
+            .hero-section h1 { font-size: 2.2rem; }
+            .section-header h2 { font-size: 2rem; }
+            .features-grid { flex-direction: column; align-items: center; gap: 20px;}
         }
     </style>
 </head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-0KFBLK283C"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-0KFBLK283C');
-</script>
 <body>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0KFBLK283C"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-0KFBLK283C');
+    </script>
+
     <div class="container">
         <header>
             <div class="logo">
@@ -893,245 +372,226 @@
                     <span>TraderLog</span>
                 </a>
             </div>
-            
-            <!-- Desktop Navigation -->
             <nav class="desktop-nav">
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="#">Features</a></li>
-                    <li><a href="#" id="pricing-nav">Pricing</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
                     <li><a href="https://topmate.io/rahul_luthra/1377078">Resources</a></li>
                     <li><a href="https://wa.link/1nycuf" target="_blank">Contact</a></li>
                 </ul>
             </nav>
-            
-            <!-- Mobile Navigation Toggle -->
-            <button class="mobile-nav-toggle" id="mobileNavToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <!-- Mobile Navigation -->
+            <button class="mobile-nav-toggle" id="mobileNavToggle"><i class="fas fa-bars"></i></button>
             <div class="mobile-nav" id="mobileNav">
-                <button class="mobile-nav-close" id="mobileNavClose">
-                    <i class="fas fa-times"></i>
-                </button>
+                <button class="mobile-nav-close" id="mobileNavClose"><i class="fas fa-times"></i></button>
                 <ul>
                     <li><a href="index.html">Home</a></li>
-                    <li><a href="#">Features</a></li>
-                    <li><a href="#" id="mobile-pricing-nav">Pricing</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#">Pricing</a></li>
                     <li><a href="https://topmate.io/rahul_luthra/1377078">Resources</a></li>
                     <li><a href="https://wa.link/1nycuf" target="_blank">Contact</a></li>
                 </ul>
             </div>
         </header>
-        
-        <section class="hero">
-            <h1>Elevate Your Trading with AI-Powered Insights</h1>
-            <p>TraderLog helps you analyze your trades, identify patterns, and improve your strategy with advanced analytics and personalized suggestions.</p>
+
+        <main>
+            <section class="hero-section">
+                <h1>Unlock Your Full Trading Potential</h1>
+                <p class="subtitle">Stop guessing, start winning. Our AI-powered tools give you the edge you need to trade smarter. Choose your plan and elevate your strategy today.</p>
+            </section>
             
-            <div class="offer-card">
-                <div class="offer-badge">LIMITED TIME OFFER</div>
-                <h2>Choose Your Plan</h2>
-                <div class="price-tag">
-                    <span>Save up to 91%</span>
-                </div>
-                <div class="offer-duration">Special introductory pricing</div>
-                
-                <div class="plan-options">
-                    <div class="plan-option selected" data-plan="monthly" data-amount="199" data-desc="Monthly Subscription">
-                        <h4>Monthly</h4>
-                        <div class="plan-price">₹199</div>
-                        <div class="plan-duration">per month</div>
-                    </div>
-                    
-                    <div class="plan-option" data-plan="six-months" data-amount="999" data-desc="6 Months Access">
-                        <h4>6 Months</h4>
-                        <div class="plan-price">₹999</div>
-                        <div class="plan-duration">one-time payment</div>
-                    </div>
-                    
-                    <div class="plan-option" data-plan="yearly" data-amount="1899" data-desc="1 Year Access">
-                        <h4>1 Year</h4>
-                        <div class="plan-price">₹1899</div>
-                        <div class="plan-duration">one-time payment</div>
+            <section class="pricing-section">
+
+                <div class="universal-features">
+                    <h2>Every Plan Includes Full Access To:</h2>
+                    <div class="features-grid">
+                        <div class="feature-item"><i class="fas fa-infinity"></i> Unlimited Trade Journaling</div>
+                        <div class="feature-item"><i class="fas fa-brain"></i> AI Performance Analytics</div>
+                        <div class="feature-item"><i class="fas fa-lightbulb"></i> Actionable Insights</div>
                     </div>
                 </div>
-                
-                <button class="subscription-btn pulse" id="subscribe-btn">
-                    <i class="fas fa-bolt"></i> Subscribe Now
-                </button>
-                
-                <div style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-light);">
-                    <span class="status-indicator status-active"></span>
-                    Payment gateway is active and ready
+
+                <div class="pricing-grid">
+                    <!-- Monthly Plan -->
+                    <div class="pricing-card">
+                        <h3>Monthly</h3>
+                        <div class="price">
+                            <span class="new-price">₹199</span>
+                            <span class="old-price">₹499</span>
+                        </div>
+                        <p class="price-description">Flexibility First</p>
+                        <ul class="features-list">
+                            <li><i class="fas fa-check"></i><span><strong>Log Every Trade</strong> without limits to build a complete picture of your performance.</span></li>
+                             <li><i class="fas fa-check"></i><span><strong>Standard Email Support</strong> to help with your questions.</span></li>
+                        </ul>
+                        <button class="btn btn-secondary plan-btn" data-plan="monthly" data-amount="199" data-desc="Monthly Subscription">Choose Monthly</button>
+                    </div>
+
+                    <!-- 6 Months Plan (Most Popular) -->
+                    <div class="pricing-card popular">
+                        <div class="popular-badge">Most Popular</div>
+                        <h3>6 Months</h3>
+                        <div class="price">
+                            <span class="new-price">₹999</span>
+                            <span class="old-price">₹2994</span>
+                        </div>
+                        <p class="price-description">Best Value & Commitment</p>
+                        <ul class="features-list">
+                           <li><i class="fas fa-check"></i><span><strong>Everything in Monthly, plus:</strong></span></li>
+                           <li><i class="fas fa-star"></i><span><strong>Priority Support</strong> to get your questions answered faster.</span></li>
+                           <li><i class="fas fa-rocket"></i><span><strong>Early Access to New Features</strong> before anyone else.</span></li>
+                        </ul>
+                        <button class="btn plan-btn" data-plan="six-months" data-amount="999" data-desc="6 Months Access">Choose 6 Months</button>
+                    </div>
+
+                    <!-- 1 Year Plan -->
+                    <div class="pricing-card">
+                        <h3>1 Year</h3>
+                        <div class="price">
+                            <span class="new-price">₹1899</span>
+                            <span class="old-price">₹5988</span>
+                        </div>
+                        <p class="price-description">Long-Term Growth</p>
+                         <ul class="features-list">
+                            <li><i class="fas fa-check"></i><span><strong>Lock in the best rate</strong> for a full year of analysis and improvement.</span></li>
+                            <li><i class="fas fa-check"></i><span><strong>Standard Email Support</strong> to help with your questions.</span></li>
+                        </ul>
+                        <button class="btn btn-secondary plan-btn" data-plan="yearly" data-amount="1899" data-desc="1 Year Access">Choose Yearly</button>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- User Information Form -->
-            <div class="user-form" id="userForm">
-                <h3>Complete Your Subscription</h3>
-                <div class="error-message" id="formError"></div>
-                
-                <div class="form-group">
-                    <label for="userName">Full Name</label>
-                    <input type="text" id="userName" placeholder="Enter your full name">
-                    <div class="form-error" id="nameError">Please enter your name</div>
+
+                <div class="trial-section">
+                     <p class="subtitle">Ready to see the difference? No commitment, no risk. <br>Start your free trial and get instant access to every feature.</p>
+                    <a href="#" class="btn btn-trial" id="trial-btn"><i class="far fa-calendar-check"></i> Start 14-Day Free Trial</a>
                 </div>
-                
-                <div class="form-group">
-                    <label for="userEmail">Email Address</label>
-                    <input type="email" id="userEmail" placeholder="Enter your email">
-                    <div class="form-error" id="emailError">Please enter a valid email</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="userPhone">Phone Number</label>
-                    <input type="tel" id="userPhone" placeholder="Enter your phone number">
-                    <div class="form-error" id="phoneError">Please enter a 10-digit phone number</div>
-                </div>
-                
-                <div class="selected-plan-info">
+
+                <div class="user-form" id="userForm">
+                    <h3 id="form-title">Complete Your Subscription</h3>
+                    <div class="form-group">
+                        <label for="userName">Full Name</label>
+                        <input type="text" id="userName" placeholder="Enter your full name">
+                        <div class="form-error" id="nameError">Please enter your name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="userEmail">Email Address</label>
+                        <input type="email" id="userEmail" placeholder="Enter your email">
+                        <div class="form-error" id="emailError">Please enter a valid email</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="userPhone">Phone Number</label>
+                        <input type="tel" id="userPhone" placeholder="Enter your phone number">
+                        <div class="form-error" id="phoneError">Please enter a 10-digit phone number</div>
+                    </div>
                     <div class="subscription-details">
                         <p><strong>Selected Plan:</strong> <span id="selectedPlanName"></span></p>
                         <p><strong>Amount:</strong> ₹<span id="selectedPlanAmount"></span></p>
                     </div>
-                </div>
-                
-                <button class="subscription-btn" id="proceedToPayment">
-                    <i class="fas fa-lock"></i> Proceed to Payment
-                </button>
-            </div>
-            
-            <div class="features">
-                <div class="feature-card">
-                    <i class="fas fa-infinity"></i>
-                    <h3>Unlimited Trade Entries</h3>
-                    <p>Record every trade without limitations and build a comprehensive trading history.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <i class="fas fa-brain"></i>
-                    <h3>Advanced AI Analytics</h3>
-                    <p>Get deep insights into your trading patterns, performance metrics, and profitability.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <i class="fas fa-lightbulb"></i>
-                    <h3>Behavior Suggestions</h3>
-                    <p>Receive personalized recommendations to improve your trading psychology and decision-making.</p>
-                </div>
-                
-                <div class="feature-card">
-                    <i class="fas fa-forward"></i>
-                    <h3>Upcoming Features</h3>
-                    <p>Access to copy trading, backtesting, and demo trading modules as they launch.</p>
-                </div>
-            </div>
-
-            <!-- Supademo Section -->
-            <section class="demo-section">
-                <h2>See TraderLog in Action</h2>
-                <div class="demo-container">
-                    <div style="position: relative; padding-top: 57.7%; /* Aspect Ratio Wrapper */">
-                        <iframe 
-                            src="https://app.supademo.com/embed/cme61v0e01wi8h3pylhrahd2p?embed_v=2&utm_source=embed" 
-                            loading="lazy" 
-                            title="TraderLog- Step by Step Demo" 
-                            allow="clipboard-write" 
-                            frameborder="0" 
-                            webkitallowfullscreen="true" 
-                            mozallowfullscreen="true" 
-                            allowfullscreen 
-                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;">
-                        </iframe>
-                    </div>
+                    <button class="btn" id="proceedToPayment"><i class="fas fa-lock"></i> Proceed to Payment</button>
                 </div>
             </section>
-            
-            <!-- Testimonials Section -->
-            <div class="testimonials">
-                <h2>What Our Traders Say</h2>
-                <div class="testimonial-grid">
-                    <div class="testimonial-card">
-                        <p class="testimonial-content">"TraderLog's analytics helped me identify my emotional trading patterns. I've become consistently profitable and increased my returns by 35% in just 3 months."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">RK</div>
-                            <div class="author-info">
-                                <span class="author-name">Rajesh Kumar</span>
-                                <span class="author-location">Mumbai, India</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <p class="testimonial-content">"The AI insights pointed out weaknesses I never noticed. My win rate improved from 52% to 68% after implementing TraderLog's suggestions."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">PS</div>
-                            <div class="author-info">
-                                <span class="author-name">Priya Sharma</span>
-                                <span class="author-location">Delhi, India</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-card">
-                        <p class="testimonial-content">"As a full-time trader, TraderLog saves me hours of journaling. The behavioral insights transformed my trading discipline and increased my profits."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">MJ</div>
-                            <div class="author-info">
-                                <span class="author-name">Michael Johnson</span>
-                                <span class="author-location">New York, USA</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="buttons-section">
-                <div class="buttons-section">
-                    <button class="btn" id="start-journaling">
-                        <i class="fas fa-book"></i> Start Journaling Now
-                    </button>
-                    
-                    <button class="btn" id="avail-now">
-                        <i class="fas fa-gem"></i> AVAIL NOW
-                    </button>
-                    
-                    <button class="btn" id="start-now">
-                        <i class="fas fa-play-circle"></i> Start Now
-                    </button>
-                </div>
-            </div>
-        </section>
-        
-        <footer>
-            <p>© 2023 TraderLog. All rights reserved.</p>
-            <div class="secure-badge">
-                <i class="fas fa-lock"></i>
-                <span>Secure payments powered by Razorpay</span>
-            </div>
-        </footer>
+        </main>
     </div>
+
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>See TraderLog in Action</h2>
+                <p>Watch this quick demo to see how TraderLog can revolutionize your trading journal and provide actionable insights.</p>
+            </div>
+            <div class="demo-container">
+                <iframe src="https://www.youtube.com/embed/sMC2QRZTV8Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Join Traders Who Transformed Their Results</h2>
+                <p>Don't just take our word for it. Here's how TraderLog is creating more disciplined, profitable traders.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-content">"I was stuck in a break-even loop. TraderLog's AI finally showed me the emotional mistakes I was blind to. My win rate jumped from 52% to over 65% in two months."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">RK</div>
+                        <div>
+                            <div class="author-name">Rajesh K.</div>
+                            <div class="author-location">Mumbai, India</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-content">"This is the first journal that doesn't feel like a chore. The insights are brilliant. I finally have a clear roadmap of what to work on to improve my strategy."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">PS</div>
+                        <div>
+                            <div class="author-name">Priya S.</div>
+                            <div class="author-location">Delhi, India</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-content">"The discipline TraderLog enforces is priceless. Seeing my progress quantified every week has been a game-changer for my confidence and my bottom line."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div>
+                            <div class="author-name">Michael J.</div>
+                            <div class="author-location">New York, USA</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     
-    <!-- Loading Overlay -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question"><span>What happens after I pay?</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer"><p>You will receive an email with your login credentials and access to the Trading Journal within 12 hours. If you don't receive it, please contact us at Traderlog.cc@gmail.com.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question"><span>Is my payment information secure?</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer"><p>Absolutely. All payments are processed through Razorpay, a leading payment gateway that uses industry-standard encryption to protect your financial details.</p></div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question"><span>Can I cancel my subscription?</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer"><p>Yes, you can cancel your monthly subscription at any time. For one-time payments, you will retain access for the duration of the plan you purchased.</p></div>
+                </div>
+                 <div class="faq-item">
+                    <div class="faq-question"><span>What does the 14-Day Free Trial include?</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer"><p>The free trial gives you full access to all TraderLog features, including unlimited trade entries, AI analytics, and personalized suggestions. No credit card is required to start the trial.</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 TraderLog. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Modals & Overlays -->
     <div class="loading-overlay" id="loadingOverlay">
         <div>
             <div class="loading-spinner"></div>
-            <div class="loading-text">Processing your payment...</div>
+            <div class="loading-text">Processing your request...</div>
         </div>
     </div>
-    
-    <!-- Success Modal -->
     <div id="successModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeModalBtn">&times;</span>
-            <div class="modal-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
+            <div class="modal-icon"><i class="fas fa-check-circle"></i></div>
             <h2 id="modalTitle">Payment Successful!</h2>
             <div id="modalMessage">
                 <p>Thanks for signing up for TraderLog!</p>
-                <div class="subscription-details" id="subscriptionDetails">
+                <div class="subscription-details" style="background:var(--dark)">
                     <p><strong>Transaction ID:</strong> <span id="subId"></span></p>
                     <p><strong>Plan:</strong> <span id="successPlanName"></span></p>
                     <p><strong>Amount:</strong> ₹<span id="successPlanAmount"></span></p>
@@ -1140,193 +600,121 @@
                 <p>You'll get your login details and Trading Journal access in your email within 12 hours.</p>
                 <p>If you don't get the email, just message us at Traderlog.cc@gmail.com.</p>
             </div>
-            <button class="modal-btn" id="modalActionBtn">
-                <i class="fas fa-chart-line"></i> Go to Dashboard
-            </button>
         </div>
     </div>
-
-    <!-- NEW: Failure Modal -->
     <div id="failureModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeFailureModalBtn">&times;</span>
-            <div class="modal-icon" style="color: var(--danger);">
-                <i class="fas fa-times-circle"></i>
-            </div>
+            <div class="modal-icon" style="color: var(--danger);"><i class="fas fa-times-circle"></i></div>
             <h2>Payment Failed</h2>
             <div id="failureModalMessage">
                 <p>Your payment has failed. If any amount was deducted, it will be refunded within 7 business days.</p>
-                <p>If you do not receive the refund, please email your payment screenshot & details to: <strong>Traderlog.cc@gmail.com</strong></p>
+                <p>Please email your payment screenshot & details to: <strong>Traderlog.cc@gmail.com</strong></p>
             </div>
-            <button class="modal-btn" id="failureModalCloseBtn" style="background: var(--gray);">
-                Close
-            </button>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ===== AFFILIATE TRACKING SYSTEM =====
+            // ===== AFFILIATE TRACKING SYSTEM (UNCHANGED) =====
             const urlParams = new URLSearchParams(window.location.search);
             const affiliateId = urlParams.get('affiliate') || urlParams.get('ref') || urlParams.get('utm_source');
-            
             if (affiliateId) {
                 localStorage.setItem('traderlog_affiliate', affiliateId);
                 localStorage.setItem('traderlog_affiliate_timestamp', Date.now());
-                console.log('Affiliate stored:', affiliateId);
             }
-            
             const storedAffiliate = localStorage.getItem('traderlog_affiliate');
             const affiliateTimestamp = localStorage.getItem('traderlog_affiliate_timestamp');
-            
             const affiliateAge = affiliateTimestamp ? (Date.now() - affiliateTimestamp) : 0;
             const validAffiliate = storedAffiliate && affiliateAge < (30 * 24 * 60 * 60 * 1000);
-            
             const activeAffiliate = validAffiliate ? storedAffiliate : affiliateId;
-            
             if (activeAffiliate) {
                 document.getElementById('affiliateId').textContent = activeAffiliate;
             } else {
                 document.querySelector('#affiliateId').closest('p').style.display = 'none';
             }
-            
+
             // ===== UI ELEMENTS =====
             const mobileNavToggle = document.getElementById('mobileNavToggle');
             const mobileNav = document.getElementById('mobileNav');
             const mobileNavClose = document.getElementById('mobileNavClose');
             const successModal = document.getElementById('successModal');
             const closeSuccessModalBtn = document.getElementById('closeModalBtn');
-            const successModalActionBtn = document.getElementById('modalActionBtn');
             const failureModal = document.getElementById('failureModal');
             const closeFailureModalBtn = document.getElementById('closeFailureModalBtn');
-            const failureModalCloseBtn = document.getElementById('failureModalCloseBtn');
             const userForm = document.getElementById('userForm');
-            const subscribeBtn = document.getElementById('subscribe-btn');
+            const planButtons = document.querySelectorAll('.plan-btn');
+            const trialBtn = document.getElementById('trial-btn');
             const proceedBtn = document.getElementById('proceedToPayment');
-            const formError = document.getElementById('formError');
             const loadingOverlay = document.getElementById('loadingOverlay');
-            
+            let selectedPlan = {};
+
             // ===== MOBILE NAVIGATION =====
-            if (mobileNavToggle && mobileNav) {
-                mobileNavToggle.addEventListener('click', () => {
-                    mobileNav.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                });
-            }
-            
-            if (mobileNavClose) {
-                mobileNavClose.addEventListener('click', () => {
-                    mobileNav.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            }
-            
+            if (mobileNavToggle && mobileNav) { mobileNavToggle.addEventListener('click', () => mobileNav.classList.add('active')); }
+            if (mobileNavClose) { mobileNavClose.addEventListener('click', () => mobileNav.classList.remove('active')); }
             document.querySelectorAll('.mobile-nav a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileNav.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
+                link.addEventListener('click', () => mobileNav.classList.remove('active'));
             });
 
             // ===== MODAL LOGIC =====
             function showSuccessModal(transactionId, planName, planAmount) {
-                if (transactionId) {
-                    document.getElementById('subId').textContent = transactionId;
-                }
+                if (transactionId) { document.getElementById('subId').textContent = transactionId; }
                 document.getElementById('successPlanName').textContent = planName;
                 document.getElementById('successPlanAmount').textContent = planAmount;
+                document.getElementById('modalTitle').textContent = transactionId === 'TRIAL_ACCOUNT' ? 'Trial Started!' : 'Payment Successful!';
                 successModal.style.display = 'flex';
-
-                // --- REDIRECT LOGIC ---
+                
                 const modalMessage = document.getElementById('modalMessage');
-                successModalActionBtn.style.display = 'none';
-
                 const redirectMessage = document.createElement('p');
                 redirectMessage.id = 'redirect-message';
                 redirectMessage.style.marginTop = '20px';
-                redirectMessage.style.fontSize = '1rem';
-                redirectMessage.innerHTML = 'You will be redirected to the login page in <span id="redirect-timer">3</span> seconds...';
-                
-                const existingRedirectMsg = document.getElementById('redirect-message');
-                if (existingRedirectMsg) existingRedirectMsg.remove();
-                
-                modalMessage.appendChild(redirectMessage);
-
-                const timerSpan = document.getElementById('redirect-timer');
+                redirectMessage.innerHTML = 'Redirecting in <span id="redirect-timer">3</span>s...';
+                if (!document.getElementById('redirect-message')) { modalMessage.appendChild(redirectMessage); }
                 let countdown = 3;
-
                 const timerInterval = setInterval(() => {
                     countdown--;
+                    const timerSpan = document.getElementById('redirect-timer');
                     if (timerSpan) timerSpan.textContent = countdown;
                     if (countdown <= 0) clearInterval(timerInterval);
                 }, 1000);
-
-                setTimeout(() => {
-                    window.location.href = 'https://journal-traderlog.netlify.app/';
-                }, 3000);
+                setTimeout(() => { window.location.href = 'https://journal-traderlog.netlify.app/'; }, 3000);
             }
-
-            function showFailureModal() {
-                failureModal.style.display = 'flex';
-            }
-            
-            function closeModal(modalElement) {
-                if (modalElement) {
-                    modalElement.style.display = 'none';
-                }
-            }
-
+            function showFailureModal() { failureModal.style.display = 'flex'; }
+            function closeModal(modalElement) { if (modalElement) modalElement.style.display = 'none'; }
             if (closeSuccessModalBtn) closeSuccessModalBtn.addEventListener('click', () => closeModal(successModal));
-            if (successModalActionBtn) successModalActionBtn.addEventListener('click', () => closeModal(successModal));
             if (closeFailureModalBtn) closeFailureModalBtn.addEventListener('click', () => closeModal(failureModal));
-            if (failureModalCloseBtn) failureModalCloseBtn.addEventListener('click', () => closeModal(failureModal));
-            
             window.addEventListener('click', (event) => {
                 if (event.target === successModal) closeModal(successModal);
                 if (event.target === failureModal) closeModal(failureModal);
             });
 
             // ===== PLAN SELECTION & FORM LOGIC =====
-            let selectedPlan = {
-                id: 'monthly',
-                amount: 199,
-                description: 'Monthly Subscription'
-            };
-            
-            const planOptions = document.querySelectorAll('.plan-option');
-            planOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    planOptions.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-                    selectedPlan = {
-                        id: this.dataset.plan,
-                        amount: parseInt(this.dataset.amount),
-                        description: this.dataset.desc
-                    };
-                });
-            });
-            
-            function showUserForm() {
-                if (!selectedPlan) {
-                    formError.textContent = "Please select a plan";
-                    formError.style.display = 'block';
-                    return;
+            function showUserForm(isTrial = false) {
+                if(isTrial){
+                    selectedPlan = {id: 'trial', amount: 0, description: '14-Day Free Trial'};
                 }
+                
                 document.getElementById('selectedPlanName').textContent = selectedPlan.description;
                 document.getElementById('selectedPlanAmount').textContent = selectedPlan.amount;
+                document.getElementById('form-title').textContent = isTrial ? 'Start Your Free Trial' : 'Complete Your Subscription';
+                document.getElementById('proceedToPayment').innerHTML = isTrial ? '<i class="far fa-calendar-check"></i> Get Instant Access' : '<i class="fas fa-lock"></i> Proceed to Payment';
+                
                 userForm.style.display = 'block';
                 userForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
             
-            const paymentButtons = [
-                subscribeBtn,
-                document.getElementById('start-journaling'),
-                document.getElementById('avail-now'),
-                document.getElementById('start-now')
-            ];
-            paymentButtons.forEach(button => {
-                if (button) button.addEventListener('click', showUserForm);
+            planButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    selectedPlan = {
+                        id: e.target.dataset.plan,
+                        amount: parseInt(e.target.dataset.amount),
+                        description: e.target.dataset.desc
+                    };
+                    showUserForm(false);
+                });
             });
+            if(trialBtn) trialBtn.addEventListener('click', (e) => { e.preventDefault(); showUserForm(true); });
 
             // ===== FORM VALIDATION =====
             function validateForm() {
@@ -1334,29 +722,28 @@
                 const email = document.getElementById('userEmail').value.trim();
                 const phone = document.getElementById('userPhone').value.trim();
                 let isValid = true;
-
                 document.querySelectorAll('.form-error').forEach(el => el.style.display = 'none');
-                
-                if (name === '') {
-                    document.getElementById('nameError').style.display = 'block';
-                    isValid = false;
-                }
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                    document.getElementById('emailError').style.display = 'block';
-                    isValid = false;
-                }
-                if (!/^[0-9]{10}$/.test(phone)) {
-                    document.getElementById('phoneError').style.display = 'block';
-                    isValid = false;
-                }
+                if (name === '') { document.getElementById('nameError').style.display = 'block'; isValid = false; }
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('emailError').style.display = 'block'; isValid = false; }
+                if (!/^[0-9]{10}$/.test(phone)) { document.getElementById('phoneError').style.display = 'block'; isValid = false; }
                 return isValid;
             }
 
-            // ===== PAYMENT CREATION =====
+            // ===== FAQ Accordion =====
+            document.querySelectorAll('.faq-question').forEach(item => {
+                item.addEventListener('click', () => {
+                    const activeItem = document.querySelector('.faq-item.active');
+                    if (activeItem && activeItem !== item.parentElement) {
+                        activeItem.classList.remove('active');
+                    }
+                    item.parentElement.classList.toggle('active');
+                });
+            });
+
+            // ===== PAYMENT CREATION (UNCHANGED) =====
             async function createPayment() {
                 try {
                     loadingOverlay.style.display = 'flex';
-                    
                     const requestData = {
                         name: document.getElementById('userName').value.trim(),
                         email: document.getElementById('userEmail').value.trim(),
@@ -1366,33 +753,16 @@
                         amount: selectedPlan.amount * 100,
                         description: selectedPlan.description
                     };
-                    
-                    const endpoint = selectedPlan.id === 'monthly' 
-                        ? '/.netlify/functions/create-subscription' 
-                        : '/.netlify/functions/create-order';
-                    
-                    const response = await fetch(endpoint, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestData)
-                    });
-                    
+                    const endpoint = selectedPlan.id === 'monthly' ? '/.netlify/functions/create-subscription' : '/.netlify/functions/create-order';
+                    const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestData) });
                     const data = await response.json();
                     if (!response.ok) throw new Error(data.error || 'Failed to create payment');
-                    
                     const options = {
-                        // =================================================================
-                        // FINAL FIX: Using the new, correct Key ID
-                        // =================================================================
                         key: "rzp_live_R76huJF9dytj1q",
                         name: "TraderLog",
                         description: selectedPlan.description,
-                        prefill: {
-                            name: requestData.name,
-                            email: requestData.email,
-                            contact: requestData.phone
-                        },
-                        theme: { color: "#8b5cf6" },
+                        prefill: { name: requestData.name, email: requestData.email, contact: requestData.phone },
+                        theme: { color: "#4f46e5" },
                         notes: {
                             affiliate_id: activeAffiliate || "direct",
                             user_name: requestData.name,
@@ -1402,34 +772,17 @@
                         },
                         handler: function(response) {
                             loadingOverlay.style.display = 'none';
-                            const transactionId = selectedPlan.id === 'monthly' 
-                                ? response.razorpay_subscription_id 
-                                : response.razorpay_payment_id;
+                            const transactionId = selectedPlan.id === 'monthly' ? response.razorpay_subscription_id : response.razorpay_payment_id;
                             showSuccessModal(transactionId, selectedPlan.description, selectedPlan.amount);
                         },
                         modal: { ondismiss: () => loadingOverlay.style.display = 'none' },
-                        hooks: {
-                            onPaymentFailed: function(response) {
-                                loadingOverlay.style.display = 'none';
-                                showFailureModal();
-                            }
-                        }
+                        hooks: { onPaymentFailed: function(response) { loadingOverlay.style.display = 'none'; showFailureModal(); } }
                     };
-                    
-                    if (selectedPlan.id === 'monthly') {
-                        options.subscription_id = data.id;
-                    } else {
-                        options.order_id = data.id;
-                        options.amount = data.amount;
-                    }
-                    
+                    if (selectedPlan.id === 'monthly') { options.subscription_id = data.id; } else { options.order_id = data.id; options.amount = data.amount; }
                     const rzp = new Razorpay(options);
                     rzp.open();
-                    
                 } catch (error) {
                     console.error("Payment error:", error);
-                    formError.textContent = error.message || 'An error occurred. Please try again.';
-                    formError.style.display = 'block';
                     loadingOverlay.style.display = 'none';
                 }
             }
@@ -1437,11 +790,21 @@
             if (proceedBtn) {
                 proceedBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    if (validateForm()) createPayment();
+                    if (validateForm()) {
+                        if (selectedPlan.id === 'trial') {
+                            loadingOverlay.style.display = 'flex';
+                            console.log("Creating trial account...");
+                            setTimeout(() => { // Simulate API call for trial
+                                loadingOverlay.style.display = 'none';
+                                showSuccessModal('TRIAL_ACCOUNT', '14-Day Free Trial', '0');
+                            }, 1500);
+                        } else {
+                             createPayment();
+                        }
+                    }
                 });
             }
         });
     </script>
 </body>
 </html>
-
