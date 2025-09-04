@@ -2,6 +2,7 @@ const Razorpay = require('razorpay');
 const admin = require('firebase-admin');
 
 // --- Initialize Firebase Admin SDK ---
+// This is kept for consistency, though this function no longer directly uses it.
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -27,29 +28,14 @@ exports.handler = async function(event) {
         const data = JSON.parse(event.body);
         const userEmail = data.email.toLowerCase();
 
-        console.log("Received data for order:", data);
+        console.log("Received data for order creation:", data);
         
-        let firebaseUid = '';
-        try {
-            const usersRef = db.collection('free_trial_users');
-            const snapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
-            if (!snapshot.empty) {
-                firebaseUid = snapshot.docs[0].id;
-            }
-        } catch (dbError) {
-            console.error('Firestore lookup failed, but proceeding with payment. Error:', dbError);
-        }
-
         const options = {
             amount: data.amount, 
             currency: "INR",
-            // =================================================================
-            // FINAL FIX: Created a shorter receipt ID to meet Razorpay's
-            // 40-character limit.
-            // =================================================================
             receipt: `order_${Date.now()}`,
             notes: {
-                firebase_uid: firebaseUid || "N/A",
+                // This data is passed to Razorpay and back to the frontend handler.
                 user_email: userEmail,
                 user_name: data.name,
                 user_phone: data.phone,
