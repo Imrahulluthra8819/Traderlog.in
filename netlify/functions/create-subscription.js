@@ -2,6 +2,7 @@ const Razorpay = require('razorpay');
 const admin = require('firebase-admin');
 
 // --- Initialize Services ---
+// This is kept for consistency, though this function no longer directly uses it.
 try {
   if (!admin.apps.length) {
     const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
@@ -17,35 +18,22 @@ const razorpay = new Razorpay({
 // --------------------------
 
 exports.handler = async function(event) {
-    // --- NEW DEBUGGING LINE ---
-    // This will help us confirm that the environment variable is being loaded correctly.
     console.log("Function is attempting to use Key ID starting with:", process.env.RAZORPAY_KEY_ID ? process.env.RAZORPAY_KEY_ID.substring(0, 12) : "UNDEFINED");
 
     if (event.httpMethod !== 'POST') return { statusCode: 405, body: 'Method Not Allowed' };
 
     try {
-        // Correctly parse the incoming data from the form
         const data = JSON.parse(event.body);
         const userEmail = data.email.toLowerCase();
 
-        console.log("Received data for subscription:", data); // Log to confirm data is received
-
-        const usersRef = db.collection('free_trial_users');
-        const snapshot = await usersRef.where('email', '==', userEmail).limit(1).get();
-        
-        let firebaseUid = '';
-        if (!snapshot.empty) {
-            firebaseUid = snapshot.docs[0].id;
-        }
+        console.log("Received data for subscription creation:", data);
 
         const subscription = await razorpay.subscriptions.create({
-            // --- UPDATED PLAN ID ---
             plan_id: "plan_R76nWkRQGGkReO", // Your Monthly Plan ID
             customer_notify: 1,
             total_count: 12,
             notes: { 
-                // Pass all captured details to Razorpay notes
-                firebase_uid: firebaseUid,
+                // This data is passed to Razorpay and back to the frontend handler.
                 user_email: userEmail,
                 user_name: data.name,
                 user_phone: data.phone,
