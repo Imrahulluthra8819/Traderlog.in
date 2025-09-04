@@ -592,12 +592,12 @@
             <div id="modalMessage">
                 <p>Thanks for signing up for TraderLog!</p>
                 <div class="subscription-details" style="background:var(--dark)">
-                    <p><strong>Transaction ID:</strong> <span id="subId"></span></p>
+                    <p id="transactionIdWrapper"><strong>Transaction ID:</strong> <span id="subId"></span></p>
                     <p><strong>Plan:</strong> <span id="successPlanName"></span></p>
                     <p><strong>Amount:</strong> ₹<span id="successPlanAmount"></span></p>
                     <p><strong>Affiliate:</strong> <span id="affiliateId"></span></p>
                 </div>
-                <p>You'll get your login details and Trading Journal access in your email within 12 hours.</p>
+                 <p>You can now log in to the journal. You'll also get your login details in your email within 12 hours.</p>
                 <p>If you don't get the email, just message us at Traderlog.cc@gmail.com.</p>
             </div>
         </div>
@@ -606,32 +606,36 @@
         <div class="modal-content">
             <span class="close" id="closeFailureModalBtn">&times;</span>
             <div class="modal-icon" style="color: var(--danger);"><i class="fas fa-times-circle"></i></div>
-            <h2>Payment Failed</h2>
+            <h2>Operation Failed</h2>
             <div id="failureModalMessage">
-                <p>Your payment has failed. If any amount was deducted, it will be refunded within 7 business days.</p>
-                <p>Please email your payment screenshot & details to: <strong>Traderlog.cc@gmail.com</strong></p>
+                 <p>Your request could not be processed. If this was a payment, and any amount was deducted, it will be refunded within 7 business days.</p>
+                <p>Please email payment screenshot & details to: <strong>Traderlog.cc@gmail.com</strong> if you have issues.</p>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // ===== CONFIGURATION =====
+            // This MUST point to the live URL where your Journaltesting app is deployed.
+            const JOURNAL_APP_URL = 'https://journaltesting.netlify.app';
+            // This is the endpoint for the Netlify function that writes to Firebase.
+            const FIREBASE_SUBSCRIPTION_ENDPOINT = `${JOURNAL_APP_URL}/.netlify/functions/create-subscription`;
+
             // ===== AFFILIATE TRACKING SYSTEM (UNCHANGED) =====
             const urlParams = new URLSearchParams(window.location.search);
             const affiliateId = urlParams.get('affiliate') || urlParams.get('ref') || urlParams.get('utm_source');
             if (affiliateId) {
                 localStorage.setItem('traderlog_affiliate', affiliateId);
-                localStorage.setItem('traderlog_affiliate_timestamp', Date.now());
             }
-            const storedAffiliate = localStorage.getItem('traderlog_affiliate');
-            const affiliateTimestamp = localStorage.getItem('traderlog_affiliate_timestamp');
-            const affiliateAge = affiliateTimestamp ? (Date.now() - affiliateTimestamp) : 0;
-            const validAffiliate = storedAffiliate && affiliateAge < (30 * 24 * 60 * 60 * 1000);
-            const activeAffiliate = validAffiliate ? storedAffiliate : affiliateId;
+            const activeAffiliate = localStorage.getItem('traderlog_affiliate') || affiliateId;
             if (activeAffiliate) {
                 document.getElementById('affiliateId').textContent = activeAffiliate;
             } else {
-                document.querySelector('#affiliateId').closest('p').style.display = 'none';
+                 const affiliateElement = document.getElementById('affiliateId');
+                 if (affiliateElement && affiliateElement.closest('p')) {
+                    affiliateElement.closest('p').style.display = 'none';
+                 }
             }
 
             // ===== UI ELEMENTS =====
@@ -658,28 +662,47 @@
 
             // ===== MODAL LOGIC =====
             function showSuccessModal(transactionId, planName, planAmount) {
-                if (transactionId) { document.getElementById('subId').textContent = transactionId; }
+                const transactionWrapper = document.getElementById('transactionIdWrapper');
+                if (transactionId && transactionId !== 'TRIAL_ACCOUNT') {
+                    document.getElementById('subId').textContent = transactionId;
+                    if(transactionWrapper) transactionWrapper.style.display = 'block';
+                } else {
+                    if(transactionWrapper) transactionWrapper.style.display = 'none';
+                }
+
                 document.getElementById('successPlanName').textContent = planName;
                 document.getElementById('successPlanAmount').textContent = planAmount;
-                document.getElementById('modalTitle').textContent = transactionId === 'TRIAL_ACCOUNT' ? 'Trial Started!' : 'Payment Successful!';
+                document.getElementById('modalTitle').textContent = planAmount === 0 ? 'Trial Started!' : 'Payment Successful!';
                 successModal.style.display = 'flex';
                 
                 const modalMessage = document.getElementById('modalMessage');
-                const redirectMessage = document.createElement('p');
-                redirectMessage.id = 'redirect-message';
-                redirectMessage.style.marginTop = '20px';
-                redirectMessage.innerHTML = 'Redirecting in <span id="redirect-timer">3</span>s...';
-                if (!document.getElementById('redirect-message')) { modalMessage.appendChild(redirectMessage); }
-                let countdown = 3;
+                let redirectMessage = document.getElementById('redirect-message');
+                if (!redirectMessage) {
+                    redirectMessage = document.createElement('p');
+                    redirectMessage.id = 'redirect-message';
+                    redirectMessage.style.marginTop = '20px';
+                    modalMessage.appendChild(redirectMessage);
+                }
+                
+                redirectMessage.innerHTML = 'You can now log in. Redirecting to the journal in <span id="redirect-timer">5</span>s...';
+                let countdown = 5;
                 const timerInterval = setInterval(() => {
                     countdown--;
                     const timerSpan = document.getElementById('redirect-timer');
                     if (timerSpan) timerSpan.textContent = countdown;
-                    if (countdown <= 0) clearInterval(timerInterval);
+                    if (countdown <= 0) {
+                        clearInterval(timerInterval);
+                        window.location.href = JOURNAL_APP_URL;
+                    }
                 }, 1000);
-                setTimeout(() => { window.location.href = 'https://journal-traderlog.netlify.app/'; }, 3000);
             }
-            function showFailureModal() { failureModal.style.display = 'flex'; }
+
+            function showFailureModal(message = null) {
+                const defaultMessage = "<p>Your request could not be processed. If this was a payment, and any amount was deducted, it will be refunded within 7 business days.</p><p>Please email payment screenshot & details to: <strong>Traderlog.cc@gmail.com</strong> if you have issues.</p>";
+                document.getElementById('failureModalMessage').innerHTML = message ? `<p>${message}</p>` : defaultMessage;
+                failureModal.style.display = 'flex';
+            }
+
             function closeModal(modalElement) { if (modalElement) modalElement.style.display = 'none'; }
             if (closeSuccessModalBtn) closeSuccessModalBtn.addEventListener('click', () => closeModal(successModal));
             if (closeFailureModalBtn) closeFailureModalBtn.addEventListener('click', () => closeModal(failureModal));
@@ -697,7 +720,7 @@
                 document.getElementById('selectedPlanName').textContent = selectedPlan.description;
                 document.getElementById('selectedPlanAmount').textContent = selectedPlan.amount;
                 document.getElementById('form-title').textContent = isTrial ? 'Start Your Free Trial' : 'Complete Your Subscription';
-                document.getElementById('proceedToPayment').innerHTML = isTrial ? '<i class="far fa-calendar-check"></i> Get Instant Access' : '<i class="fas fa-lock"></i> Proceed to Payment';
+                proceedBtn.innerHTML = isTrial ? '<i class="far fa-calendar-check"></i> Get Instant Access' : '<i class="fas fa-lock"></i> Proceed to Payment';
                 
                 userForm.style.display = 'block';
                 userForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -740,50 +763,109 @@
                 });
             });
 
-            // ===== PAYMENT CREATION (UNCHANGED) =====
-            async function createPayment() {
+            // ===== NEW: CENTRALIZED FUNCTION TO CREATE THE FIREBASE RECORD =====
+            async function createFirestoreSubscriptionRecord(transactionDetails = {}) {
+                loadingOverlay.style.display = 'flex';
+                const { transactionId } = transactionDetails;
+
+                const requestData = {
+                    planId: selectedPlan.id,
+                    email: document.getElementById('userEmail').value.trim(),
+                    name: document.getElementById('userName').value.trim(),
+                    phone: document.getElementById('userPhone').value.trim(),
+                    affiliateId: activeAffiliate || 'direct',
+                };
+
+                try {
+                    const response = await fetch(FIREBASE_SUBSCRIPTION_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(requestData)
+                    });
+
+                    const result = await response.json();
+                    loadingOverlay.style.display = 'none';
+
+                    if (!response.ok) {
+                        // Handle errors from the Netlify function, like duplicate trial
+                        throw new Error(result.error || `Server responded with status: ${response.status}`);
+                    }
+                    
+                    // On success, show the success modal.
+                    showSuccessModal(transactionId || 'TRIAL_ACCOUNT', selectedPlan.description, selectedPlan.amount);
+
+                } catch (error) {
+                    console.error("Firestore Subscription creation error:", error);
+                    loadingOverlay.style.display = 'none';
+                    showFailureModal(error.message);
+                }
+            }
+
+            // ===== MODIFIED: PAYMENT CREATION & HANDLING =====
+            async function initiateRazorpayPayment() {
                 try {
                     loadingOverlay.style.display = 'flex';
-                    const requestData = {
-                        name: document.getElementById('userName').value.trim(),
-                        email: document.getElementById('userEmail').value.trim(),
-                        phone: document.getElementById('userPhone').value.trim(),
-                        affiliate_id: activeAffiliate || "direct",
-                        plan_id: selectedPlan.id === 'monthly' ? "plan_R76nWkRQGGkReO" : undefined,
-                        amount: selectedPlan.amount * 100,
-                        description: selectedPlan.description
-                    };
-                    const endpoint = selectedPlan.id === 'monthly' ? '/.netlify/functions/create-subscription' : '/.netlify/functions/create-order';
-                    const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestData) });
+                    const isMonthly = selectedPlan.id === 'monthly';
+                    const endpoint = isMonthly ? '/.netlify/functions/create-subscription' : '/.netlify/functions/create-order';
+                    
+                    const response = await fetch(endpoint, { 
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json' }, 
+                        body: JSON.stringify({
+                            name: document.getElementById('userName').value.trim(),
+                            email: document.getElementById('userEmail').value.trim(),
+                            phone: document.getElementById('userPhone').value.trim(),
+                            affiliate_id: activeAffiliate || "direct",
+                            plan_id: selectedPlan.id, // Pass plan_id for both types
+                            amount: selectedPlan.amount * 100,
+                            description: selectedPlan.description
+                        }) 
+                    });
+
                     const data = await response.json();
                     if (!response.ok) throw new Error(data.error || 'Failed to create payment');
+                    
                     const options = {
                         key: "rzp_live_R76huJF9dytj1q",
                         name: "TraderLog",
                         description: selectedPlan.description,
-                        prefill: { name: requestData.name, email: requestData.email, contact: requestData.phone },
+                        prefill: { name: document.getElementById('userName').value.trim(), email: document.getElementById('userEmail').value.trim(), contact: document.getElementById('userPhone').value.trim() },
                         theme: { color: "#4f46e5" },
                         notes: {
-                            affiliate_id: activeAffiliate || "direct",
-                            user_name: requestData.name,
-                            user_email: requestData.email,
-                            user_phone: requestData.phone,
-                            plan_id: selectedPlan.id
+                            user_email: document.getElementById('userEmail').value.trim(),
+                            user_name: document.getElementById('userName').value.trim(),
+                            user_phone: document.getElementById('userPhone').value.trim(),
+                            plan_id: selectedPlan.id,
+                            affiliate_id: activeAffiliate || "direct"
                         },
                         handler: function(response) {
-                            loadingOverlay.style.display = 'none';
-                            const transactionId = selectedPlan.id === 'monthly' ? response.razorpay_subscription_id : response.razorpay_payment_id;
-                            showSuccessModal(transactionId, selectedPlan.description, selectedPlan.amount);
+                            // **CRITICAL CHANGE**: After successful payment, call the function to create the Firestore record.
+                            const transactionId = isMonthly ? response.razorpay_subscription_id : response.razorpay_payment_id;
+                            createFirestoreSubscriptionRecord({ transactionId });
                         },
                         modal: { ondismiss: () => loadingOverlay.style.display = 'none' },
-                        hooks: { onPaymentFailed: function(response) { loadingOverlay.style.display = 'none'; showFailureModal(); } }
+                        hooks: { 
+                            onPaymentFailed: function(response) { 
+                                loadingOverlay.style.display = 'none'; 
+                                showFailureModal(); 
+                                console.error('Razorpay payment failed:', response);
+                            } 
+                        }
                     };
-                    if (selectedPlan.id === 'monthly') { options.subscription_id = data.id; } else { options.order_id = data.id; options.amount = data.amount; }
+                    
+                    if (isMonthly) { 
+                        options.subscription_id = data.id; 
+                    } else { 
+                        options.order_id = data.id; 
+                        options.amount = data.amount; 
+                    }
+                    
                     const rzp = new Razorpay(options);
                     rzp.open();
                 } catch (error) {
-                    console.error("Payment error:", error);
+                    console.error("Payment initiation error:", error);
                     loadingOverlay.style.display = 'none';
+                    showFailureModal('Could not connect to the payment gateway. Please try again.');
                 }
             }
             
@@ -792,14 +874,11 @@
                     e.preventDefault();
                     if (validateForm()) {
                         if (selectedPlan.id === 'trial') {
-                            loadingOverlay.style.display = 'flex';
-                            console.log("Creating trial account...");
-                            setTimeout(() => { // Simulate API call for trial
-                                loadingOverlay.style.display = 'none';
-                                showSuccessModal('TRIAL_ACCOUNT', '14-Day Free Trial', '0');
-                            }, 1500);
+                            // For trials, directly call the Firestore creation function.
+                            createFirestoreSubscriptionRecord();
                         } else {
-                             createPayment();
+                            // For paid plans, start the Razorpay flow.
+                            initiateRazorpayPayment();
                         }
                     }
                 });
