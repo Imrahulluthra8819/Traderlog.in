@@ -24,45 +24,44 @@ exports.handler = async function(event) {
 
     try {
         const data = JSON.parse(event.body);
-        const { planId, email, name, phone, transactionId, affiliateId } = data;
+        const { planId, email, name, phone, transactionId, affiliateId, deviceId } = data;
 
         // ============================================================
-        // BRANCH A: ACTIVATE SUBSCRIPTION (User has paid or is Trial)
+        // BRANCH A: ACTIVATE SUBSCRIPTION
         // ============================================================
         if (transactionId || planId === 'trial') {
             
             console.log(`[ACTIVATE] Processing ${planId} for ${email}`);
 
-            // --- 1. TRIAL ABUSE CHECK (EMAIL & PHONE) ---
+            // --- 1. ABUSE PROTECTION SYSTEM ---
             if (planId === 'trial') {
-                // Check A: Is this EMAIL already used?
+                
+                // CHECK A: EMAIL (Has this email used a trial?)
                 const emailCheck = await db.collection('subscriptions').doc(email).get();
                 if (emailCheck.exists) {
-                    return { 
-                        statusCode: 403, 
-                        body: JSON.stringify({ error: 'This email has already used a Free Trial.' }) 
-                    };
+                    return { statusCode: 403, body: JSON.stringify({ error: 'This email has already used a Free Trial.' }) };
                 }
 
-                // Check B: Is this PHONE NUMBER already used?
-                // We query the database to see if any document has this phone number
-                const phoneCheck = await db.collection('subscriptions')
-                    .where('userPhone', '==', phone)
-                    .get();
-
+                // CHECK B: PHONE (Has this phone number used a trial?)
+                const phoneCheck = await db.collection('subscriptions').where('userPhone', '==', phone).limit(1).get();
                 if (!phoneCheck.empty) {
-                    return { 
-                        statusCode: 403, 
-                        body: JSON.stringify({ error: 'This phone number has already used a Free Trial.' }) 
-                    };
+                    return { statusCode: 403, body: JSON.stringify({ error: 'This phone number has already used a Free Trial.' }) };
+                }
+
+                // CHECK C: DEVICE ID (Has this specific browser used a trial?)
+                // This stops them even if they change Email & Phone!
+                if (deviceId) {
+                    const deviceCheck = await db.collection('subscriptions').where('deviceId', '==', deviceId).limit(1).get();
+                    if (!deviceCheck.empty) {
+                        return { statusCode: 403, body: JSON.stringify({ error: 'Free Trial already claimed on this device.' }) };
+                    }
                 }
             }
 
-            // --- 2. PAYMENT VERIFICATION (For Paid Plans) ---
+            // --- 2. PAYMENT VERIFICATION ---
             if (planId !== 'trial') {
-                if (!transactionId) {
-                    return { statusCode: 400, body: JSON.stringify({ error: 'Missing Transaction ID' }) };
-                }
+                if (!transactionId) return { statusCode: 400, body: JSON.stringify({ error: 'Missing Transaction ID' }) };
+                
                 try {
                     if (transactionId.startsWith('sub_')) {
                         const sub = await razorpay.subscriptions.fetch(transactionId);
@@ -72,30 +71,23 @@ exports.handler = async function(event) {
                         if (payment.status !== 'captured') throw new Error('Payment not captured');
                     }
                 } catch (verifyError) {
-                    console.error('Payment Verification Failed:', verifyError.message);
+                    console.error('Payment Verify Error:', verifyError.message);
                     return { statusCode: 400, body: JSON.stringify({ error: 'Payment verification failed.' }) };
                 }
             }
 
-            // --- CALCULATE DATES ---
+            // --- 3. SAVE TO DB ---
             const now = new Date();
             let endDate = new Date();
-            let durationDays = 0;
-            switch (planId) {
-                case 'trial': durationDays = 14; break;
-                case 'monthly': durationDays = 30; break;
-                case 'six-months': durationDays = 180; break;
-                case 'yearly': durationDays = 365; break;
-                default: return { statusCode: 400, body: JSON.stringify({ error: 'Invalid Plan' }) };
-            }
+            let durationDays = (planId === 'trial') ? 14 : (planId === 'monthly' ? 30 : (planId === 'six-months' ? 180 : 365));
             endDate.setDate(now.getDate() + durationDays);
 
-            // --- SAVE TO DATABASE ---
             await db.collection('subscriptions').doc(email).set({
                 planId,
                 userEmail: email,
                 userName: name,
                 userPhone: phone,
+                deviceId: deviceId || 'unknown', // Save device ID for future blocks
                 transactionId: transactionId || 'TRIAL',
                 affiliateId: affiliateId || 'direct',
                 startDate: admin.firestore.Timestamp.fromDate(now),
@@ -108,12 +100,11 @@ exports.handler = async function(event) {
         }
 
         // ============================================================
-        // BRANCH B: CREATE PAYMENT INTENT
+        // BRANCH B: PAYMENT INTENT
         // ============================================================
         else {
             const subscription = await razorpay.subscriptions.create({
                 plan_id: "plan_R76nWkRQGGkReO",
-                customer_notify: 1,
                 total_count: 12,
                 notes: { user_email: email, affiliate_id: affiliateId || "direct" }
             });
