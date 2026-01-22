@@ -1,3 +1,13 @@
+// --- HELPER: GET/SET DEVICE ID ---
+function getDeviceId() {
+    let deviceId = localStorage.getItem('traderlog_device_id');
+    if (!deviceId) {
+        // Generate a random unique ID for this browser
+        deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+        localStorage.setItem('traderlog_device_id', deviceId);
+    }
+    return deviceId;
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -888,6 +898,7 @@
     </script>
 </body>
 </html>
+
 
 
 
