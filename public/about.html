@@ -8,45 +8,64 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Include all CSS from index.html here */
-        /* ... (Copy CSS from index.html) ... */
-        
-        /* ADD THIS NEW CSS FOR SUBPAGES */
         :root {
             --primary: #2563eb; --primary-dark: #1d4ed8; --secondary: #0ea5e9; --accent: #8b5cf6;
             --dark: #1e293b; --darker: #0f172a; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1;
         }
-        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); margin:0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); line-height: 1.6; overflow-x: hidden; background-attachment: fixed; }
+        h1, h2, h3 { font-family: 'Poppins', sans-serif; font-weight: 700; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        a { text-decoration: none; transition: all 0.3s; }
+
+        /* NAV */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(100, 116, 139, 0.2); }
+        .logo { display: flex; align-items: center; font-size: 1.8rem; font-weight: 700; color: white; }
+        .logo i { color: var(--accent); margin-right: 0.5rem; }
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--gray-light); font-weight: 500; }
+        .nav-links a:hover { color: white; }
+
+        /* HEADER */
+        .page-header { padding: 160px 0 60px; text-align: center; background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%); }
+        .page-header h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .page-header h1 span { background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: var(--gray-light); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* CONTENT */
+        .content-section { padding-bottom: 80px; }
+        .glass-card { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 3rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
         
-        /* About Page Specifics */
-        .page-header {
-            padding: 160px 0 60px;
-            text-align: center;
-            background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
-        }
-        .about-content {
-            background: rgba(30, 41, 59, 0.5);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(100, 116, 139, 0.2);
-            margin-bottom: 60px;
-        }
-        .mission-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
+        .feature-box { text-align: center; padding: 2rem; border-radius: 15px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.05); transition: transform 0.3s; }
+        .feature-box:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .feature-box i { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; }
+
+        /* FOOTER */
+        footer { padding: 3rem 0; border-top: 1px solid rgba(100, 116, 139, 0.2); background: rgba(15, 23, 42, 0.9); margin-top: auto; }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+        .link-group h4 { margin-bottom: 1.5rem; color: white; border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 5px;}
+        .link-group ul { list-style: none; }
+        .link-group ul li { margin-bottom: 0.8rem; }
+        .link-group ul li a { color: var(--gray-light); }
+        .link-group ul li a:hover { color: white; transform: translateX(5px); display: inline-block; }
+        .copyright { text-align: center; padding-top: 3rem; color: var(--gray); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 2.2rem; }
+            .glass-card { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <nav id="navbar">
-        <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
-            <div class="logo" style="color:white; font-size:1.8rem; font-weight:bold; display:flex; align-items:center;">
-                <i class="fas fa-chart-line" style="color:#8b5cf6; margin-right:10px;"></i> TraderLog
-            </div>
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> <span>TraderLog</span></a>
             <div class="nav-links">
-                <a href="index.html" style="color:white; text-decoration:none; margin-left:20px;">Home</a>
+                <a href="index.html">Home</a>
+                <a href="Rpp1.html">Pricing</a>
             </div>
         </div>
     </nav>
@@ -54,35 +73,55 @@
     <div class="page-header">
         <div class="container">
             <h1>About <span>TraderLog</span></h1>
-            <p style="color: #cbd5e1; max-width: 600px; margin: 20px auto;">Empowering traders to master their psychology and strategy through data-driven insights.</p>
+            <p>Empowering traders to master their psychology and strategy through data-driven insights.</p>
         </div>
     </div>
 
-    <div class="container">
-        <div class="about-content">
-            <h2>Our Mission</h2>
-            <p>At TraderLog, we believe that successful trading isn't just about finding the right entry; it's about mastering your mind. Most traders fail not because they lack a strategy, but because they lack discipline and self-awareness.</p>
-            <br>
-            <p>We built TraderLog to bridge the gap between complex data and actionable advice. We don't just show you numbers; we tell you what they mean and how to fix your mistakes.</p>
-
-            <div class="mission-grid">
-                <div class="feature-card" style="background: rgba(15, 23, 42, 0.6); padding: 30px; border-radius: 15px; border: 1px solid rgba(139, 92, 246, 0.2);">
-                    <i class="fas fa-brain" style="font-size: 2rem; color: #8b5cf6; margin-bottom: 15px;"></i>
-                    <h3>Psychology First</h3>
-                    <p style="color: #cbd5e1;">We prioritize emotional analysis because mindset is the biggest edge in the market.</p>
-                </div>
-                <div class="feature-card" style="background: rgba(15, 23, 42, 0.6); padding: 30px; border-radius: 15px; border: 1px solid rgba(37, 99, 235, 0.2);">
-                    <i class="fas fa-lightbulb" style="font-size: 2rem; color: #2563eb; margin-bottom: 15px;"></i>
-                    <h3>Simplicity</h3>
-                    <p style="color: #cbd5e1;">No complex spreadsheets. Just clean, simple insights anyone can understand.</p>
+    <div class="content-section">
+        <div class="container">
+            <div class="glass-card">
+                <div class="grid-2">
+                    <div>
+                        <h2 style="font-size:2rem; margin-bottom:1.5rem; color:white;">Our Mission</h2>
+                        <p style="color: var(--gray-light); margin-bottom:1rem; line-height:1.7;">
+                            At TraderLog, we believe that successful trading isn't just about finding the right entry; it's about mastering your mind. Most traders fail not because they lack a strategy, but because they lack discipline.
+                        </p>
+                        <p style="color: var(--gray-light); margin-bottom:1rem; line-height:1.7;">
+                            We built TraderLog to bridge the gap between complex data and actionable advice. We don't just show you numbers; we tell you what they mean.
+                        </p>
+                    </div>
+                    <div style="display:grid; gap:20px;">
+                        <div class="feature-box">
+                            <i class="fas fa-brain"></i>
+                            <h3 style="margin-bottom:0.5rem; color:white;">Psychology First</h3>
+                            <p style="font-size:0.9rem; color:var(--gray-light);">Mindset is your biggest edge.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-bolt"></i>
+                            <h3 style="margin-bottom:0.5rem; color:white;">Actionable Data</h3>
+                            <p style="font-size:0.9rem; color:var(--gray-light);">Insights you can actually use.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <footer style="background: rgba(15, 23, 42, 0.9); padding: 3rem 0; text-align: center; border-top: 1px solid rgba(100,116,139,0.2);">
+    <footer>
         <div class="container">
-            <p>&copy; 2025 TraderLog. All rights reserved.</p>
+            <div class="footer-content">
+                <div class="link-group">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="refund.html">Refund Policy</a></li>
+                        <li><a href="terms.html">T&C</a></li>
+                        <li><a href="shipping.html">Delivery Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright"><p>&copy; 2025 TraderLog. All rights reserved.</p></div>
         </div>
     </footer>
 </body>
