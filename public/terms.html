@@ -4,46 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms & Conditions - TraderLog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #8b5cf6; --light: #f8fafc; --dark: #0f172a; }
-        body { font-family: 'Roboto', sans-serif; background: #0f172a; color: var(--light); line-height: 1.8; margin: 0;}
-        .legal-wrapper { max-width: 800px; margin: 0 auto; padding: 120px 20px 60px; }
-        h1 { color: white; font-size: 2.5rem; text-align: center; margin-bottom: 40px; }
-        h2 { color: var(--accent); margin-top: 30px; font-size: 1.5rem; }
-        p, ul { color: #cbd5e1; margin-bottom: 15px; }
-        .legal-box { background: rgba(30, 41, 59, 0.5); padding: 40px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        :root { --primary: #2563eb; --accent: #8b5cf6; --dark: #1e293b; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); line-height: 1.8; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { width: 90%; max-width: 900px; margin: 0 auto; }
+        a { text-decoration: none; transition: 0.3s; }
+        nav { padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 90%; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--accent); }
+        .nav-links a { color: var(--gray-light); margin-left: 2rem; font-weight: 500; }
+        
+        .page-header { padding: 180px 0 60px; text-align: center; }
+        .page-header h1 { font-family: 'Poppins', sans-serif; font-size: 3rem; margin-bottom: 1rem; color: white; }
+        .page-header span { color: var(--accent); }
+        
+        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin-bottom: 80px; }
+        h2 { font-family: 'Poppins', sans-serif; color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 15px; }
+        p, li { color: var(--gray-light); margin-bottom: 1rem; font-size: 1.05rem; }
+        
+        footer { background: rgba(15, 23, 42, 0.95); padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
+        .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--gray); } .footer-links a:hover { color: var(--accent); }
+        .copyright { text-align: center; color: var(--gray); }
+        @media(max-width:768px){ .nav-links { display: none; } .glass-card { padding: 2rem; } .page-header h1 { font-size: 2.2rem; } }
     </style>
 </head>
 <body>
-    <nav style="padding: 20px; position: fixed; width: 100%; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); z-index: 100;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> TraderLog</a>
+            <div class="nav-links"><a href="index.html">Home</a></div>
         </div>
     </nav>
 
-    <div class="legal-wrapper">
-        <h1>Terms & Conditions</h1>
-        <div class="legal-box">
-            <p>Last updated: [Current Date]</p>
-            
-            <h2>1. Introduction</h2>
-            <p>Welcome to TraderLog. By accessing our website and using our AI-Powered Trading Journal services, you agree to be bound by these Terms and Conditions.</p>
-
-            <h2>2. Use of Service</h2>
-            <p>TraderLog provides analytics and journaling tools for educational purposes. We are not financial advisors. Decisions made based on our analytics are your sole responsibility.</p>
-
-            <h2>3. Accounts</h2>
-            <p>When you create an account with us, you must provide us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms.</p>
-
-            <h2>4. Subscription & Payments</h2>
-            <p>Services are billed on a subscription basis (Monthly, 6-Month, or Yearly). You agree to pay the fees associated with your selected plan.</p>
-
-            <h2>5. Termination</h2>
-            <p>We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
-            
-            <p style="margin-top: 30px; font-size: 0.9rem; opacity: 0.7;">For the full legal document, please refer to our official Google Doc link or contact support.</p>
+    <div class="page-header">
+        <div class="container">
+            <h1>Terms & <span>Conditions</span></h1>
+            <p style="color: var(--gray-light);">Rules for using our service.</p>
         </div>
     </div>
+
+    <div class="container">
+        <div class="glass-card">
+            <p><strong>Effective Date:</strong> October 2023</p>
+
+            <h2>1. Introduction</h2>
+            <p>Welcome to TraderLog. By creating an account and using our AI-Powered Trading Journal services, you agree to comply with and be bound by these Terms and Conditions.</p>
+
+            <h2>2. Educational Purpose</h2>
+            <p>TraderLog provides analytics, journaling tools, and AI-generated suggestions for <strong>educational and informational purposes only</strong>. We are NOT financial advisors. The insights provided by our platform should not be construed as financial advice. You are solely responsible for your trading decisions.</p>
+
+            <h2>3. Account Responsibilities</h2>
+            <p>You must provide accurate information when creating an account. You are responsible for safeguarding your password and for any activities or actions under your password.</p>
+
+            <h2>4. Subscriptions</h2>
+            <p>Services are billed on a recurring subscription basis (Monthly, 6-Month, or Yearly). By subscribing, you agree to pay the applicable fees. Payments are processed securely via Razorpay.</p>
+
+            <h2>5. Termination</h2>
+            <p>We reserve the right to terminate or suspend your account immediately, without prior notice, if you breach these Terms, including but not limited to sharing your account credentials.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="refund.html">Refund Policy</a>
+                <a href="terms.html">T&C</a>
+                <a href="shipping.html">Delivery Policy</a>
+            </div>
+            <div class="copyright">&copy; 2025 TraderLog. All rights reserved.</div>
+        </div>
+    </footer>
 </body>
 </html>
