@@ -8,73 +8,135 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Exact Master CSS */
-        :root { --primary: #2563eb; --accent: #8b5cf6; --dark: #1e293b; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1; }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); line-height: 1.8; min-height: 100vh; display: flex; flex-direction: column; }
-        .container { width: 90%; max-width: 900px; margin: 0 auto; }
+        /* =========================================
+           1. EXACT STYLES FROM INDEX.HTML (MASTER CSS)
+           ========================================= */
+        :root {
+            --primary: #2563eb; --primary-dark: #1d4ed8; --secondary: #0ea5e9; --accent: #8b5cf6;
+            --dark: #1e293b; --darker: #0f172a; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column;
+        }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 700; }
+        .container { width: 90%; max-width: 1000px; margin: 0 auto; }
         a { text-decoration: none; transition: 0.3s; }
-        nav { padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 90%;}
+
+        /* HEADER */
+        nav {
+            padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 90%; }
         .logo { font-size: 1.8rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
         .logo i { color: var(--accent); }
         .nav-links a { color: var(--gray-light); margin-left: 2rem; font-weight: 500; }
         .nav-links a:hover { color: var(--accent); }
-        
-        .page-header { padding: 180px 0 60px; text-align: center; }
-        .page-header h1 { font-family: 'Poppins', sans-serif; font-size: 3rem; margin-bottom: 1rem; color: white; }
-        .page-header span { color: var(--accent); }
-        
-        /* Legal Content Styles */
-        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin-bottom: 80px; }
-        h2 { font-family: 'Poppins', sans-serif; color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 15px; }
-        p, li { color: var(--gray-light); margin-bottom: 1rem; font-size: 1.05rem; }
-        ul { padding-left: 20px; margin-bottom: 1.5rem; }
-        
+
+        /* HERO AREA */
+        .page-header {
+            padding: 180px 0 60px; text-align: center;
+            background: radial-gradient(circle at top, rgba(139, 92, 246, 0.15), transparent 60%);
+        }
+        .page-header h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .page-header span { background: linear-gradient(90deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: var(--gray-light); font-size: 1.1rem; }
+
+        /* CONTENT CARD */
+        .content-section { padding-bottom: 100px; flex: 1; }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* TYPOGRAPHY */
+        .text-content h2 { 
+            color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; 
+            border-left: 4px solid var(--accent); padding-left: 15px; 
+        }
+        .text-content p { 
+            margin-bottom: 1rem; color: var(--gray-light); font-size: 1rem; 
+        }
+        .intro-text {
+            font-size: 1.1rem; color: white; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;
+        }
+
+        /* FOOTER */
         footer { background: rgba(15, 23, 42, 0.95); padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
         .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
-        .footer-links a { color: var(--gray); } .footer-links a:hover { color: var(--accent); }
-        .copyright { text-align: center; color: var(--gray); }
-        @media(max-width:768px){ .nav-links { display: none; } .glass-card { padding: 2rem; } .page-header h1 { font-size: 2.2rem; } }
+        .footer-links a { color: var(--gray); font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--accent); }
+        .copyright { text-align: center; color: var(--gray); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-header h1 { font-size: 2.2rem; }
+            .glass-card { padding: 2rem; }
+        }
     </style>
 </head>
 <body>
+
     <nav>
         <div class="nav-content">
             <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> TraderLog</a>
-            <div class="nav-links"><a href="index.html">Home</a></div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="Rpp1.html">Pricing</a>
+            </div>
         </div>
     </nav>
 
     <div class="page-header">
         <div class="container">
             <h1>Refund <span>Policy</span></h1>
-            <p style="color: var(--gray-light);">Fair and transparent.</p>
+            <p>Please read carefully before subscribing.</p>
         </div>
     </div>
 
-    <div class="container">
-        <div class="glass-card">
-            <p><strong>Last Updated:</strong> October 2023</p>
+    <div class="content-section">
+        <div class="container">
+            <div class="glass-card text-content">
+                <p class="intro-text">At TraderLog, we are committed to delivering a high-quality and valuable trading journal experience to all our users. Please read our Refund Policy carefully before making a subscription purchase.</p>
 
-            <h2>1. 14-Day Free Trial</h2>
-            <p>We believe in our product. That's why we offer a <strong>14-Day Free Trial</strong> for all new users. We strongly encourage you to use this period to fully test our AI analytics, journaling features, and reports to ensure TraderLog meets your needs before you pay.</p>
+                <h2>1. Refund Policy</h2>
+                <p>All payments made towards subscriptions for TraderLog are non-refundable. Once a payment is processed successfully, we do not offer any refunds, either in full or in part, under any circumstances. This includes — but is not limited to — user dissatisfaction, accidental purchases, or unused subscriptions.</p>
 
-            <h2>2. No Refunds on Subscriptions</h2>
-            <p>Since we provide a fully functional free trial and our product is a digital service with instant access, <strong>we generally do not offer refunds</strong> once a subscription payment has been processed (Monthly, 6-Month, or Yearly).</p>
+                <h2>2. Subscription Cancellations</h2>
+                <p>If you wish to cancel your subscription, you must do so directly through the payment platform or UPI app used at the time of subscription (e.g., Razorpay, Google Pay, PhonePe, Paytm, etc.). TraderLog does not have access to your billing credentials and therefore cannot cancel your subscription on your behalf.</p>
+                <p>Please ensure that cancellations are completed before the next billing cycle to avoid unwanted charges. Subscriptions canceled mid-cycle will remain active until the end of the paid period, and no prorated refunds will be provided.</p>
 
-            <h2>3. Cancellation Policy</h2>
-            <p>You can cancel your subscription at any time. If you cancel, your account will remain active until the end of your current billing cycle. You will not be charged again, but no pro-rated refund will be issued for the remaining time.</p>
+                <h2>3. Trial and Demo Responsibility</h2>
+                <p>We may offer free trials, demo access, or discounted plans periodically for evaluation purposes. It is the user’s responsibility to utilize such offers to evaluate the platform before subscribing. By proceeding with a paid plan, you acknowledge and agree to our strict no-refund policy.</p>
 
-            <h2>4. Exceptions</h2>
-            <p>We may consider refunds in special circumstances, such as:</p>
-            <ul>
-                <li><strong>Technical Errors:</strong> If a system glitch causes a double charge.</li>
-                <li><strong>Service Failure:</strong> If the platform is unavailable for more than 72 hours due to our server issues.</li>
-            </ul>
+                <h2>4. Duplicate Transactions</h2>
+                <p>In case of accidental duplicate payments or technical errors resulting in overcharging, users may contact our support team within 7 days of the transaction with valid proof. We will investigate and initiate a refund only if verified as a duplicate transaction.</p>
 
-            <h2>5. Contact Us</h2>
-            <p>If you believe you have been charged in error, please contact us within 7 days of the transaction at <a href="mailto:support@traderlog.in" style="color:var(--accent);">support@traderlog.in</a>.</p>
+                <h2>5. Chargebacks and Disputes</h2>
+                <p>Initiating a chargeback or payment dispute without first contacting our support team will be treated as a breach of this policy. We reserve the right to permanently suspend access to TraderLog for users who attempt to circumvent our payment and refund terms through false disputes.</p>
+
+                <h2>6. Policy Acceptance</h2>
+                <p>By purchasing a subscription to TraderLog, you confirm that you have read, understood, and agreed to this Refund Policy. It is your responsibility to review this policy prior to making any payment.</p>
+
+                <h2>7. User Responsibility</h2>
+                <p>Users are solely responsible for managing their account, subscription status, and payment methods. TraderLog shall not be held liable for missed cancellations, incorrect subscriptions, or user errors during payment.</p>
+
+                <h2>8. Non-Transferable and Non-Exchangeable</h2>
+                <p>Subscriptions to TraderLog are non-transferable and non-exchangeable. Users cannot transfer their subscription to another individual or request credits or exchanges for other services or time periods.</p>
+
+                <h2>9. Digital Product Acknowledgement</h2>
+                <p>By purchasing a subscription, you acknowledge that TraderLog is a digital service, and hence, traditional refund policies (like for physical products) do not apply. As access is granted instantly upon payment, refunds are not feasible under any use case.</p>
+
+                <h2>10. Jurisdiction and Dispute Resolution</h2>
+                <p>Any disputes arising from this policy shall be subject to the jurisdiction of the courts located in Chhattisgarh, India. Before initiating any legal action, users must attempt to resolve the issue by contacting TraderLog support.</p>
+
+                <h2>11. Policy Modification Rights</h2>
+                <p>We reserve the right to modify, update, or change this Refund Policy at any time. Continued use of TraderLog after such changes constitutes acceptance of the revised policy.</p>
+            </div>
         </div>
     </div>
 
@@ -84,11 +146,12 @@
                 <a href="about.html">About</a>
                 <a href="contact.html">Contact</a>
                 <a href="refund.html">Refund Policy</a>
-                <a href="terms.html">T&C</a>
+                <a href="terms.html">Privacy & Terms</a>
                 <a href="shipping.html">Delivery Policy</a>
             </div>
             <div class="copyright">&copy; 2025 TraderLog. All rights reserved.</div>
         </div>
     </footer>
+
 </body>
 </html>
