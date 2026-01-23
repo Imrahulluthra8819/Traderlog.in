@@ -55,9 +55,6 @@
         
         /* Navigation */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 1.5rem 0;
             position: fixed;
             top: 0;
@@ -68,6 +65,13 @@
             backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(100, 116, 139, 0.2);
             transition: all 0.3s ease;
+        }
+
+        /* --- FIX: Ensure the container inside nav aligns items correctly --- */
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         nav.scrolled {
