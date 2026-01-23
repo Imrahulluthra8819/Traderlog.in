@@ -3,70 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms & Conditions - TraderLog</title>
+    <title>Privacy Policy & Terms - TraderLog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2563eb; --accent: #8b5cf6; --dark: #1e293b; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1; }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); line-height: 1.8; min-height: 100vh; display: flex; flex-direction: column; }
-        .container { width: 90%; max-width: 900px; margin: 0 auto; }
+        /* =========================================
+           1. EXACT STYLES FROM INDEX.HTML (MASTER CSS)
+           ========================================= */
+        :root {
+            --primary: #2563eb; --primary-dark: #1d4ed8; --secondary: #0ea5e9; --accent: #8b5cf6;
+            --dark: #1e293b; --darker: #0f172a; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--light); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column;
+        }
+        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 700; }
+        .container { width: 90%; max-width: 1000px; margin: 0 auto; }
         a { text-decoration: none; transition: 0.3s; }
-        nav { padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+
+        /* HEADER */
+        nav {
+            padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
         .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 90%; }
         .logo { font-size: 1.8rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
         .logo i { color: var(--accent); }
         .nav-links a { color: var(--gray-light); margin-left: 2rem; font-weight: 500; }
-        
-        .page-header { padding: 180px 0 60px; text-align: center; }
-        .page-header h1 { font-family: 'Poppins', sans-serif; font-size: 3rem; margin-bottom: 1rem; color: white; }
-        .page-header span { color: var(--accent); }
-        
-        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin-bottom: 80px; }
-        h2 { font-family: 'Poppins', sans-serif; color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 15px; }
-        p, li { color: var(--gray-light); margin-bottom: 1rem; font-size: 1.05rem; }
-        
+        .nav-links a:hover { color: var(--accent); }
+
+        /* HERO AREA */
+        .page-header {
+            padding: 180px 0 60px; text-align: center;
+            background: radial-gradient(circle at top, rgba(139, 92, 246, 0.15), transparent 60%);
+        }
+        .page-header h1 { font-size: 3rem; margin-bottom: 1rem; }
+        .page-header span { background: linear-gradient(90deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: var(--gray-light); font-size: 1.1rem; }
+
+        /* CONTENT CARD */
+        .content-section { padding-bottom: 100px; flex: 1; }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* TYPOGRAPHY FOR TERMS */
+        .text-content h2 { 
+            color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; 
+            border-left: 4px solid var(--accent); padding-left: 15px; 
+        }
+        .text-content h3 {
+            color: var(--light); font-size: 1.1rem; margin-top: 1.5rem; margin-bottom: 0.5rem; font-weight: 600;
+        }
+        .text-content p, .text-content li { 
+            margin-bottom: 1rem; color: var(--gray-light); font-size: 1rem; 
+        }
+        .text-content ul { 
+            margin-bottom: 1.5rem; padding-left: 20px; color: var(--gray-light); 
+        }
+        .text-content strong { color: white; }
+        .text-content a { color: var(--accent); }
+        .text-content a:hover { text-decoration: underline; }
+
+        /* FOOTER */
         footer { background: rgba(15, 23, 42, 0.95); padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
         .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
-        .footer-links a { color: var(--gray); } .footer-links a:hover { color: var(--accent); }
-        .copyright { text-align: center; color: var(--gray); }
-        @media(max-width:768px){ .nav-links { display: none; } .glass-card { padding: 2rem; } .page-header h1 { font-size: 2.2rem; } }
+        .footer-links a { color: var(--gray); font-size: 0.95rem; }
+        .footer-links a:hover { color: var(--accent); }
+        .copyright { text-align: center; color: var(--gray); font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-header h1 { font-size: 2.2rem; }
+            .glass-card { padding: 2rem; }
+        }
     </style>
 </head>
 <body>
+
     <nav>
         <div class="nav-content">
             <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> TraderLog</a>
-            <div class="nav-links"><a href="index.html">Home</a></div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="Rpp1.html">Pricing</a>
+            </div>
         </div>
     </nav>
 
     <div class="page-header">
         <div class="container">
-            <h1>Terms & <span>Conditions</span></h1>
-            <p style="color: var(--gray-light);">Rules for using our service.</p>
+            <h1>Privacy & <span>Terms</span></h1>
+            <p>Please read our policies carefully.</p>
         </div>
     </div>
 
-    <div class="container">
-        <div class="glass-card">
-            <p><strong>Effective Date:</strong> October 2023</p>
+    <div class="content-section">
+        <div class="container">
+            <div class="glass-card text-content">
+                <p><strong>TraderLog – Privacy Policy & Terms of Use</strong><br>
+                <strong>Effective Date:</strong> [Add date]<br>
+                <strong>Website:</strong> <a href="https://traderlog.in/">https://traderlog.in/</a></p>
 
-            <h2>1. Introduction</h2>
-            <p>Welcome to TraderLog. By creating an account and using our AI-Powered Trading Journal services, you agree to comply with and be bound by these Terms and Conditions.</p>
+                <p>TraderLog (“we”, “our”, “us”) is a digital trading journal and analytics platform. By accessing, registering, or using TraderLog, you agree to comply with and be bound by this Privacy Policy & Terms of Use. If you do not agree, please discontinue use immediately.</p>
 
-            <h2>2. Educational Purpose</h2>
-            <p>TraderLog provides analytics, journaling tools, and AI-generated suggestions for <strong>educational and informational purposes only</strong>. We are NOT financial advisors. The insights provided by our platform should not be construed as financial advice. You are solely responsible for your trading decisions.</p>
+                <h2>1. Eligibility</h2>
+                <p>You must be 18 years or older and legally capable of entering into a binding contract to use TraderLog.</p>
 
-            <h2>3. Account Responsibilities</h2>
-            <p>You must provide accurate information when creating an account. You are responsible for safeguarding your password and for any activities or actions under your password.</p>
+                <h2>2. Nature & Purpose of the Platform</h2>
+                <p><strong>⚠️ Important Disclaimer</strong></p>
+                <ul>
+                    <li>TraderLog is only a journaling and analytics tool.</li>
+                    <li>We do not provide financial advice, stock tips, trading signals, or buy/sell recommendations.</li>
+                    <li>We do not guarantee profitability, success, or improved trading results.</li>
+                    <li>All trading decisions made using TraderLog are entirely at your own risk.</li>
+                    <li>Users are encouraged to consult a certified financial advisor before trading or investing.</li>
+                </ul>
 
-            <h2>4. Subscriptions</h2>
-            <p>Services are billed on a recurring subscription basis (Monthly, 6-Month, or Yearly). By subscribing, you agree to pay the applicable fees. Payments are processed securely via Razorpay.</p>
+                <h2>3. Information We Collect</h2>
+                
+                <h3>a) Personal Information</h3>
+                <ul>
+                    <li>Name</li>
+                    <li>Email address</li>
+                    <li>Contact details</li>
+                    <li>(Payment details are processed by third-party gateways; we do not store card, UPI, or banking data.)</li>
+                </ul>
 
-            <h2>5. Termination</h2>
-            <p>We reserve the right to terminate or suspend your account immediately, without prior notice, if you breach these Terms, including but not limited to sharing your account credentials.</p>
+                <h3>b) Usage & Account Data</h3>
+                <ul>
+                    <li>Trade entries and logs</li>
+                    <li>Performance analytics</li>
+                    <li>Login activity, timestamps</li>
+                    <li>Device and browser information</li>
+                </ul>
+
+                <h3>c) Cookies</h3>
+                <p>We use cookies to maintain secure sessions, improve user experience, and analyze platform performance. Disabling cookies may affect platform functionality.</p>
+
+                <h2>4. How We Use Your Data</h2>
+                <p>We use collected information to:</p>
+                <ul>
+                    <li>Create and manage user accounts</li>
+                    <li>Provide subscription-based access</li>
+                    <li>Process payments and renewals</li>
+                    <li>Improve platform performance</li>
+                    <li>Send service-related updates</li>
+                    <li>Prevent fraud and ensure security</li>
+                </ul>
+                <p><strong>❌ We do not sell or rent your personal data.</strong></p>
+
+                <h2>5. Payments & Subscriptions</h2>
+                <ul>
+                    <li>TraderLog operates on a subscription model.</li>
+                    <li>Access is activated after successful payment.</li>
+                    <li>Pricing and features may change with prior notice.</li>
+                    <li>Payments are handled securely by third-party payment gateways.</li>
+                </ul>
+
+                <h2>6. Refund Policy (Strict)</h2>
+                <p><strong>🚫 All payments are final and non-refundable.</strong></p>
+                <p>No refunds will be provided for:</p>
+                <ul>
+                    <li>Change of mind</li>
+                    <li>Low or no usage</li>
+                    <li>Accidental purchase</li>
+                    <li>Dissatisfaction with features</li>
+                </ul>
+                <p>Users must cancel subscriptions via the original payment method or app.</p>
+
+                <h2>7. Data Sharing</h2>
+                <p>Limited data may be shared only with:</p>
+                <ul>
+                    <li>Payment processors (transactions)</li>
+                    <li>Hosting & analytics providers (performance)</li>
+                    <li>Legal authorities (if required by law)</li>
+                </ul>
+                <p>All third parties are required to maintain confidentiality.</p>
+
+                <h2>8. Data Security & Retention</h2>
+                <ul>
+                    <li>We use reasonable technical and organizational safeguards to protect data.</li>
+                    <li>No online system is 100% secure; users acknowledge this risk.</li>
+                    <li>Data is retained only as long as necessary for services, legal compliance, or dispute resolution.</li>
+                    <li>Users may request account deletion via email.</li>
+                </ul>
+
+                <h2>9. User Rights</h2>
+                <p>You have the right to access your data, correct inaccurate information, request deletion of your account, and withdraw consent for non-essential communications.</p>
+
+                <h2>10. User Responsibilities</h2>
+                <p>You agree to:</p>
+                <ul>
+                    <li>Provide accurate registration details</li>
+                    <li>Keep account credentials confidential</li>
+                    <li>Use TraderLog for lawful, personal use only</li>
+                    <li>Not copy, scrape, reverse-engineer, or tamper with the platform</li>
+                    <li>Not upload harmful or malicious code</li>
+                </ul>
+                <p>Violation may result in immediate account suspension or termination without refund.</p>
+
+                <h2>11. Intellectual Property</h2>
+                <p>All content, design, features, and branding belong exclusively to TraderLog. Unauthorized reproduction or redistribution is prohibited.</p>
+
+                <h2>12. Platform Availability & Liability</h2>
+                <p>The platform is provided “as is” and “as available.” We do not guarantee uninterrupted or error-free service. We are not liable for financial losses, data misinterpretation, or trading outcomes.</p>
+
+                <h2>13. Account Suspension & Termination</h2>
+                <p>We may suspend or terminate accounts for policy violations, fraudulent or abusive activity, or misuse of the platform. No refunds will be issued in such cases.</p>
+
+                <h2>14. Third-Party Links</h2>
+                <p>TraderLog may contain external links. We are not responsible for third-party content or privacy practices.</p>
+
+                <h2>15. Children’s Privacy</h2>
+                <p>TraderLog is not intended for users under 18. We do not knowingly collect data from minors.</p>
+
+                <h2>16. Updates to This Policy</h2>
+                <p>We may update this document periodically. Continued use of the platform constitutes acceptance of the revised terms.</p>
+
+                <h2>17. Governing Law & Jurisdiction</h2>
+                <p>All disputes are governed by the laws of <strong>Chhattisgarh, India</strong>, with exclusive jurisdiction in Chhattisgarh courts.</p>
+
+                <h2>18. Contact Information</h2>
+                <p>For legal, billing, or data-related queries:<br>
+                📧 Email: <a href="mailto:traderlog.cc@gmail.com">traderlog.cc@gmail.com</a><br>
+                🌐 Website: <a href="https://traderlog.in/">https://traderlog.in/</a></p>
+
+                <p style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color); font-size: 0.9rem;">
+                    <em>By using TraderLog, you acknowledge that you have read, understood, and agreed to this Privacy Policy & Terms of Use, including the No Refund Policy and platform limitations.</em>
+                </p>
+            </div>
         </div>
     </div>
 
@@ -76,11 +248,12 @@
                 <a href="about.html">About</a>
                 <a href="contact.html">Contact</a>
                 <a href="refund.html">Refund Policy</a>
-                <a href="terms.html">T&C</a>
+                <a href="terms.html">Privacy & Terms</a>
                 <a href="shipping.html">Delivery Policy</a>
             </div>
             <div class="copyright">&copy; 2025 TraderLog. All rights reserved.</div>
         </div>
     </footer>
+
 </body>
 </html>
