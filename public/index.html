@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TraderLog - AI-Powered Trading Journal</title>
-<link rel="icon" type="image/png" href="/favicon.png">
-<link rel="icon" type="image/svg+xml" href="/logo.svg">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -81,6 +81,7 @@
             font-size: 1.8rem;
             font-weight: 700;
             color: white;
+            z-index: 102; /* Ensure logo stays above mobile menu */
         }
         
         .logo i {
@@ -88,6 +89,7 @@
             margin-right: 0.5rem;
         }
         
+        /* Desktop Menu Styles */
         .nav-links {
             display: flex;
             gap: 2rem;
@@ -119,6 +121,49 @@
         .nav-links a:hover:after {
             width: 100%;
         }
+
+        /* --- MOBILE MENU STYLES START --- */
+        .menu-icon {
+            display: none;
+            font-size: 1.8rem;
+            color: white;
+            cursor: pointer;
+            z-index: 102;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .menu-icon {
+                display: block; /* Show hamburger only on mobile */
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%; /* Hidden by default */
+                width: 70%;
+                height: 100vh;
+                background: rgba(15, 23, 42, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                transition: right 0.3s ease-in-out;
+                z-index: 101;
+                border-left: 1px solid var(--border-color);
+                box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            }
+
+            .nav-links.active {
+                right: 0; /* Slide in */
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+                color: white;
+            }
+        }
+        /* --- MOBILE MENU STYLES END --- */
         
         .cta-button {
             background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
@@ -702,10 +747,6 @@
         }
         
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
             .hero h1 {
                 font-size: 2.5rem;
             }
@@ -1650,11 +1691,19 @@
                 <i class="fas fa-chart-line"></i>
                 <span>TraderLog</span>
             </div>
-            <div class="nav-links">
+            
+            <div class="menu-icon" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <div class="nav-links" id="navLinks">
                 <a href="#features">Features</a>
                 <a href="#psychology">Psychology</a>
                 <a href="#how-it-works">How It Works</a>
-                <a href="Rpp1" class="tracked-payment-link">Pricing</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
+                <a href="Rpp1.html" class="tracked-payment-link">Pricing</a>
+            </div>
         </div>
     </nav>
 
@@ -2175,7 +2224,7 @@
                         <ul>
                             <li><a href="#features">Features</a></li>
                             <li><a href="#how-it-works">How It Works</a></li>
-                            <li><a href="#pricing">Pricing</a></li>
+                            <li><a href="Rpp1">Pricing</a></li>
                             <li><a href="#">Integrations</a></li>
                         </ul>
                     </div>
@@ -2288,6 +2337,38 @@
                 navbar.classList.remove('scrolled');
             }
         });
+
+        // ============================================
+        // MOBILE MENU TOGGLE SCRIPT
+        // ============================================
+        const menuIcon = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        if(menuIcon && navLinks){
+            menuIcon.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                
+                // Optional: Change icon from bars to times (X)
+                const icon = menuIcon.querySelector('i');
+                if(navLinks.classList.contains('active')){
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Close menu when a link is clicked
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    const icon = menuIcon.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+        }
         
         // Animation for feature cards on scroll
         const observerOptions = {
