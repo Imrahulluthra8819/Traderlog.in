@@ -4,46 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delivery Policy - TraderLog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --accent: #8b5cf6; --light: #f8fafc; --dark: #0f172a; }
-        body { font-family: 'Roboto', sans-serif; background: #0f172a; color: var(--light); line-height: 1.8; margin: 0;}
-        .legal-wrapper { max-width: 800px; margin: 0 auto; padding: 120px 20px 60px; }
-        h1 { color: white; font-size: 2.5rem; text-align: center; margin-bottom: 40px; }
-        h2 { color: var(--accent); margin-top: 30px; font-size: 1.5rem; }
-        p { color: #cbd5e1; margin-bottom: 15px; }
-        .legal-box { background: rgba(30, 41, 59, 0.5); padding: 40px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); }
+        :root { --primary: #2563eb; --accent: #8b5cf6; --dark: #1e293b; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); line-height: 1.8; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { width: 90%; max-width: 900px; margin: 0 auto; }
+        a { text-decoration: none; transition: 0.3s; }
+        nav { padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 90%; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--accent); }
+        .nav-links a { color: var(--gray-light); margin-left: 2rem; font-weight: 500; }
+        .page-header { padding: 180px 0 60px; text-align: center; }
+        .page-header h1 { font-family: 'Poppins', sans-serif; font-size: 3rem; margin-bottom: 1rem; color: white; }
+        .page-header span { color: var(--accent); }
+        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin-bottom: 80px; }
+        h2 { font-family: 'Poppins', sans-serif; color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 15px; }
+        p, li { color: var(--gray-light); margin-bottom: 1rem; font-size: 1.05rem; }
+        footer { background: rgba(15, 23, 42, 0.95); padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
+        .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--gray); } .footer-links a:hover { color: var(--accent); }
+        .copyright { text-align: center; color: var(--gray); }
+        @media(max-width:768px){ .nav-links { display: none; } .glass-card { padding: 2rem; } .page-header h1 { font-size: 2.2rem; } }
     </style>
 </head>
 <body>
-    <nav style="padding: 20px; position: fixed; width: 100%; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); z-index: 100;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> TraderLog</a>
+            <div class="nav-links"><a href="index.html">Home</a></div>
         </div>
     </nav>
 
-    <div class="legal-wrapper">
-        <h1>Delivery Policy</h1>
-        <div class="legal-box">
-            <h2>Digital Delivery</h2>
-            <p>TraderLog is a digital Software-as-a-Service (SaaS) product. No physical items will be shipped to you.</p>
-
-            <h2>Instant Access</h2>
-            <p>Upon successful payment or trial activation, you will receive an email immediately containing:</p>
-            <ul>
-                <li>Your login credentials.</li>
-                <li>A link to access the dashboard.</li>
-                <li>Instructions on how to set up your journal.</li>
-            </ul>
-
-            <h2>Troubleshooting</h2>
-            <p>If you do not receive your access email within 15 minutes of signing up, please:</p>
-            <ol>
-                <li>Check your Spam/Junk folder.</li>
-                <li>Check the "Promotions" tab in Gmail.</li>
-                <li>Contact our support team at support@traderlog.in.</li>
-            </ol>
+    <div class="page-header">
+        <div class="container">
+            <h1>Delivery <span>Policy</span></h1>
+            <p style="color: var(--gray-light);">Instant digital access.</p>
         </div>
     </div>
+
+    <div class="container">
+        <div class="glass-card">
+            <h2>1. Digital Delivery</h2>
+            <p>TraderLog is a Software-as-a-Service (SaaS) product. <strong>No physical items will be shipped to your address.</strong> All services are delivered electronically via the internet.</p>
+
+            <h2>2. Instant Access</h2>
+            <p>Upon successful payment or trial activation, your access is granted immediately:</p>
+            <ul>
+                <li>You will be automatically redirected to the Journal Dashboard.</li>
+                <li>A Welcome Email containing your login credentials and setup guide will be sent to your registered email address instantly.</li>
+            </ul>
+
+            <h2>3. Troubleshooting</h2>
+            <p>If you do not receive your access details within 15 minutes of purchase, please:</p>
+            <ul>
+                <li>Check your Spam/Junk folder.</li>
+                <li>Check the "Promotions" tab if you are using Gmail.</li>
+                <li>Contact our support team immediately at <a href="mailto:support@traderlog.in" style="color:var(--accent);">support@traderlog.in</a>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="refund.html">Refund Policy</a>
+                <a href="terms.html">T&C</a>
+                <a href="shipping.html">Delivery Policy</a>
+            </div>
+            <div class="copyright">&copy; 2025 TraderLog. All rights reserved.</div>
+        </div>
+    </footer>
 </body>
 </html>
