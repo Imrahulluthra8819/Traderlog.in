@@ -1,33 +1,94 @@
-<main>
-        <section class="page-header">
-            <div class="container">
-                <h1>Refund <span>Policy</span></h1>
-                <p>Transparent and fair.</p>
-            </div>
-        </section>
-
-        <div class="container">
-            <div class="content-card text-content">
-                <p><strong>Last Updated:</strong> October 2023</p>
-
-                <h2>1. 14-Day Free Trial</h2>
-                <p>We strongly encourage all users to utilize the <strong>14-Day Free Trial</strong> before purchasing a subscription. This allows you to fully test the features, analytics, and AI suggestions to ensure TraderLog meets your specific trading needs.</p>
-
-                <h2>2. No Refunds on Subscriptions</h2>
-                <p>Since we provide a fully functional free trial and our product is a digital service with instant access, <strong>we generally do not offer refunds</strong> once a subscription payment has been processed (Monthly, 6-Month, or Yearly).</p>
-
-                <h2>3. Cancellation Policy</h2>
-                <p>You can cancel your subscription at any time. If you cancel, your account will remain active until the end of your current billing cycle. You will not be charged again, but no pro-rated refund will be issued.</p>
-
-                <h2>4. Exceptions</h2>
-                <p>We may consider refunds in special circumstances, such as:</p>
-                <ul>
-                    <li><strong>Technical Errors:</strong> If a system glitch causes a double charge.</li>
-                    <li><strong>Service Failure:</strong> If the platform is unavailable for more than 72 hours.</li>
-                </ul>
-
-                <h2>5. Contact Us</h2>
-                <p>If you believe you have been charged in error, please contact us within 7 days at <a href="mailto:support@traderlog.in" style="color:var(--accent);">support@traderlog.in</a>.</p>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refund Policy - TraderLog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Exact Master CSS */
+        :root { --primary: #2563eb; --accent: #8b5cf6; --dark: #1e293b; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); line-height: 1.8; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { width: 90%; max-width: 900px; margin: 0 auto; }
+        a { text-decoration: none; transition: 0.3s; }
+        nav { padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 90%;}
+        .logo { font-size: 1.8rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--accent); }
+        .nav-links a { color: var(--gray-light); margin-left: 2rem; font-weight: 500; }
+        .nav-links a:hover { color: var(--accent); }
+        
+        .page-header { padding: 180px 0 60px; text-align: center; }
+        .page-header h1 { font-family: 'Poppins', sans-serif; font-size: 3rem; margin-bottom: 1rem; color: white; }
+        .page-header span { color: var(--accent); }
+        
+        /* Legal Content Styles */
+        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); margin-bottom: 80px; }
+        h2 { font-family: 'Poppins', sans-serif; color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; border-left: 4px solid var(--accent); padding-left: 15px; }
+        p, li { color: var(--gray-light); margin-bottom: 1rem; font-size: 1.05rem; }
+        ul { padding-left: 20px; margin-bottom: 1.5rem; }
+        
+        footer { background: rgba(15, 23, 42, 0.95); padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
+        .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--gray); } .footer-links a:hover { color: var(--accent); }
+        .copyright { text-align: center; color: var(--gray); }
+        @media(max-width:768px){ .nav-links { display: none; } .glass-card { padding: 2rem; } .page-header h1 { font-size: 2.2rem; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> TraderLog</a>
+            <div class="nav-links"><a href="index.html">Home</a></div>
         </div>
-    </main>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>Refund <span>Policy</span></h1>
+            <p style="color: var(--gray-light);">Fair and transparent.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="glass-card">
+            <p><strong>Last Updated:</strong> October 2023</p>
+
+            <h2>1. 14-Day Free Trial</h2>
+            <p>We believe in our product. That's why we offer a <strong>14-Day Free Trial</strong> for all new users. We strongly encourage you to use this period to fully test our AI analytics, journaling features, and reports to ensure TraderLog meets your needs before you pay.</p>
+
+            <h2>2. No Refunds on Subscriptions</h2>
+            <p>Since we provide a fully functional free trial and our product is a digital service with instant access, <strong>we generally do not offer refunds</strong> once a subscription payment has been processed (Monthly, 6-Month, or Yearly).</p>
+
+            <h2>3. Cancellation Policy</h2>
+            <p>You can cancel your subscription at any time. If you cancel, your account will remain active until the end of your current billing cycle. You will not be charged again, but no pro-rated refund will be issued for the remaining time.</p>
+
+            <h2>4. Exceptions</h2>
+            <p>We may consider refunds in special circumstances, such as:</p>
+            <ul>
+                <li><strong>Technical Errors:</strong> If a system glitch causes a double charge.</li>
+                <li><strong>Service Failure:</strong> If the platform is unavailable for more than 72 hours due to our server issues.</li>
+            </ul>
+
+            <h2>5. Contact Us</h2>
+            <p>If you believe you have been charged in error, please contact us within 7 days of the transaction at <a href="mailto:support@traderlog.in" style="color:var(--accent);">support@traderlog.in</a>.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="refund.html">Refund Policy</a>
+                <a href="terms.html">T&C</a>
+                <a href="shipping.html">Delivery Policy</a>
+            </div>
+            <div class="copyright">&copy; 2025 TraderLog. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html>
