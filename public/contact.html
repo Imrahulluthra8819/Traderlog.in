@@ -1,34 +1,95 @@
-<main>
-        <section class="page-header">
-            <div class="container">
-                <h1>Contact <span>Us</span></h1>
-                <p>We are here to help you on your trading journey.</p>
-            </div>
-        </section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TraderLog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* PASTE THE EXACT SAME CSS FROM ABOUT.HTML HERE */
+        /* ... OR just copy the full file logic below ... */
+        :root { --primary: #2563eb; --accent: #8b5cf6; --dark: #1e293b; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        a { text-decoration: none; transition: 0.3s; }
+        nav { padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .nav-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
+        .logo i { color: var(--accent); }
+        .nav-links a { color: var(--gray-light); margin-left: 2rem; font-weight: 500; }
+        .nav-links a:hover { color: var(--accent); }
+        .page-header { padding: 180px 0 80px; text-align: center; background: radial-gradient(circle at top, rgba(139, 92, 246, 0.15), transparent 60%); }
+        .page-header h1 { font-family: 'Poppins', sans-serif; font-size: 3.5rem; margin-bottom: 1rem; color: white; }
+        .page-header span { color: var(--accent); }
+        .content-section { padding-bottom: 100px; flex: 1; }
+        .glass-card { background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+        
+        /* Contact Specifics */
+        .contact-item { display: flex; align-items: center; gap: 20px; background: rgba(15, 23, 42, 0.6); padding: 20px; border-radius: 15px; margin-bottom: 20px; transition: 0.3s; border: 1px solid rgba(255,255,255,0.05); }
+        .contact-item:hover { transform: translateX(10px); border-color: var(--accent); }
+        .contact-item i { font-size: 2rem; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: white; font-weight: 500; }
+        .form-group input, .form-group textarea { width: 100%; padding: 15px; background: rgba(15, 23, 42, 0.8); border: 1px solid #334155; border-radius: 12px; color: white; font-family: inherit; transition: 0.3s; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+        .submit-btn { width: 100%; padding: 15px; border: none; border-radius: 50px; background: linear-gradient(90deg, #2563eb, #8b5cf6); color: white; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4); }
 
+        footer { background: rgba(15, 23, 42, 0.95); padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
+        .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+        .footer-links a { color: var(--gray); } .footer-links a:hover { color: var(--accent); }
+        .copyright { text-align: center; color: var(--gray); }
+        @media(max-width:768px){ .grid-2 { grid-template-columns: 1fr; } .glass-card { padding: 2rem; } .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> TraderLog</a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="Rpp1.html">Pricing</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
         <div class="container">
-            <div class="content-card">
+            <h1>Get in <span>Touch</span></h1>
+            <p style="color: var(--gray-light); font-size: 1.1rem;">We are here to help you on your trading journey.</p>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <div class="container">
+            <div class="glass-card">
                 <div class="grid-2">
                     <div>
-                        <h2 style="color: white; margin-bottom: 1.5rem;">Get in Touch</h2>
-                        <div style="margin-bottom: 2rem;">
-                            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                                <i class="fas fa-envelope" style="font-size: 1.5rem; color: var(--primary);"></i>
-                                <div>
-                                    <h4 style="color: white; margin: 0;">Email</h4>
-                                    <a href="mailto:support@traderlog.in" style="color: var(--gray-light); text-decoration: none;">support@traderlog.in</a>
-                                </div>
+                        <h2 style="font-family: 'Poppins', sans-serif; font-size: 2rem; color: white; margin-bottom: 1.5rem;">How can we help?</h2>
+                        <p style="color: var(--gray-light); margin-bottom: 2rem;">Have a question about the platform? Found a bug? Or just want to say hi? Contact us via email or WhatsApp.</p>
+                        
+                        <a href="mailto:support@traderlog.in" class="contact-item">
+                            <i class="fas fa-envelope" style="color: var(--primary);"></i>
+                            <div>
+                                <h4 style="color: white; margin: 0;">Email Support</h4>
+                                <span style="color: var(--gray-light);">support@traderlog.in</span>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <i class="fab fa-whatsapp" style="font-size: 1.5rem; color: #25D366;"></i>
-                                <div>
-                                    <h4 style="color: white; margin: 0;">WhatsApp</h4>
-                                    <a href="https://wa.link/jarbs9" style="color: var(--gray-light); text-decoration: none;">Chat with Support</a>
-                                </div>
+                        </a>
+                        
+                        <a href="https://wa.link/jarbs9" target="_blank" class="contact-item">
+                            <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                            <div>
+                                <h4 style="color: white; margin: 0;">WhatsApp</h4>
+                                <span style="color: var(--gray-light);">Chat Instantly</span>
                             </div>
-                        </div>
+                        </a>
                     </div>
-                    
+
                     <form>
                         <div class="form-group">
                             <label>Name</label>
@@ -42,9 +103,24 @@
                             <label>Message</label>
                             <textarea rows="4" placeholder="How can we help?"></textarea>
                         </div>
-                        <button class="btn-primary" style="width: 100%;">Send Message</button>
+                        <button class="submit-btn">Send Message</button>
                     </form>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+                <a href="refund.html">Refund Policy</a>
+                <a href="terms.html">T&C</a>
+                <a href="shipping.html">Delivery Policy</a>
+            </div>
+            <div class="copyright">&copy; 2025 TraderLog. All rights reserved.</div>
+        </div>
+    </footer>
+</body>
+</html>
