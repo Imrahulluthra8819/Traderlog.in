@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - TraderLog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Include all CSS from index.html here */
+        /* ... (Copy CSS from index.html) ... */
+        
+        /* ADD THIS NEW CSS FOR SUBPAGES */
+        :root {
+            --primary: #2563eb; --primary-dark: #1d4ed8; --secondary: #0ea5e9; --accent: #8b5cf6;
+            --dark: #1e293b; --darker: #0f172a; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1;
+        }
+        body { font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: var(--light); margin:0; }
+        
+        /* About Page Specifics */
+        .page-header {
+            padding: 160px 0 60px;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+        }
+        .about-content {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            margin-bottom: 60px;
+        }
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="container" style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="logo" style="color:white; font-size:1.8rem; font-weight:bold; display:flex; align-items:center;">
+                <i class="fas fa-chart-line" style="color:#8b5cf6; margin-right:10px;"></i> TraderLog
+            </div>
+            <div class="nav-links">
+                <a href="index.html" style="color:white; text-decoration:none; margin-left:20px;">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="container">
+            <h1>About <span>TraderLog</span></h1>
+            <p style="color: #cbd5e1; max-width: 600px; margin: 20px auto;">Empowering traders to master their psychology and strategy through data-driven insights.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="about-content">
+            <h2>Our Mission</h2>
+            <p>At TraderLog, we believe that successful trading isn't just about finding the right entry; it's about mastering your mind. Most traders fail not because they lack a strategy, but because they lack discipline and self-awareness.</p>
+            <br>
+            <p>We built TraderLog to bridge the gap between complex data and actionable advice. We don't just show you numbers; we tell you what they mean and how to fix your mistakes.</p>
+
+            <div class="mission-grid">
+                <div class="feature-card" style="background: rgba(15, 23, 42, 0.6); padding: 30px; border-radius: 15px; border: 1px solid rgba(139, 92, 246, 0.2);">
+                    <i class="fas fa-brain" style="font-size: 2rem; color: #8b5cf6; margin-bottom: 15px;"></i>
+                    <h3>Psychology First</h3>
+                    <p style="color: #cbd5e1;">We prioritize emotional analysis because mindset is the biggest edge in the market.</p>
+                </div>
+                <div class="feature-card" style="background: rgba(15, 23, 42, 0.6); padding: 30px; border-radius: 15px; border: 1px solid rgba(37, 99, 235, 0.2);">
+                    <i class="fas fa-lightbulb" style="font-size: 2rem; color: #2563eb; margin-bottom: 15px;"></i>
+                    <h3>Simplicity</h3>
+                    <p style="color: #cbd5e1;">No complex spreadsheets. Just clean, simple insights anyone can understand.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: rgba(15, 23, 42, 0.9); padding: 3rem 0; text-align: center; border-top: 1px solid rgba(100,116,139,0.2);">
+        <div class="container">
+            <p>&copy; 2025 TraderLog. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
