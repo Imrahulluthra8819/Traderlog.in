@@ -8,13 +8,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* =========================================
-           1. EXACT STYLES FROM INDEX.HTML (MASTER)
-           ========================================= */
+        /* --- MASTER CSS (MATCHING INDEX 27) --- */
         :root {
-            --primary: #2563eb; --primary-dark: #1d4ed8; --secondary: #0ea5e9; --accent: #8b5cf6;
-            --dark: #1e293b; --darker: #0f172a; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1; --border-color: #334155; 
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+            --border-color: #334155; 
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
@@ -29,17 +39,16 @@
             flex-direction: column;
         }
         
-        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 700; }
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
         a { text-decoration: none; transition: 0.3s; }
 
-        /* --- NAVIGATION (EXACT COPY FROM INDEX) --- */
+        /* --- NAVIGATION --- */
         nav {
             padding: 1.5rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
             background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(100, 116, 139, 0.2);
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2); transition: all 0.3s ease;
         }
-        /* CRITICAL FIX: This aligns Logo Left and Menu Right */
         nav .container { display: flex; justify-content: space-between; align-items: center; }
         
         .logo { display: flex; align-items: center; font-size: 1.8rem; font-weight: 700; color: white; z-index: 102; }
@@ -56,7 +65,53 @@
 
         .menu-icon { display: none; font-size: 1.8rem; color: white; cursor: pointer; z-index: 102; }
 
-        /* --- FOOTER (EXACT COPY FROM INDEX) --- */
+        /* --- PAGE HEADER (UNIFIED) --- */
+        .page-header {
+            padding: 180px 0 80px;
+            text-align: center;
+            position: relative;
+        }
+        .page-header::before {
+            content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            z-index: -1; pointer-events: none;
+        }
+        .page-header h1 { font-size: 3.5rem; margin-bottom: 1rem; line-height: 1.2; }
+        .page-header h1 span {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .page-header p { font-size: 1.2rem; color: var(--gray-light); max-width: 600px; margin: 0 auto; }
+
+        /* --- CONTENT CARDS --- */
+        .content-wrapper { padding-bottom: 6rem; flex: 1; }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- ABOUT SPECIFIC --- */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+        
+        .feature-box {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s;
+        }
+        .feature-box:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .feature-box i { font-size: 2rem; color: var(--accent); margin-bottom: 1rem; }
+        .feature-box h3 { margin-bottom: 0.5rem; color: white; }
+        .feature-box p { color: var(--gray-light); font-size: 0.95rem; }
+
+        /* --- FOOTER --- */
         footer { padding: 3rem 0; background: rgba(15, 23, 42, 0.9); border-top: 1px solid rgba(100, 116, 139, 0.2); margin-top: auto; }
         .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
         .footer-brand { flex: 1; min-width: 300px; }
@@ -75,44 +130,34 @@
         .social-links a:hover { background: var(--accent); color: white; transform: translateY(-3px); }
         .copyright { text-align: center; padding-top: 3rem; color: var(--gray); font-size: 0.9rem; }
 
-        /* --- CONTENT STYLES --- */
-        .page-header { padding: 160px 0 60px; text-align: center; }
-        .page-header h1 { font-size: 3rem; margin-bottom: 1rem; }
-        .page-header span { background: linear-gradient(90deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .glass-card {
-            background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px);
-            border: 1px solid rgba(100, 116, 139, 0.2); border-radius: 20px; padding: 3rem;
-            margin-bottom: 80px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        /* --- MOBILE --- */
+        @media (max-width: 992px) {
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
         }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-        .feature-box { background: rgba(15, 23, 42, 0.6); padding: 2rem; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-        .feature-box i { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; }
-
-        /* --- MOBILE OPTIMIZATION (MATCHING INDEX) --- */
         @media (max-width: 768px) {
             .menu-icon { display: block; }
             .nav-links {
                 position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
                 background: rgba(15, 23, 42, 0.98); flex-direction: column;
-                justify-content: center; align-items: center; transition: 0.3s;
-                z-index: 101; border-left: 1px solid var(--border-color);
+                justify-content: center; align-items: center; gap: 2rem;
+                transition: right 0.3s ease-in-out; z-index: 101;
+                border-left: 1px solid var(--border-color); box-shadow: -5px 0 15px rgba(0,0,0,0.5);
             }
             .nav-links.active { right: 0; }
-            .page-header h1 { font-size: 2.2rem; }
-            .grid-2 { grid-template-columns: 1fr; }
+            .nav-links a { font-size: 1.2rem; color: white; }
+            
+            .page-header h1 { font-size: 2.5rem; }
             .glass-card { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
+    <nav id="navbar">
         <div class="container">
             <div class="logo">
-                <a href="index.html" style="color:white; display:flex; align-items:center; text-decoration:none;">
-                    <i class="fas fa-chart-line"></i> <span>TraderLog</span>
-                </a>
+                <i class="fas fa-chart-line"></i>
+                <span>TraderLog</span>
             </div>
             
             <div class="menu-icon" id="mobileMenuBtn">
@@ -123,7 +168,7 @@
                 <a href="index.html">Home</a>
                 <a href="index.html#features">Features</a>
                 <a href="index.html#how-it-works">How It Works</a>
-                <a href="about.html">About Us</a>
+                <a href="about.html" style="color:white; opacity:1;">About Us</a>
                 <a href="contact.html">Contact</a>
                 <a href="Rpp1.html">Pricing</a>
             </div>
@@ -133,28 +178,34 @@
     <div class="page-header">
         <div class="container">
             <h1>About <span>TraderLog</span></h1>
-            <p style="color: var(--gray-light);">Empowering traders to master their psychology.</p>
+            <p>Empowering traders to master their psychology.</p>
         </div>
     </div>
 
-    <div class="container">
-        <div class="glass-card">
-            <div class="grid-2">
-                <div>
-                    <h2 style="color:white; margin-bottom:1rem; font-size:2rem;">Our Mission</h2>
-                    <p style="color:var(--gray-light); margin-bottom:1rem;">At TraderLog, we believe that successful trading isn't just about finding the right entry; it's about mastering your mind. Most traders fail not because they lack a strategy, but because they lack discipline and self-awareness.</p>
-                    <p style="color:var(--gray-light);">We built TraderLog to bridge the gap between complex data and actionable advice. We don't just show you numbers; we tell you what they mean.</p>
-                </div>
-                <div style="display:grid; gap:20px;">
-                    <div class="feature-box">
-                        <i class="fas fa-brain"></i>
-                        <h3 style="color:white;">Psychology First</h3>
-                        <p style="color:var(--gray-light);">Mindset is your biggest edge.</p>
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="glass-card">
+                <div class="about-grid">
+                    <div>
+                        <h2 style="font-size: 2rem; margin-bottom: 1.5rem;">Our Mission</h2>
+                        <p style="color: var(--gray-light); margin-bottom: 1.5rem; font-size: 1.05rem;">
+                            At TraderLog, we believe that successful trading isn't just about finding the right entry; it's about mastering your mind. Most traders fail not because they lack a strategy, but because they lack discipline and self-awareness.
+                        </p>
+                        <p style="color: var(--gray-light); font-size: 1.05rem;">
+                            We built TraderLog to bridge the gap between complex data and actionable advice. We don't just show you numbers; we tell you what they mean. Our goal is to provide a clean, distraction-free environment where you can focus on what truly matters: your growth.
+                        </p>
                     </div>
-                    <div class="feature-box">
-                        <i class="fas fa-bolt"></i>
-                        <h3 style="color:white;">Actionable Data</h3>
-                        <p style="color:var(--gray-light);">Insights you can actually use.</p>
+                    <div>
+                        <div class="feature-box">
+                            <i class="fas fa-brain"></i>
+                            <h3>Psychology First</h3>
+                            <p>We analyze your emotional state alongside your P&L to find hidden patterns in your behavior.</p>
+                        </div>
+                        <div class="feature-box">
+                            <i class="fas fa-bolt"></i>
+                            <h3>Actionable Data</h3>
+                            <p>No jargon. No clutter. Just simple, AI-driven insights you can use immediately.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -166,13 +217,15 @@
             <div class="footer-content">
                 <div class="footer-brand">
                     <div class="logo">
-                        <i class="fas fa-chart-line"></i> <span>TraderLog</span>
+                        <i class="fas fa-chart-line"></i>
+                        <span>TraderLog</span>
                     </div>
-                    <p style="color: var(--gray-light); margin-top: 1rem; max-width: 350px;">The advanced trading journal that focuses on both strategy and psychology.</p>
+                    <p style="color: var(--gray-light); margin-top: 1rem; max-width: 350px;">The advanced trading journal that focuses on both strategy and psychology to accelerate your trading success.</p>
                     <div class="social-links">
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
                 <div class="footer-links">
@@ -182,6 +235,7 @@
                             <li><a href="index.html#features">Features</a></li>
                             <li><a href="index.html#how-it-works">How It Works</a></li>
                             <li><a href="Rpp1.html">Pricing</a></li>
+                            <li><a href="#">Integrations</a></li>
                         </ul>
                     </div>
                     <div class="link-group">
@@ -203,8 +257,24 @@
     </footer>
 
     <script>
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+                navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+                navbar.style.padding = '1rem 0';
+            } else {
+                navbar.classList.remove('scrolled');
+                navbar.style.boxShadow = 'none';
+                navbar.style.padding = '1.5rem 0';
+            }
+        });
+
+        // Mobile Menu Toggle
         const menuIcon = document.getElementById('mobileMenuBtn');
         const navLinks = document.getElementById('navLinks');
+
         if(menuIcon && navLinks){
             menuIcon.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
@@ -216,6 +286,16 @@
                     icon.classList.remove('fa-times');
                     icon.classList.add('fa-bars');
                 }
+            });
+
+            // Close menu when clicking links
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    const icon = menuIcon.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
             });
         }
     </script>
