@@ -8,84 +8,163 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* =========================================
-           1. EXACT STYLES FROM INDEX.HTML (MASTER CSS)
-           ========================================= */
+        /* --- MASTER CSS (MATCHING INDEX 27) --- */
         :root {
-            --primary: #2563eb; --primary-dark: #1d4ed8; --secondary: #0ea5e9; --accent: #8b5cf6;
-            --dark: #1e293b; --darker: #0f172a; --light: #f8fafc; --gray: #64748b; --gray-light: #cbd5e1;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0ea5e9;
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1e293b;
+            --darker: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+            --border-color: #334155; 
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Roboto', sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: var(--light); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column;
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        h1, h2, h3, h4 { font-family: 'Poppins', sans-serif; font-weight: 700; }
+        
+        h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; font-weight: 700; }
         .container { width: 90%; max-width: 1000px; margin: 0 auto; }
         a { text-decoration: none; transition: 0.3s; }
 
-        /* HEADER */
+        /* --- NAVIGATION --- */
         nav {
-            padding: 1.5rem 0; position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 1.5rem 0; position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2); transition: all 0.3s ease;
         }
-        .nav-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; width: 90%; }
-        .logo { font-size: 1.8rem; font-weight: 700; color: white; display: flex; align-items: center; gap: 10px; }
-        .logo i { color: var(--accent); }
-        .nav-links a { color: var(--gray-light); margin-left: 2rem; font-weight: 500; }
-        .nav-links a:hover { color: var(--accent); }
+        nav .container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; }
+        
+        .logo { display: flex; align-items: center; font-size: 1.8rem; font-weight: 700; color: white; z-index: 102; }
+        .logo i { color: var(--accent); margin-right: 0.5rem; }
+        
+        .nav-links { display: flex; gap: 2rem; }
+        .nav-links a { color: var(--gray-light); font-weight: 500; position: relative; }
+        .nav-links a:hover { color: white; }
+        .nav-links a:after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0;
+            background: var(--accent); transition: width 0.3s;
+        }
+        .nav-links a:hover:after { width: 100%; }
 
-        /* HERO AREA */
+        .menu-icon { display: none; font-size: 1.8rem; color: white; cursor: pointer; z-index: 102; }
+
+        /* --- PAGE HEADER --- */
         .page-header {
-            padding: 180px 0 60px; text-align: center;
-            background: radial-gradient(circle at top, rgba(139, 92, 246, 0.15), transparent 60%);
+            padding: 180px 0 80px;
+            text-align: center;
+            position: relative;
         }
-        .page-header h1 { font-size: 3rem; margin-bottom: 1rem; }
-        .page-header span { background: linear-gradient(90deg, var(--accent), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .page-header p { color: var(--gray-light); font-size: 1.1rem; }
+        .page-header::before {
+            content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            z-index: -1; pointer-events: none;
+        }
+        .page-header h1 { font-size: 3rem; margin-bottom: 1rem; line-height: 1.2; }
+        .page-header h1 span {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .page-header p { font-size: 1.2rem; color: var(--gray-light); max-width: 600px; margin: 0 auto; }
 
-        /* CONTENT CARD */
-        .content-section { padding-bottom: 100px; flex: 1; }
+        /* --- CONTENT WRAPPER --- */
+        .content-wrapper { padding-bottom: 6rem; flex: 1; }
         .glass-card {
-            background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 24px; padding: 4rem;
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 20px;
+            padding: 4rem;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+            backdrop-filter: blur(10px);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* TYPOGRAPHY */
-        .text-content h2 { 
+        /* --- TEXT CONTENT STYLES (Policies) --- */
+        .policy-content h2 { 
             color: white; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; 
             border-left: 4px solid var(--accent); padding-left: 15px; 
         }
-        .text-content p { 
-            margin-bottom: 1rem; color: var(--gray-light); font-size: 1rem; 
-        }
+        .policy-content h2:first-of-type { margin-top: 0; }
+        
+        .policy-content p { margin-bottom: 1rem; color: var(--gray-light); font-size: 1rem; line-height: 1.8; }
+        .policy-content strong { color: white; font-weight: 600; }
+        
         .intro-text {
-            font-size: 1.1rem; color: white; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 2rem;
+            font-size: 1.1rem; color: white; margin-bottom: 2rem; 
+            border-bottom: 1px solid rgba(100, 116, 139, 0.2); padding-bottom: 2rem;
         }
 
-        /* FOOTER */
-        footer { background: rgba(15, 23, 42, 0.95); padding: 3rem 0; border-top: 1px solid rgba(255,255,255,0.1); margin-top: auto; }
-        .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
-        .footer-links a { color: var(--gray); font-size: 0.95rem; }
-        .footer-links a:hover { color: var(--accent); }
-        .copyright { text-align: center; color: var(--gray); font-size: 0.9rem; }
+        /* --- FOOTER --- */
+        footer { padding: 3rem 0; background: rgba(15, 23, 42, 0.9); border-top: 1px solid rgba(100, 116, 139, 0.2); margin-top: auto; }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 2rem; max-width: 1200px; margin: 0 auto; }
+        .footer-brand { flex: 1; min-width: 300px; }
+        .footer-links { flex: 1; display: flex; gap: 3rem; flex-wrap: wrap; }
+        .link-group h4 { margin-bottom: 1.5rem; color: white; position: relative; padding-bottom: 0.5rem; }
+        .link-group h4:after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: var(--accent); }
+        .link-group ul { list-style: none; }
+        .link-group li { margin-bottom: 0.8rem; }
+        .link-group a { color: var(--gray-light); }
+        .link-group a:hover { color: white; transform: translateX(5px); display: inline-block; }
+        .social-links { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .social-links a {
+            display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;
+            border-radius: 50%; background: rgba(30, 41, 59, 0.7); color: var(--gray-light);
+        }
+        .social-links a:hover { background: var(--accent); color: white; transform: translateY(-3px); }
+        .copyright { text-align: center; padding-top: 3rem; color: var(--gray); font-size: 0.9rem; }
 
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .page-header h1 { font-size: 2.2rem; }
-            .glass-card { padding: 2rem; }
+            .menu-icon { display: block; }
+            .nav-links {
+                position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+                background: rgba(15, 23, 42, 0.98); flex-direction: column;
+                justify-content: center; align-items: center; gap: 2rem;
+                transition: right 0.3s ease-in-out; z-index: 101;
+                border-left: 1px solid var(--border-color); box-shadow: -5px 0 15px rgba(0,0,0,0.5);
+            }
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 1.2rem; color: white; }
+            
+            .page-header h1 { font-size: 2.5rem; }
+            .glass-card { padding: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-content">
-            <a href="index.html" class="logo"><i class="fas fa-chart-line"></i> TraderLog</a>
-            <div class="nav-links">
+    <nav id="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-chart-line"></i>
+                <span>TraderLog</span>
+            </div>
+            
+            <div class="menu-icon" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <div class="nav-links" id="navLinks">
                 <a href="index.html">Home</a>
+                <a href="index.html#features">Features</a>
+                <a href="about.html">About Us</a>
+                <a href="contact.html">Contact</a>
                 <a href="Rpp1.html">Pricing</a>
             </div>
         </div>
@@ -98,9 +177,9 @@
         </div>
     </div>
 
-    <div class="content-section">
+    <div class="content-wrapper">
         <div class="container">
-            <div class="glass-card text-content">
+            <div class="glass-card policy-content">
                 <p class="intro-text">At TraderLog, we are committed to delivering a high-quality and valuable trading journal experience to all our users. Please read our Refund Policy carefully before making a subscription purchase.</p>
 
                 <h2>1. Refund Policy</h2>
@@ -142,16 +221,88 @@
 
     <footer>
         <div class="container">
-            <div class="footer-links">
-                <a href="about.html">About</a>
-                <a href="contact.html">Contact</a>
-                <a href="refund.html">Refund Policy</a>
-                <a href="terms.html">Privacy & Terms</a>
-                <a href="shipping.html">Delivery Policy</a>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <i class="fas fa-chart-line"></i>
+                        <span>TraderLog</span>
+                    </div>
+                    <p style="color: var(--gray-light); margin-top: 1rem; max-width: 350px;">The advanced trading journal that focuses on both strategy and psychology.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="index.html#features">Features</a></li>
+                            <li><a href="index.html#how-it-works">How It Works</a></li>
+                            <li><a href="Rpp1.html">Pricing</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                            <li><a href="refund.html">Refund Policy</a></li>
+                            <li><a href="terms.html">T&C</a></li>
+                            <li><a href="shipping.html">Shipping Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="copyright">&copy; 2025 TraderLog. All rights reserved.</div>
+            <div class="copyright">
+                <p>&copy; 2025 TraderLog. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
+    <script>
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+                navbar.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+                navbar.style.padding = '1rem 0';
+            } else {
+                navbar.classList.remove('scrolled');
+                navbar.style.boxShadow = 'none';
+                navbar.style.padding = '1.5rem 0';
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuIcon = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+
+        if(menuIcon && navLinks){
+            menuIcon.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const icon = menuIcon.querySelector('i');
+                if(navLinks.classList.contains('active')){
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Close menu when clicking links
+            navLinks.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                    const icon = menuIcon.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                });
+            });
+        }
+    </script>
 </body>
 </html>
