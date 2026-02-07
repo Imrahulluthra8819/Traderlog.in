@@ -65,10 +65,12 @@ exports.handler = async function(event) {
         // ============================================================
         // BRANCH A: ACTIVATE SUBSCRIPTION
         // ============================================================
-        if (transactionId || planId === 'trial') {
+        // UPDATED: Added check for 'trial_30'
+        if (transactionId || planId === 'trial' || planId === 'trial_30') {
 
             // --- 1. ABUSE PROTECTION SYSTEM ---
-            if (planId === 'trial') {
+            // UPDATED: Apply protection to BOTH trial types
+            if (planId === 'trial' || planId === 'trial_30') {
                 
                 // CHECK A: EMAIL
                 const emailCheck = await db.collection('subscriptions').doc(email).get();
@@ -105,7 +107,8 @@ exports.handler = async function(event) {
             }
 
             // --- 2. PAYMENT VERIFICATION ---
-            if (planId !== 'trial') {
+            // UPDATED: Skip payment check for 'trial_30' as well
+            if (planId !== 'trial' && planId !== 'trial_30') {
                 if (!transactionId) return { statusCode: 400, headers, body: JSON.stringify({ error: 'Missing Transaction ID' }) };
                 try {
                     if (transactionId.startsWith('sub_')) {
@@ -123,7 +126,21 @@ exports.handler = async function(event) {
             // --- 3. SAVE TO DB ---
             const now = new Date();
             let endDate = new Date();
-            let durationDays = (planId === 'trial') ? 14 : (planId === 'monthly' ? 30 : (planId === 'six-months' ? 180 : 365));
+            
+            // UPDATED: Duration logic for 30 day trial
+            let durationDays;
+            if (planId === 'trial') {
+                durationDays = 14;
+            } else if (planId === 'trial_30') {
+                durationDays = 30; // <--- This handles the new 30-day offer
+            } else if (planId === 'monthly') {
+                durationDays = 30;
+            } else if (planId === 'six-months') {
+                durationDays = 180;
+            } else {
+                durationDays = 365; // Yearly
+            }
+            
             endDate.setDate(now.getDate() + durationDays);
 
             await db.collection('subscriptions').doc(email).set({
@@ -161,4 +178,3 @@ exports.handler = async function(event) {
         return { statusCode: 500, headers, body: JSON.stringify({ error: error.message }) };
     }
 };
-
