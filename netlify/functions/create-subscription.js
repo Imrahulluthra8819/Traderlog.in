@@ -149,7 +149,7 @@ exports.handler = async function(event) {
         // ============================================================
         else {
             const subscription = await razorpay.subscriptions.create({
-                plan_id: "plan_R76nWkRQGGkReO",
+                plan_id: "plan_SDGnlG3fwzmHos",
                 total_count: 12,
                 notes: { user_email: email, affiliate_id: affiliateId || "direct" }
             });
@@ -161,3 +161,4 @@ exports.handler = async function(event) {
         return { statusCode: 500, headers, body: JSON.stringify({ error: error.message }) };
     }
 };
+
