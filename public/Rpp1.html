@@ -275,6 +275,7 @@
             padding: 30px;
             border-radius: 16px;
             border: 1px solid rgba(255,255,255,0.1);
+            position: relative; /* For pulse effect focus */
         }
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
@@ -337,6 +338,151 @@
         .modal-btn { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
         .modal-btn:hover { background: var(--primary-dark); }
         
+        /* ===== POPUP PROMO STYLES (NEW) ===== */
+        .offer-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 11000; /* Higher than other modals */
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .offer-content {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+            position: relative;
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            box-shadow: 0 0 60px rgba(79, 70, 229, 0.25), inset 0 0 20px rgba(255,255,255,0.05);
+            animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .offer-badge {
+            background: var(--warning);
+            color: var(--dark);
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 12px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        .offer-content h2 {
+            font-size: 2.2rem;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .text-highlight {
+            color: var(--primary);
+            background: linear-gradient(90deg, #4f46e5, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .offer-content p {
+            font-size: 1.1rem;
+            color: var(--gray-light);
+            margin-bottom: 25px;
+        }
+
+        .offer-price {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 12px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .offer-price .old-price {
+            font-size: 1.4rem;
+            color: var(--gray);
+            text-decoration: line-through;
+            font-weight: 500;
+        }
+
+        .offer-price .new-price {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--success);
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-claim {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.5);
+            transition: all 0.3s;
+            animation: pulse-btn 2s infinite;
+        }
+
+        .btn-claim:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px -5px rgba(79, 70, 229, 0.6);
+        }
+
+        .close-offer {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 32px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: 0.3s;
+            line-height: 1;
+        }
+        .close-offer:hover { color: white; transform: rotate(90deg); }
+
+        .no-commitment {
+            margin-top: 15px !important;
+            font-size: 0.85rem !important;
+            color: var(--gray) !important;
+            opacity: 0.7;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes pulse-btn {
+            0% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(79, 70, 229, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+        }
+
+        @media (max-width: 480px) {
+            .offer-content h2 { font-size: 1.8rem; }
+            .offer-price .new-price { font-size: 2.2rem; }
+            .btn-claim { font-size: 1.1rem; padding: 15px; }
+        }
+
         /* Responsive */
         @media (max-width: 992px) {
             .pricing-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -608,6 +754,22 @@
         </div>
     </div>
 
+    <!-- ===== PROMO POPUP HTML ===== -->
+    <div id="promoPopup" class="offer-modal">
+        <div class="offer-content">
+            <span class="close-offer" id="closePromoBtn">&times;</span>
+            <div class="offer-badge">Limited Time Offer</div>
+            <h2>Get 30 Days Premium <br><span class="text-highlight">FOR FREE</span></h2>
+            <p>Unlock advanced AI analytics and unlimited journaling to skyrocket your profits.</p>
+            <div class="offer-price">
+                <span class="old-price">₹499</span>
+                <span class="new-price">₹0</span>
+            </div>
+            <button id="claimOfferBtn" class="btn-claim">Claim 30 Days Free</button>
+            <p class="no-commitment">No credit card required • Cancel anytime</p>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // ===== CONFIGURATION =====
@@ -657,6 +819,53 @@
             const proceedBtn = document.getElementById('proceedToPayment');
             const loadingOverlay = document.getElementById('loadingOverlay');
             let selectedPlan = {};
+
+            // ===== POPUP LOGIC (NEW) =====
+            const promoPopup = document.getElementById('promoPopup');
+            const closePromoBtn = document.getElementById('closePromoBtn');
+            const claimOfferBtn = document.getElementById('claimOfferBtn');
+
+            // Trigger popup 2 seconds after load - EVERY TIME
+            setTimeout(() => {
+                promoPopup.style.display = 'flex';
+            }, 2000);
+
+            // Close Logic
+            if(closePromoBtn) {
+                closePromoBtn.addEventListener('click', () => {
+                    promoPopup.style.display = 'none';
+                });
+            }
+
+            // Claim Offer Logic
+            if(claimOfferBtn) {
+                claimOfferBtn.addEventListener('click', () => {
+                    promoPopup.style.display = 'none'; // Close popup
+                    
+                    // Set logic for 30 Day Trial
+                    // IMPORTANT: We use 'trial_30' ID so the backend can distinguish it from the standard 14-day 'trial'
+                    selectedPlan = {
+                        id: 'trial_30',
+                        amount: 0,
+                        description: '30-Day Free Trial (Special Offer)'
+                    };
+                    
+                    showUserForm(true); // Open form
+                    
+                    // Override the title and button specifically for this offer
+                    document.getElementById('form-title').textContent = 'Claim Your 30 Days Free';
+                    document.getElementById('selectedPlanName').textContent = '30-Day Free Trial (Special Offer)';
+                    proceedBtn.innerHTML = '<i class="fas fa-gift"></i> Activate 30 Days Free';
+                });
+            }
+            
+            // Close popup if clicking outside content
+            window.addEventListener('click', (event) => {
+                if (event.target === promoPopup) {
+                    promoPopup.style.display = 'none';
+                }
+            });
+
 
             // ===== MOBILE NAVIGATION =====
             if (mobileNavToggle && mobileNav) { mobileNavToggle.addEventListener('click', () => mobileNav.classList.add('active')); }
@@ -719,6 +928,7 @@
             // ===== PLAN SELECTION & FORM LOGIC =====
             function showUserForm(isTrial = false) {
                 if(isTrial){
+                    // Default trial logic, will be overridden if triggered by popup
                     selectedPlan = {id: 'trial', amount: 0, description: '14-Day Free Trial'};
                 }
                 
@@ -917,4 +1127,3 @@
     </script>
 </body>
 </html>
-
